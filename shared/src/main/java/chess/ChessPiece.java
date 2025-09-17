@@ -150,6 +150,28 @@ public class ChessPiece {
                     }
                 }
                 break; //
+
+            case PAWN:
+                int pawnDirections;
+                int startRow;
+
+                if(this.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    pawnDirections = 1;
+                    startRow = 2;
+                } else {
+                    pawnDirections = -1;
+                    startRow = 7;
+
+                }
+
+                int basicMoveRow = myPosition.getRow() + pawnDirections;
+                int basicMoveCol = myPosition.getColumn();
+
+
+                        }
+                    }
+                }
+                break; //
         }
 
         return validMoves;
