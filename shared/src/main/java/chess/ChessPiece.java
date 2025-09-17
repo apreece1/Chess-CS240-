@@ -153,7 +153,6 @@ public class ChessPiece {
 
             case PAWN:
                 int pawnDirections;
-                int startRow;
 
                 if(this.getTeamColor() == ChessGame.TeamColor.WHITE) {
                     pawnDirections = 1;
@@ -163,14 +162,29 @@ public class ChessPiece {
                     startRow = 7;
 
                 }
-
+                //basic one square move
                 int basicMoveRow = myPosition.getRow() + pawnDirections;
                 int basicMoveCol = myPosition.getColumn();
 
+                if(basicMoveRow >= 1 && basicMoveRow <= 8){
+                    ChessPosition newPosition = new ChessPosition(basicMoveRow, basicMoveCol);
+                    ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+
+                    if (pieceAtNewPosition == null) {
+                        validMoves.add(new ChessMove(myPosition, newPosition, null));
 
                         }
-                    }
                 }
+
+                //two square move
+                if(myPosition.getRow() == startRow) {
+                    int twoSquareRow = myPosition.getRow() + (pawnDirections * 2);
+                    int twoSquareCol = myPosition.getColumn();
+
+
+
+                }
+
                 break; //
         }
 
