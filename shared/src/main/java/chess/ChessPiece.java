@@ -63,11 +63,17 @@ public class ChessPiece {
              int startRow = myPosition.getRow();
              int startCol = myPosition.getColumn();
 
-             //direction up and to the right
-             int currentRow = startRow + 1;
-             int currentCol = startCol + 1;
+             int[][] directions = {{1,1}, {1, -1}, {-1,1}, {-1,-1}};
 
-             while (currentRow < 8 && currentRow >= 0 && currentCol < 8 && currentCol >= 0) {
+             for (int[] direction : directions) {
+                 int rowDirection = direction[0];
+                 int colDirection = direction[1];
+
+                 //direction up and to the right
+                 int currentRow = startRow + rowDirection;
+                 int currentCol = startCol + colDirection;
+
+             while (currentRow <= 8 && currentRow >= 1 && currentCol < 8 && currentCol >= 0) {
                  //creates position object for square being checked
                  ChessPosition newPosition = new ChessPosition(currentRow, currentCol);
                  //Get or check for piece at that position since the square is empty we add it to the list and continue
@@ -87,14 +93,6 @@ public class ChessPiece {
                  currentCol++;
 
              }
-
-
-
-
-                 //add a valid move to list
-                 //then increment to next square
-                 //currentRow ++
-                 //Currentcol ++
         }
         return List.of();
     }
