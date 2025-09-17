@@ -2,7 +2,6 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -247,23 +246,30 @@ public class ChessPiece {
                 }
                 break;
 
+            //the same as rook but with more directions
             case QUEEN:
-                int[][] queenDirections = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{-1,1},{1,-1},{-1,1}};
+                int[][] queenDirections = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{-1,-1},{1,-1},{-1,1}};
 
                 for (int[] direction : queenDirections) {
-                    int newRow = startRow + direction[0];
-                    int newCol = startCol + direction[1];
+                    int newRow = myPosition.getRow() + direction[0];
+                    int newCol = myPosition.getColumn() + direction[1];
 
-                    if (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
+                    while (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
                         ChessPosition newPosition = new ChessPosition(newRow, newCol);
                         ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
 
-                        if (pieceAtNewPosition == null || pieceAtNewPosition.getTeamColor() != this.getTeamColor()) {
+                        if (pieceAtNewPosition == null) {
                             validMoves.add(new ChessMove(myPosition, newPosition, null));
+                        } else {
+                            if (pieceAtNewPosition.getTeamColor() != this.getTeamColor()) {
+                                validMoves.add(new ChessMove(myPosition, newPosition, null));
+                            }
+                            break;
                         }
+                        newRow += direction[0];
+                        newCol += direction[1];
                     }
                 }
-
                 break;
         }
         return validMoves;
