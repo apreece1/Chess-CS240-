@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -55,29 +56,45 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
         if (piece.getPieceType() == PieceType.BISHOP) {
+            //List holds valid moves
+            Collection<ChessMove> validMoves = new ArrayList<>();
+
+            //gets the starting row and column
              int startRow = myPosition.getRow();
              int startCol = myPosition.getColumn();
 
+             //direction up and to the right
              int currentRow = startRow + 1;
              int currentCol = startCol + 1;
 
-             while (currentRow < 8 && currentRow >= 0 && currentCol < 8 && currentCol >= 0){
-                 //check the piece at current row and col
-
+             while (currentRow < 8 && currentRow >= 0 && currentCol < 8 && currentCol >= 0) {
+                 //creates position object for square being checked
                  ChessPosition newPosition = new ChessPosition(currentRow, currentCol);
+                 //Get or check for piece at that position since the square is empty we add it to the list and continue
                  ChessPiece pieceAtCurrentPosition = board.getPiece(newPosition);
+                 if (pieceAtCurrentPosition == null) {
+                     validMoves.add(new ChessMove(myPosition, newPosition, null));
+                 //Check for opposing piece stop if there is one
+                 } else {
+                     if (pieceAtCurrentPosition.getTeamColor() != this.getTeamColor()) {
+                         validMoves.add(new ChessMove(myPosition, newPosition, null));
+                     }
 
-                 if (pieceAtCurrentPosition == null){
-
-
+                     break;
                  }
-                 else if (pieceAtCurrentPosition.getTeamColor() != this.getTeamColor() )
+
+                 currentRow++;
+                 currentCol++;
+
+             }
+
+
+
 
                  //add a valid move to list
                  //then increment to next square
                  //currentRow ++
                  //Currentcol ++
-             }
         }
         return List.of();
     }
