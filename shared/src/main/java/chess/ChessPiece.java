@@ -115,9 +115,8 @@ public class ChessPiece {
                 break;
 
             case KNIGHT:
-                int[][] knightDirections = {{2,1},{1,2},{-2,1},
-                        {-1,2},{-1,2},{-2,1},{-1,-2},{-2,-1}
-                };
+                int[][] knightDirections = {{2, 1}, {2, -1}, {1, 2}, {1, -2},
+                        {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
 
                 for (int[] direction : knightDirections) {
                     int newRow = startRow + direction[0];
