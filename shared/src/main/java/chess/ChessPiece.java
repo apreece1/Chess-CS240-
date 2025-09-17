@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -18,6 +19,23 @@ public class ChessPiece {
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessPiece that = (ChessPiece) o;
+        return pieceColor == that.pieceColor && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, type);
     }
 
     /**
@@ -54,46 +72,57 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        ChessPiece piece = board.getPiece(myPosition);
-        if (piece.getPieceType() == PieceType.BISHOP) {
-            //List holds valid moves
-            Collection<ChessMove> validMoves = new ArrayList<>();
+        //List holds valid moves
+        Collection<ChessMove> validMoves = new ArrayList<>();
 
-            //gets the starting row and column
-             int startRow = myPosition.getRow();
-             int startCol = myPosition.getColumn();
+        //gets the starting row and column
+        int startRow = myPosition.getRow();
+        int startCol = myPosition.getColumn();
 
-             int[][] directions = {{1,1}, {1, -1}, {-1,1}, {-1,-1}};
+        switch (this.getPieceType()) {
+            case BISHOP:
+                int[][] bishopdirections = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
-             for (int[] direction : directions) {
-                 int rowDirection = direction[0];
-                 int colDirection = direction[1];
+                for (int[] direction : bishopdirections) {
+                    int rowDirection = direction[0];
+                    int colDirection = direction[1];
 
-                 //direction up and to the right
-                 int currentRow = startRow + rowDirection;
-                 int currentCol = startCol + colDirection;
+                    //all directions
+                    int currentRow = startRow + rowDirection;
+                    int currentCol = startCol + colDirection;
 
-             while (currentRow <= 8 && currentRow >= 1 && currentCol < 8 && currentCol >= 0) {
-                 //creates position object for square being checked
-                 ChessPosition newPosition = new ChessPosition(currentRow, currentCol);
-                 //Get or check for piece at that position since the square is empty we add it to the list and continue
-                 ChessPiece pieceAtCurrentPosition = board.getPiece(newPosition);
-                 if (pieceAtCurrentPosition == null) {
-                     validMoves.add(new ChessMove(myPosition, newPosition, null));
-                 //Check for opposing piece stop if there is one
-                 } else {
-                     if (pieceAtCurrentPosition.getTeamColor() != this.getTeamColor()) {
-                         validMoves.add(new ChessMove(myPosition, newPosition, null));
-                     }
+                    while (currentRow <= 8 && currentRow >= 1 && currentCol <= 8 && currentCol >= 1) {
+                        //creates position object for square being checked
+                        ChessPosition newPosition = new ChessPosition(currentRow, currentCol);
+                        //Get or check for piece at that position since the square is empty we add it to the list and continue
+                        ChessPiece pieceAtCurrentPosition = board.getPiece(newPosition);
+                        if (pieceAtCurrentPosition == null) {
+                            validMoves.add(new ChessMove(myPosition, newPosition, null));
+                            //Check for opposing piece stop if there is one
+                        } else {
+                            if (pieceAtCurrentPosition.getTeamColor() != this.getTeamColor()) {
+                                validMoves.add(new ChessMove(myPosition, newPosition, null));
+                            }
 
-                     break;
-                 }
+                            break;
+                        }
 
-                 currentRow++;
-                 currentCol++;
+                        currentRow += rowDirection;
+                        currentCol += colDirection;
 
-             }
+                    }
+                }
+                break;
+            case KNIGHT:
+                int[][] knightMoves = {{2,1},{1,2},{-2,1},
+                        {-1,2},{-1,2},{-2,1},{-1,-2},{-2,-1}
+                };
+
+                for
+                break; //
         }
-        return List.of();
+
+
+        return validMoves;
     }
 }
