@@ -95,9 +95,14 @@ public class ChessPiece {
                         ChessPosition newPosition = new ChessPosition(currentRow, currentCol);
                         //Get or check for piece at that position since the square is empty we add it to the list and continue
                         ChessPiece pieceAtCurrentPosition = board.getPiece(newPosition);
-                        if (pieceAtCurrentPosition == null || pieceAtCurrentPosition.getTeamColor() != this.getTeamColor()) {
+                        if (pieceAtCurrentPosition == null) {
                             validMoves.add(new ChessMove(myPosition, newPosition, null));
                             //Check for opposing piece stop if there is one
+                        } else {
+                            if (pieceAtCurrentPosition.getTeamColor() != this.getTeamColor()) {
+                                validMoves.add(new ChessMove(myPosition, newPosition, null));
+                            }
+
                             break;
                         }
 
