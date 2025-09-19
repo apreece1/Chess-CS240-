@@ -131,7 +131,7 @@ public class ChessPiece {
                     }
                 }
                 break; //
-
+            //The knight and King have very similar abilities, with the king having different restrictions
             case KING:
                 int[][] kingDirections = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
@@ -221,6 +221,7 @@ public class ChessPiece {
                 }
                 break;
 
+            //the rook introduces sliding method, this is used for the queen as well consider finding a way to combine them?
             case ROOK:
                 int[][] rookDirections = {{1,0},{-1,0},{0,1},{0,-1}};
 
