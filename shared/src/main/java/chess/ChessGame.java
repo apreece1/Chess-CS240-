@@ -57,10 +57,18 @@ public class ChessGame {
 
         ChessPiece piece = board.getPiece(startPosition);
 
-        if(piece == null){
+        if (piece == null) {
             return null;
         }
 
+        Collection<ChessMove> potentialMoves = piece.pieceMoves(board, startPosition);
+
+        for (ChessMove)
+
+
+
+        return validMoves;
+    }
 
     /**
      * Makes a move in a chess game
