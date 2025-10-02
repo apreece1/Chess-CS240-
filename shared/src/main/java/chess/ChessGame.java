@@ -9,6 +9,7 @@ import java.util.Collection;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
+
 public class ChessGame {
 
     private ChessBoard board;
@@ -60,13 +61,6 @@ public class ChessGame {
             return null;
         }
 
-        } else {
-            if(startPosition != isInCheck()){
-                validMoves.add( new ChessMove("add availible moves that piece could make"));
-            }
-        }
-
-    }
 
     /**
      * Makes a move in a chess game
