@@ -51,13 +51,18 @@ public class ChessGame {
 
         if(startPosition == null){
             return null;
+
+        ChessPiece piece ==  somesortofgetter(startPosition);
+
+        if(piece == null){
+            return null;
+            }
+            }
         } else {
             if(startPosition != isInCheck()){
-                validMoves.add( new ChessMove );
+                validMoves.add( new ChessMove("add availible moves that piece could make"));
             }
         }
-
-
 
     }
 
