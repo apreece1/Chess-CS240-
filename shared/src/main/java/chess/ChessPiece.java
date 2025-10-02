@@ -17,6 +17,7 @@ public class ChessPiece {
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
+
         this.type = type;
     }
 
@@ -83,16 +84,12 @@ public class ChessPiece {
                 int[][] bishopdirections = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
                 for (int[] direction : bishopdirections) {
-                    int rowDirection = direction[0];
-                    int colDirection = direction[1];
+                    int newRow = startRow + direction[0];
+                    int newCol = startCol + direction[1];
 
-                    //all directions
-                    int currentRow = startRow + rowDirection;
-                    int currentCol = startCol + colDirection;
-
-                    while (currentRow <= 8 && currentRow >= 1 && currentCol <= 8 && currentCol >= 1) {
+                    while (newRow <= 8 && newRow >= 1 && newCol <= 8 && newCol >= 1) {
                         //creates position object for square being checked
-                        ChessPosition newPosition = new ChessPosition(currentRow, currentCol);
+                        ChessPosition newPosition = new ChessPosition(newRow, newCol);
                         //Get or check for piece at that position since the square is empty we add it to the list and continue
                         ChessPiece pieceAtCurrentPosition = board.getPiece(newPosition);
                         if (pieceAtCurrentPosition == null) {
@@ -106,8 +103,8 @@ public class ChessPiece {
                             break;
                         }
 
-                        currentRow += rowDirection;
-                        currentCol += colDirection;
+                        newRow += direction[0];
+                        newCol += direction[1];
 
                     }
                 }
@@ -232,6 +229,7 @@ public class ChessPiece {
                     while (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
                         ChessPosition newPosition = new ChessPosition(newRow, newCol);
                         ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+
 
                         if (pieceAtNewPosition == null) {
                             validMoves.add(new ChessMove(myPosition, newPosition, null));
