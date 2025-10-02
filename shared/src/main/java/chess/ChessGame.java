@@ -11,6 +11,8 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    private ChessBoard board;
+
     public ChessGame() {
 
     }
@@ -52,11 +54,13 @@ public class ChessGame {
         if(startPosition == null){
             return null;
 
-        ChessPiece piece ==  somesortofgetter(startPosition);
+        ChessPiece piece == board.getPiece(startPosition);
 
         if(piece == null){
             return null;
-            }
+        }
+
+
             }
         } else {
             if(startPosition != isInCheck()){
