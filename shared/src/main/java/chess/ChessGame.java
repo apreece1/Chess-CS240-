@@ -11,8 +11,6 @@ import java.util.Collection;
  */
 public class ChessGame {
 
-    private ChessBoard board;
-
     public ChessGame() {
 
     }
@@ -54,14 +52,8 @@ public class ChessGame {
         if(startPosition == null){
             return null;
 
-        ChessPiece piece == board.getPiece(startPosition);
-
-        if(piece == null){
-            return null;
-        }
-
-
-            }
+        ChessPiece piece ==  somesortofgetter(startPosition)
+        if(piece == null)
         } else {
             if(startPosition != isInCheck()){
                 validMoves.add( new ChessMove("add availible moves that piece could make"));
