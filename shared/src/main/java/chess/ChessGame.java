@@ -60,7 +60,6 @@ public class ChessGame {
             return null;
         }
 
-
         } else {
             if(startPosition != isInCheck()){
                 validMoves.add( new ChessMove("add availible moves that piece could make"));
