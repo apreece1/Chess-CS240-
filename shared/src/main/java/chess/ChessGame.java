@@ -63,7 +63,21 @@ public class ChessGame {
 
         Collection<ChessMove> potentialMoves = piece.pieceMoves(board, startPosition);
 
-        for (ChessMove)
+
+
+        for (ChessMove move : potentialMoves) {
+            //save state
+            ChessPiece c
+            }
+
+            //make move
+
+            //check if in check
+
+            //move piece back
+
+            //add move if not in check to moves.
+        }
 
 
 
