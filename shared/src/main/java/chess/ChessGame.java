@@ -11,7 +11,12 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    private ChessBoard board;
+
     public ChessGame() {
+
+        board = new ChessBoard();
+        board.resetBoard();
 
     }
 
@@ -49,11 +54,13 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         Collection<ChessMove> validMoves = new ArrayList<>();
 
-        if(startPosition == null){
-            return null;
+        ChessPiece piece = board.getPiece(startPosition);
 
-        ChessPiece piece ==  somesortofgetter(startPosition)
-        if(piece == null)
+        if(piece == null){
+            return null;
+        }
+
+
         } else {
             if(startPosition != isInCheck()){
                 validMoves.add( new ChessMove("add availible moves that piece could make"));
