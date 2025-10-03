@@ -137,10 +137,13 @@ public class ChessGame {
         //find opposite color
         TeamColor opposing = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
 
-
-
-
         //go through each piece on other team
+        for (int row = 1; row <= 8; row++){
+            for (int col = 1; col <= 8; col++){
+                ChessPosition oppPosition = new ChessPosition(row, col);
+                ChessPiece oppPiece = board.getPiece(oppPosition);
+            }
+
 
         //calculate moves piece could make
 
