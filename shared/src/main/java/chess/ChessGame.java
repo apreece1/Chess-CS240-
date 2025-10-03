@@ -142,8 +142,11 @@ public class ChessGame {
         }
 
         //do move
+        board.addPiece(move.getEndPosition(), piece);
+        board.addPiece(start, null);
 
         //switch teams/turns
+
     }
 
     /**
