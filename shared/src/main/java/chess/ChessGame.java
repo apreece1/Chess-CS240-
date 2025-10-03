@@ -141,6 +141,9 @@ public class ChessGame {
 
         }
         //need to add for pawn promotion
+        if(move.getPromotionPiece() != null) {
+            piece = new ChessPiece(piece.getTeamColor(), move.getPromotionPiece());
+        }
 
         //do move
         board.addPiece(move.getEndPosition(), piece);
