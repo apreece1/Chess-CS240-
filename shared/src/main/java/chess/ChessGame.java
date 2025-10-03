@@ -105,7 +105,13 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        //check for piece and turn
+
+        //check if move is valid
+
+        //do move
+
+        //switch teams/turns
     }
 
     /**
