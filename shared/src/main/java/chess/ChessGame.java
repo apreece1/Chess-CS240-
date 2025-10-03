@@ -166,7 +166,7 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
 
-       if(isInCheck(teamColor)){
+       if(!isInCheck(teamColor)){
            return false;
        }
 
@@ -198,8 +198,13 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         //not in check
+        if(isInCheck(teamColor)){
+            return false;
+        }
         //check if opp has moves
         //return tru id no valid moves
+
+
     }
 
     /**
