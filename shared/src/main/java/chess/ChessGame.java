@@ -145,6 +145,12 @@ public class ChessGame {
 
                 if(oppPiece != null && oppPiece.getTeamColor() == opposing) {
                     Collection<ChessMove> oppMoves = oppPiece.pieceMoves(board, oppPosition);
+
+                    for(ChessMove move: oppMoves){
+                        if (move.getEndPosition().equals(kingPosition)){
+                            return true;
+                        }
+                    }
                 }
             }
 
