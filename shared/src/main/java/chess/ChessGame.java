@@ -127,8 +127,18 @@ public class ChessGame {
                     break;
                 }
             }
+            if (kingPosition != null) break;
         }
+
+        if(kingPosition == null){
+            return false;
+        }
+
         //find opposite color
+        TeamColor opposing = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+
+
+
 
         //go through each piece on other team
 
