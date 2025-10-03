@@ -159,7 +159,27 @@ public class ChessGame {
      *
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
+     *
      */
+
+    private boolean noLegalMove (TeamColor teamColor){
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition newPosition = new ChessPosition(row, col);
+                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+                //check for other team moves
+                if (pieceAtNewPosition != null && pieceAtNewPosition.getTeamColor() == teamColor) {
+                    Collection<ChessMove> moves = validMoves(newPosition);
+                    if (moves != null && !moves.isEmpty()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        //return true if no valid moves
+        return true;
+    }
+
     public boolean isInCheck(TeamColor teamColor) {
         //iterate through until find king
 
@@ -211,29 +231,12 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-
        if(!isInCheck(teamColor)){
            return false;
        }
-
-        // check for inCheck
-
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                ChessPosition newPosition = new ChessPosition(row, col);
-                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
-                //check for other team moves
-                if (pieceAtNewPosition != null && pieceAtNewPosition.getTeamColor() == teamColor) {
-                    Collection<ChessMove> moves = validMoves(newPosition);
-                    if (moves != null && !moves.isEmpty()) {
-                        return false;
-                    }
-                }
-            }
-        }
-        //return true if no valid moves
-        return true;
+        return noLegalMove(teamColor);
     }
+
 
     /**
      * Determines if the given team is in stalemate, which here is defined as having
