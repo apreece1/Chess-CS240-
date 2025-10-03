@@ -165,12 +165,18 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+
+       if(isInCheck(teamColor)){
+           return false;
+       }
+
         // check for inCheck
+
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
                 ChessPosition newPosition = new ChessPosition(row, col);
                 ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
-
+                //check for other team moves
                 if (pieceAtNewPosition != null && pieceAtNewPosition.getTeamColor() == teamColor) {
                     Collection<ChessMove> moves = validMoves(newPosition);
                     if (moves != null && !moves.isEmpty()) {
@@ -178,7 +184,7 @@ public class ChessGame {
                     }
                 }
             }
-        }        //check for other team moves
+        }
         //return true if no valid moves
         return true;
     }
@@ -191,7 +197,9 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        //not in check
+        //check if opp has moves
+        //return tru id no valid moves
     }
 
     /**
