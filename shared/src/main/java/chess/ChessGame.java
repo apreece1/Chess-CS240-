@@ -117,6 +117,17 @@ public class ChessGame {
     public boolean isInCheck(TeamColor teamColor) {
         //iterate through until find king
 
+        ChessPosition kingPosition = null;
+        for (int row = 1; row <= 8; row++){
+            for (int col = 1; col <= 8; col++){
+                ChessPosition newPosition = new ChessPosition(row, col);
+                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+                if (pieceAtNewPosition != null && pieceAtNewPosition.getPieceType() ==  ChessPiece.PieceType.KING && pieceAtNewPosition.getTeamColor() == teamColor){
+                    kingPosition = newPosition;
+                    break;
+                }
+            }
+        }
         //find opposite color
 
         //go through each piece on other team
