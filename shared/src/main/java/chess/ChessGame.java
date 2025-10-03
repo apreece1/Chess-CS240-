@@ -64,24 +64,36 @@ public class ChessGame {
         Collection<ChessMove> potentialMoves = piece.pieceMoves(board, startPosition);
 
 
-
         for (ChessMove move : potentialMoves) {
             //save state
-            ChessPiece c
-            }
+
+            ChessPiece capturedPiece = board.getPiece(move.getEndPosition());
+            ChessPosition start = move.getStartPosition();
+            ChessPosition end = move.getEndPosition();
 
             //make move
 
+            board.addPiece(end, piece);
+            board.addPiece(start, null);
+
             //check if in check
+
+            boolean checkInCheck = isInCheck(piece.getTeamColor());
 
             //move piece back
 
+            board.addPiece(start, piece);
+            board.addPiece(end, capturedPiece);
+
             //add move if not in check to moves.
+
+            if (!checkInCheck) {
+                validMoves.add(move);
+            }
         }
 
-
-
         return validMoves;
+
     }
 
     /**
