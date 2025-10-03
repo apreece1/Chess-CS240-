@@ -202,9 +202,21 @@ public class ChessGame {
             return false;
         }
         //check if opp has moves
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition newPosition = new ChessPosition(row, col);
+                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+                //check for other team moves
+                if (pieceAtNewPosition != null && pieceAtNewPosition.getTeamColor() == teamColor) {
+                    Collection<ChessMove> moves = validMoves(newPosition);
+                    if (moves != null && !moves.isEmpty()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
         //return tru id no valid moves
-
-
     }
 
     /**
