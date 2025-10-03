@@ -146,7 +146,8 @@ public class ChessGame {
         board.addPiece(start, null);
 
         //switch teams/turns
-
+        TeamColor nextTurn = (getTeamTurn() == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+        setTeamTurn(nextTurn);
     }
 
     /**
