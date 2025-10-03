@@ -138,28 +138,24 @@ public class ChessGame {
         TeamColor opposing = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
 
         //go through each piece on other team
-        for (int row = 1; row <= 8; row++){
-            for (int col = 1; col <= 8; col++){
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
                 ChessPosition oppPosition = new ChessPosition(row, col);
                 ChessPiece oppPiece = board.getPiece(oppPosition);
 
-                if(oppPiece != null && oppPiece.getTeamColor() == opposing) {
+                if (oppPiece != null && oppPiece.getTeamColor() == opposing) {
                     Collection<ChessMove> oppMoves = oppPiece.pieceMoves(board, oppPosition);
 
-                    for(ChessMove move: oppMoves){
-                        if (move.getEndPosition().equals(kingPosition)){
+                    for (ChessMove move : oppMoves) {
+                        if (move.getEndPosition().equals(kingPosition)) {
                             return true;
                         }
                     }
                 }
             }
+        }
 
-
-        //calculate moves piece could make
-
-        //check if piece is in kings position
-
-        //returns
+        return false;
     }
 
     /**
@@ -169,7 +165,18 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        // check for inCheck
+        for (int row = 1; row <= 8; row++){
+            for (int col = 1; col <= 8; col++){
+                ChessPosition newPosition = new ChessPosition(row, col);
+                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+
+                if (pieceAtNewPosition != null && pieceAtNewPosition.getTeamColor() == teamColor){
+                    Collection<ChessMoves> moves = validMoves()
+                }
+        //check for other team moves
+
+        //return true if no valid moves
     }
 
     /**
