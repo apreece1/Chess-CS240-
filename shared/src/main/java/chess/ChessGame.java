@@ -166,17 +166,21 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         // check for inCheck
-        for (int row = 1; row <= 8; row++){
-            for (int col = 1; col <= 8; col++){
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
                 ChessPosition newPosition = new ChessPosition(row, col);
                 ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
 
-                if (pieceAtNewPosition != null && pieceAtNewPosition.getTeamColor() == teamColor){
-                    Collection<ChessMoves> moves = validMoves()
+                if (pieceAtNewPosition != null && pieceAtNewPosition.getTeamColor() == teamColor) {
+                    Collection<ChessMove> moves = validMoves(newPosition);
+                    if (moves != null && !moves.isEmpty()) {
+                        return false;
+                    }
                 }
-        //check for other team moves
-
+            }
+        }        //check for other team moves
         //return true if no valid moves
+        return true;
     }
 
     /**
