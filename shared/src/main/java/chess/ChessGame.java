@@ -142,6 +142,10 @@ public class ChessGame {
             for (int col = 1; col <= 8; col++){
                 ChessPosition oppPosition = new ChessPosition(row, col);
                 ChessPiece oppPiece = board.getPiece(oppPosition);
+
+                if(oppPiece != null && oppPiece.getTeamColor() == opposing) {
+                    Collection<ChessMove> oppMoves = oppPiece.pieceMoves(board, oppPosition);
+                }
             }
 
 
