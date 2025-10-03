@@ -140,6 +140,7 @@ public class ChessGame {
             throw new InvalidMoveException("Illegal Move.");
 
         }
+        //need to add for pawn promotion
 
         //do move
         board.addPiece(move.getEndPosition(), piece);
