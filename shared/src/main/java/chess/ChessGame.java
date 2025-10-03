@@ -13,11 +13,13 @@ import java.util.Collection;
 public class ChessGame {
 
     private ChessBoard board;
+    private TeamColor teamTurn;
 
     public ChessGame() {
 
         board = new ChessBoard();
         board.resetBoard();
+        this.teamTurn = TeamColor.WHITE; //white goes first bb
 
     }
 
