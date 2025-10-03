@@ -196,9 +196,9 @@ public class ChessPiece {
 
                 int[][] captureDiag = {{pawnDirections, 1}, {pawnDirections, -1}};
 
-                for (int[] Diag : captureDiag) {
-                    int captureRow = myPosition.getRow() + Diag[0];
-                    int captureCol = myPosition.getColumn() + Diag[1];
+                for (int[] diag : captureDiag) {
+                    int captureRow = myPosition.getRow() + diag[0];
+                    int captureCol = myPosition.getColumn() + diag[1];
 
                     if (captureRow >= 1 && captureRow <= 8 && captureCol >= 1 && captureCol <= 8) {
                         ChessPosition newPosition = new ChessPosition(captureRow, captureCol);
