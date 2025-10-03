@@ -25,7 +25,8 @@ public class ChessGame {
             return false;
         }
         ChessGame chessGame = (ChessGame) o;
-        return Objects.equals(getBoard(), chessGame.getBoard()) && getTeamTurn() == chessGame.getTeamTurn();
+        return Objects.equals(getBoard(), chessGame.getBoard()) &&
+                getTeamTurn() == chessGame.getTeamTurn();
     }
 
     @Override
@@ -188,7 +189,8 @@ public class ChessGame {
             for (int col = 1; col <= 8; col++){
                 ChessPosition newPosition = new ChessPosition(row, col);
                 ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
-                if (pieceAtNewPosition != null && pieceAtNewPosition.getPieceType() ==  ChessPiece.PieceType.KING && pieceAtNewPosition.getTeamColor() == teamColor){
+                if (pieceAtNewPosition != null && pieceAtNewPosition.getPieceType() ==
+                        ChessPiece.PieceType.KING && pieceAtNewPosition.getTeamColor() == teamColor){
                     kingPosition = newPosition;
                     break;
                 }
