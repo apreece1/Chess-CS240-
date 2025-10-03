@@ -128,12 +128,18 @@ public class ChessGame {
 
         //check for piece and turn
         if(piece == null){
-
+            throw new InvalidMoveException("No piece at start.");
         }
         if(piece.getTeamColor() != getTeamTurn()){
+            throw new InvalidMoveException("Not teams turn");
+        }
+
+        //check if move is valid
+        Collection<ChessMove> legalMoves = validMoves(start);
+        if(legalMoves == null || !legalMoves.contains(move)){
+            throw new InvalidMoveException("Illegal Move.");
 
         }
-        //check if move is valid
 
         //do move
 
