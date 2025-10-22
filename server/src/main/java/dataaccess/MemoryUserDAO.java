@@ -1,26 +1,26 @@
 package dataaccess;
 
-import model.AuthData;
+import model.UserData;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collection;
 
-public class MemoryUserDAO implements AuthDAO {
+public class MemoryUserDAO implements UserDAO {
 
-    private final Map<String, AuthData> auths = new HashMap<>();
+    private final Map<String, UserData> users = new HashMap<>();
 
 
     @Override
-    public void createUser(UserData auth) throws DataAccessException {
-        if (auths.containsKey(auth.authToken())){
-            throw new DataAccessException("Auth token already exists");
+    public void createUser(UserData user) throws DataAccessException {
+        if (users.containsKey(user.username())){
+            throw new DataAccessException("User already exists");
         }
-        auths.put(auth.authToken(), auth);
+        users.put(user.username(), user);
     }
 
     @Override
-    public AuthData getUser(String authToken) throws DataAccessException {
-        var auth = auths.get(authToken);
+    public UserData getUser(String username) throws DataAccessException {
+        var auth = auths.get(username);
         if (auth == null) {
             throw new DataAccessException("Auth token not found");
         }
