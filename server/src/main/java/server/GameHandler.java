@@ -20,7 +20,15 @@ public class GameHandler {
 
     private record ErrorMessage(String message) {}
 
-    
+    public void listGames(Context ctx) {
+        try {
+            String authToken = ctx.header("authorization");
+            var games = gameService.listGames(authToken);
+            ctx.status(200).json(games);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }
