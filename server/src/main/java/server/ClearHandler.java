@@ -4,6 +4,7 @@ import service.AuthService;
 import service.GameService;
 import service.UserService;
 import io.javalin.http.Context;
+import java.util.Map;
 
 
 public class ClearHandler {
@@ -23,9 +24,9 @@ public class ClearHandler {
             userService.clear();
             authService.clear();
             gameService.clear();
-            ctx.status(200).json("{}");
+            ctx.status(200).json(Map.of("success",true));
         } catch (Exception e) {
-            ctx.status(500).json("{\"message\": \"Error: " + e.getMessage() + "\"}");
+            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
         }
     }
 }
