@@ -43,14 +43,17 @@ public class UserHandler {
     public void login(Context ctx) {
         try {
             LoginRequest request = gson.fromJson(ctx.body(), LoginRequest.class);
+
+            if (request.username() == null || request.password() == null) {
+                ctx.status(400).json(new ErrorMessage("Error: Missing username or password"));
+            }
+
             AuthData result = userService.login(request.username(), request.password());
             ctx.status(200).json(result);
 
+        } catch (com.google.gson.JsonSyntaxException e) {
+           ctx.status(400).json(new ErrorMessage("Error: Bad request"));
         } catch (DataAccessException e) {
-            String msg = e.getMessage();
-            if("User not found".equals(msg)) {
-                ctx.status(400).json(new ErrorMessage("Error: " + msg));
-            }
             ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
