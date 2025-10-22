@@ -60,7 +60,7 @@ public class GameService {
 
     }
 
-    private void clear() throws DataAccessException {
+    public void clear() throws DataAccessException {
         gameDAO.clear();
     }
 

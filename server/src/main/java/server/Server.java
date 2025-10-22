@@ -38,6 +38,7 @@ public class Server {
 
         UserHandler userHandler = new UserHandler(userService, authService);
         GameHandler gameHandler = new GameHandler(gameService);
+        ClearHandler clearHandler = new ClearHandler(userService, authService, gameService);
 
         // Register your endpoints and exception handlers here.
         javalin.post("/user", userHandler::register);
@@ -47,6 +48,8 @@ public class Server {
         javalin.get("/game", gameHandler::listGames);
         javalin.post("/game", gameHandler::createGame);
         javalin.put("/game/join", gameHandler::joinGame);
+
+        javalin.delete("/db", clearHandler::clear);
 
     }
 
