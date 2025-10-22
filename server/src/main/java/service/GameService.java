@@ -59,5 +59,13 @@ public class GameService {
 
     }
 
+    private void clear() throws DataAccessException {
+        gameDAO.clear();
+    }
+
+    private AuthData verifyAuth(String authToken) throws DataAccessException {
+        var auth = authDAO.getAuth(authToken);
+        if (auth == null) {
+    }
 
 }
