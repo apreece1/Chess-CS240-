@@ -29,8 +29,10 @@ public class UserHandler {
     public void register(Context ctx) {
         try {
             UserData request = gson.fromJson(ctx.body(), UserData.class);
-            AuthData result = userService.register(request);
-            ctx.status(200).json(result);
+
+            if(request.username() == null || request.password() == null) {
+
+            }
 
 
         } catch (DataAccessException e) {
