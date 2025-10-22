@@ -45,6 +45,14 @@ public class GameHandler {
         }
     }
 
+    public void joinGame(Context ctx) {
+        try {
+            String authToken = ctx.header("authorization");
+            JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
+            gameService.JoinGame(authToken, request.gameID(), request.playerColor());
+        }
+    }
+
 
 
 }
