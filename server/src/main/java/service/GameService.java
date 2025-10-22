@@ -21,5 +21,17 @@ public class GameService {
         return gameDAO.listGames();
     }
 
-    public
+    public int createGame(String authToken, String gameName) throws DataAccessException {
+        verifyAuth(authToken);
+
+        if (gameName == null || gameName.isBlank()) {
+            throw new DataAccessException("Error: bad request");
+        }
+
+        GameData newGame = new GameData(0, null, null, gameName, new ChessGame())
+        return gameDAO.createGame(newGame);
+
+    }
+
+    
 }
