@@ -39,5 +39,16 @@ public class UserHandler {
         }
     }
 
+    public void login(Context ctx) {
+        try {
+            UserData request = gson.fromJson(ctx.body(), UserData.class);
+            AuthData result = userService.login(request);
+            ctx.status(200).json(result);
 
+        } catch (DataAccessException e) {
+            ctx.status(401).json(new ErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            ctx.status(500). 
+        }
+    }
 }
