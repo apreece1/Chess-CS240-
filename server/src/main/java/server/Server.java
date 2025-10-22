@@ -1,7 +1,6 @@
 package server;
 
 import io.javalin.*;
-import org.eclipse.jetty.server.Authentication;
 import service.UserService;
 import service.AuthService;
 import service.GameService;
@@ -11,20 +10,28 @@ public class Server {
     private final Javalin javalin;
     private final UserService userService;
     private final AuthService authService;
-    private GameService gameService;
+    private final GameService gameService;
 
-    public Server(UserService userService, AuthService authService, GameService gameService, UserService userService1, AuthService authService1) {
-        this.userService = userService1;
-        this.authService = authService1;
+    public Server(UserService userService, AuthService authService, GameService gameService) {
+        this.userService = userService;
+        this.authService = authService;
         this.gameService = gameService;
         this.javalin = Javalin.create(config -> config.staticFiles.add("web"));
         registerEndpoints();
     }
 
     public Server(){
+        this.javalin = Javalin.create(config -> config.staticFiles.add("web"));
+
         var authDAO = new dataaccess.MemoryAuthDAO();
         var userDAO = new dataaccess.MemoryUserDAO();
         var gameDAO = new dataaccess.MemoryGameDAO();
+
+        this.authService = new AuthService(authDAO);
+        this.userService = new UserService(userDAO, authService);
+        this.gameService = new GameService(gameDAO, authService);
+
+        registerEndpoints();
     }
 
     private void registerEndpoints(){
@@ -38,8 +45,8 @@ public class Server {
         javalin.delete("/session", userHandler::logout);
 
         javalin.get("/game", gameHandler::listGames);
-        javalin.post("/game", gameHandler:: createGame);
-        javalin.put("/game:id?/join", gameHandler::joinGame);
+        javalin.post("/game", gameHandler::createGame);
+        javalin.put("/game/join", gameHandler::joinGame);
 
     }
 
