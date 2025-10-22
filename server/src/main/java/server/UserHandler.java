@@ -2,7 +2,12 @@ package server;
 
 
 import com.google.gson.Gson;
+import io.javalin.http.Context;
 import service.UserService;
+import service.AuthService;
+import model.UserData;
+import model.AuthData;
+import dataaccess.DataAccessException;
 
 public class UserHandler {
 
@@ -14,5 +19,13 @@ public class UserHandler {
     public UserHandler(UserService userService, AuthService authService) {
         this.userService = userService;
         this.authService = authService;
+    }
+
+    private record ErrorMessage(String message) {}
+
+    public void register(Context ctx) {
+        try {
+
+        }
     }
 }
