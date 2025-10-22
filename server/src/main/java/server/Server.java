@@ -4,6 +4,10 @@ import io.javalin.*;
 import service.UserService;
 import service.AuthService;
 import service.GameService;
+import com.google.gson.Gson;
+import io.javalin.json.JsonMapper;
+import java.lang.reflect.Type;
+
 
 public class Server {
 
