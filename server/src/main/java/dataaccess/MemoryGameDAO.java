@@ -37,11 +37,14 @@ public class MemoryGameDAO  implements GameDAO{
 
     @Override
     public Collection<GameData> listGames() throws DataAccessException {
-        return List.of();
+        return games.values();
     }
 
     @Override
     public void updateGame(GameData game) throws DataAccessException {
+        if (!games.containsKey(game.gameID())){
+            throw new DataAccessException("Game not found")
+        }
 
     }
 
