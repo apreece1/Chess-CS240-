@@ -47,12 +47,15 @@ public class GameService {
             }
             game = new GameData(game.gameID(), game.whiteUsername(), username, game.gameName(), game.game());
         } else if (playerColor.equalsIgnoreCase("BLACK")) {
-            if (game.blackUsername() != null && game.blackUsername(),equals(username)) {
+            if (game.blackUsername() != null && !game.blackUsername().equals(username)){
                 throw new DataAccessException("Error: already taken");
             }
             game = new GameData(game.gameID(), game.whiteUsername(), username, game.gameName(), game.game());
-
+        } else {
+            throw new DataAccessException("Error: bad request");
         }
+
+        gameDAO.updateGame(game);
 
     }
 
