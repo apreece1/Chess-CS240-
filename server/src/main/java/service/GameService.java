@@ -35,6 +35,7 @@ public class GameService {
 
     public void JoinGame(String authToken, int gameID, String playerColor) throws DataAccessException {
         var auth = verifyAuth(authToken);
+        String username = auth.username();
         var game = gameDAO.getGame(gameID);
 
         if (game == null) {
