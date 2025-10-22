@@ -56,7 +56,10 @@ public class UserHandler {
         try {
             String authToken = ctx.header("authorization");
             userService.logout(authToken);
-            ctx.status()
+            ctx.status(200).json("{}");
+
+        } catch (DataAccessException e) {
+            ctx.status(401).json(new)
         }
     }
 
