@@ -30,7 +30,8 @@ public class UserHandler {
         try {
             UserData request = gson.fromJson(ctx.body(), UserData.class);
 
-            if(request.username() == null || request.password() == null) {
+            if (request.username() == null || request.password() == null) {
+                ctx.status(400).json(new ErrorMessage("Error: Missing username or password"))
 
             }
 
