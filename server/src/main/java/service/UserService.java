@@ -14,4 +14,15 @@ public class UserService {
         this.userDAO = userDAO;
         this.authService = authService;
     }
+
+    public AuthData register(UserData user) throws DataAccessException {
+        if (user.username() == null || user.username().isBlank() ||
+            user.password() == null || user.password().isBlank()) {
+            throw new DataAccessException("Error: bad request");
+        }
+
+        try{
+            
+        }
+    }
 }
