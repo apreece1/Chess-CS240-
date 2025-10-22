@@ -10,6 +10,8 @@ import model.AuthData;
 import model.LoginRequest;
 import dataaccess.DataAccessException;
 
+import java.util.Map;
+
 public class UserHandler {
 
     private final UserService userService;
@@ -55,7 +57,7 @@ public class UserHandler {
         try {
             String authToken = ctx.header("authorization");
             userService.logout(authToken);
-            ctx.status(200).json("{}");
+            ctx.status(200).json(Map.of("message", "Logout successful"));
 
         } catch (DataAccessException e) {
             ctx.status(401).json(new ErrorMessage(e.getMessage()));
