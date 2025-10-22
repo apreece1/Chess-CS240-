@@ -50,7 +50,7 @@ public class GameService {
             if (game.blackUsername() != null && game.blackUsername(),equals(username)) {
                 throw new DataAccessException("Error: already taken");
             }
-            game 
+            game = new GameData(game.gameID(), game.whiteUsername(), username, game.gameName(), game.game());
 
         }
 
