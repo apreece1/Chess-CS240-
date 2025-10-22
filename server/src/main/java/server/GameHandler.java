@@ -7,6 +7,8 @@ import model.GameData;
 import dataaccess.DataAccessException;
 import service.GameService;
 
+import java.util.Map;
+
 public class GameHandler {
 
     private final GameService gameService;
@@ -35,7 +37,7 @@ public class GameHandler {
             String authToken = ctx.header("authorization");
             GameData request = gson.fromJson(ctx.body(), GameData.class);
             int gameId = gameService.createGame(authToken, request.gameName());
-            ctx.status(200).json("{\"gameID\":" + gameId + "}");
+            ctx.status(200).json(Map.of("gameID", gameId));
         } catch (DataAccessException e) {
             ctx.status(400).json(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
