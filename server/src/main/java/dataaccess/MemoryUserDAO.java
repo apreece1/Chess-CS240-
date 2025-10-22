@@ -11,7 +11,7 @@ public class MemoryUserDAO implements AuthDAO {
 
 
     @Override
-    public void createAuth(AuthData auth) throws DataAccessException {
+    public void createUser(UserData auth) throws DataAccessException {
         if (auths.containsKey(auth.authToken())){
             throw new DataAccessException("Auth token already exists");
         }
@@ -19,7 +19,7 @@ public class MemoryUserDAO implements AuthDAO {
     }
 
     @Override
-    public AuthData getAuth(String authToken) throws DataAccessException {
+    public AuthData getUser(String authToken) throws DataAccessException {
         var auth = auths.get(authToken);
         if (auth == null) {
             throw new DataAccessException("Auth token not found");
@@ -28,7 +28,7 @@ public class MemoryUserDAO implements AuthDAO {
     }
 
     @Override
-    public void deleteAuth(String authToken) throws DataAccessException {
+    public void deleteUser(String authToken) throws DataAccessException {
         if (!auths.containsKey(authToken)) {
             throw new DataAccessException("Auth token not found");
         }
