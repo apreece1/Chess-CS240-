@@ -17,12 +17,22 @@ public class UserService {
 
     public AuthData register(UserData user) throws DataAccessException {
         if (user.username() == null || user.username().isBlank() ||
-            user.password() == null || user.password().isBlank()) {
+                user.password() == null || user.password().isBlank()) {
             throw new DataAccessException("Error: bad request");
         }
 
-        try{
-            
+        try {
+            userDAO.getUser(user.username());
+            throw new DataAccessException("Error: already taken");
+        } catch (DataAccessException ignored) {
+
         }
+
+        userDAO.createUser(user);
+
+        return authService.createAuth(user.username());
+
     }
+
+
 }
