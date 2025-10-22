@@ -28,7 +28,7 @@ public class GameService {
             throw new DataAccessException("Error: bad request");
         }
 
-        GameData newGame = new GameData(0, null, null, gameName, new ChessGame())
+        GameData newGame = new GameData(0, null, null, gameName, new ChessGame());
         return gameDAO.createGame(newGame);
 
     }
@@ -66,6 +66,9 @@ public class GameService {
     private AuthData verifyAuth(String authToken) throws DataAccessException {
         var auth = authDAO.getAuth(authToken);
         if (auth == null) {
+            throw new DataAccessException("Error: unauthorized");
+        }
+        return auth;
     }
 
 }
