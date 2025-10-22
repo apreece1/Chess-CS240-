@@ -7,6 +7,7 @@ import service.UserService;
 import service.AuthService;
 import model.UserData;
 import model.AuthData;
+import model.LoginRequest;
 import dataaccess.DataAccessException;
 
 public class UserHandler {
@@ -26,9 +27,7 @@ public class UserHandler {
     public void register(Context ctx) {
         try {
             UserData request = gson.fromJson(ctx.body(), UserData.class);
-
             AuthData result = userService.register(request);
-
             ctx.status(200).json(result);
 
 
@@ -41,8 +40,8 @@ public class UserHandler {
 
     public void login(Context ctx) {
         try {
-            UserData request = gson.fromJson(ctx.body(), UserData.class);
-            AuthData result = userService.login(request);
+            LoginRequest request = gson.fromJson(ctx.body(), LoginRequest.class);
+            AuthData result = userService.login(request.username(), request.password());
             ctx.status(200).json(result);
 
         } catch (DataAccessException e) {

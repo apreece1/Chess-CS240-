@@ -43,6 +43,11 @@ public class UserService {
         return authService.createAuth(username);
     }
 
+    public void logout(String authToken) throws DataAccessException {
+        authService.deleteAuth(authToken);
+    }
+
+
     public void clear() throws DataAccessException{
         userDAO.clear();
     }
