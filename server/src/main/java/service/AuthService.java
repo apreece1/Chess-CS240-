@@ -2,6 +2,8 @@ package service;
 
 import dataaccess.*;
 import model.AuthData;
+
+import javax.xml.crypto.Data;
 import java.util.UUID;
 
 public class AuthService {
@@ -19,5 +21,12 @@ public class AuthService {
         return auth;
     }
 
+    public AuthData getAuthDAO(String authToken) throws DataAccessException {
+        return authDAO.getAuth(authToken);
+    }
+
+    public void deleteAuth(String authToken) throws DataAccessException {
+        authDAO.deleteAuth(authToken);
+    }
 
 }
