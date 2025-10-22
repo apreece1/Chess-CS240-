@@ -9,11 +9,11 @@ import java.util.Collection;
 public class GameService {
 
     private final GameDAO gameDAO;
-    private final AuthDAO authDAO;
+    private final AuthService authService;
 
-    public GameService(GameDAO gameDAO, AuthDAO authDAO) {
+    public GameService(GameDAO gameDAO, AuthService authService) {
         this.gameDAO = gameDAO;
-        this.authDAO = authDAO;
+        this.authService = authService;
     }
 
     public Collection<GameData> listGames(String authToken) throws DataAccessException {
@@ -33,7 +33,7 @@ public class GameService {
 
     }
 
-    public void JoinGame(String authToken, int gameID, String playerColor) throws DataAccessException {
+    public void joinGame(String authToken, int gameID, String playerColor) throws DataAccessException {
         var auth = verifyAuth(authToken);
         String username = auth.username();
         var game = gameDAO.getGame(gameID);
@@ -65,7 +65,7 @@ public class GameService {
     }
 
     private AuthData verifyAuth(String authToken) throws DataAccessException {
-        var auth = authDAO.getAuth(authToken);
+        var auth = authService.verifyAuth(authToken);
         if (auth == null) {
             throw new DataAccessException("Error: unauthorized");
         }

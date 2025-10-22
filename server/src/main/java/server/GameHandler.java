@@ -10,12 +10,10 @@ import service.GameService;
 public class GameHandler {
 
     private final GameService gameService;
-    private final AuthService authService;
     private final Gson gson = new Gson();
 
-    public GameHandler(GameService gameService, AuthService authService) {
+    public GameHandler(GameService gameService) {
         this.gameService = gameService;
-        this.authService = authService;
     }
 
     private record ErrorMessage(String message) {}
@@ -49,7 +47,7 @@ public class GameHandler {
         try {
             String authToken = ctx.header("authorization");
             JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
-            gameService.JoinGame(authToken, request.gameID(), request.playerColor());
+            gameService.joinGame(authToken, request.gameID(), request.playerColor());
             ctx.status(200).json("{}");
         } catch (DataAccessException e) {
             ctx.status(400).json(new ErrorMessage(e.getMessage()));

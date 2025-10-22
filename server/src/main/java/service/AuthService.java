@@ -24,6 +24,14 @@ public class AuthService {
         return authDAO.getAuth(authToken);
     }
 
+    public AuthData verifyAuth(String authToken) throws DataAccessException{
+        var auth = authDAO.getAuth(authToken);
+        if (auth == null) {
+            throw new DataAccessException("Error: unauthorized");
+        }
+        return auth;
+    }
+
     public void deleteAuth(String authToken) throws DataAccessException {
         authDAO.deleteAuth(authToken);
     }
