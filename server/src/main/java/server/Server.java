@@ -29,10 +29,16 @@ public class Server {
                 return gson.toJson(obj, type);
             }
 
+            @Override
+            public <T> T fromJsonString(String json, Type targetType) {
+                return gson.fromJson(json, targetType);
+            }
+        };
 
-
-
-
+        this.javalin = Javalin.create(config -> {
+            config.staticFiles.add("web");
+            config.jsonMapper(gsonMapper); // set Gson as JSON mapper
+        });
 
         registerEndpoints();
 
