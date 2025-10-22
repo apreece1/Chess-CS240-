@@ -1,4 +1,9 @@
 package dataaccess;
 
-public class GameDAO {
+import model.GameData;
+import java.util.Collection;
+
+public interface GameDAO {
+    int createGame(GameData game) throws DataAccessException;
+    GameData
 }
