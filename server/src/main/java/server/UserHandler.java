@@ -48,7 +48,17 @@ public class UserHandler {
         } catch (DataAccessException e) {
             ctx.status(401).json(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            ctx.status(500). 
+            ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
     }
+
+    public void logout(Context ctx) {
+        try {
+            String authToken = ctx.header("authorization");
+            userService.logout(authToken);
+            ctx.status()
+        }
+    }
+
+
 }
