@@ -26,7 +26,9 @@ public class GameHandler {
             var games = gameService.listGames(authToken);
             ctx.status(200).json(games);
         } catch (DataAccessException e) {
-            throw new RuntimeException(e);
+            ctx.status(401).json(new ErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            ctx.status(500).json(new ErrorMessage("Error:" +e.getMessage()));
         }
     }
 
