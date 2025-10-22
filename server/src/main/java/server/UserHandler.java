@@ -40,8 +40,11 @@ public class UserHandler {
 
         } catch (DataAccessException e) {
             String msg = e.getMessage().toLowerCase();
-            if (msg.contains('already exists') || msg.contains("forbidden"))
-
+            if (msg.contains("already exists") || msg.contains("forbidden")) {
+                ctx.status(403).json(new ErrorMessage(e.getMessage()));
+            } else {
+                ctx.status(400).json(new ErrorMessage(e.getMessage()));
+            }
 
         } catch (DataAccessException e) {
             ctx.status(400).json(new ErrorMessage(e.getMessage()));
