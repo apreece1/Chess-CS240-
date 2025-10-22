@@ -12,5 +12,12 @@ public class AuthService {
         this.authDAO = authDAO;
     }
 
+    public AuthData createAuth(String username) throws DataAccessException {
+        String token = UUID.randomUUID().toString();
+        AuthData auth = new AuthData(token, username);
+        authDAO.createAuth(auth);
+        return auth;
+    }
+
 
 }
