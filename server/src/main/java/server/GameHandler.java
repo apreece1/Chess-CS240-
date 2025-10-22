@@ -50,9 +50,17 @@ public class GameHandler {
             String authToken = ctx.header("authorization");
             JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
             gameService.JoinGame(authToken, request.gameID(), request.playerColor());
+            ctx.status(200).json("{}");
+        } catch (DataAccessException e) {
+            ctx.status(400).json(new ErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            ctx.status(500).json(new ErrorMessage("Error:" + e.getMessage()));
         }
     }
 
+    private record JoinGameRequest(int gameID, String playerColor) {
+
+    }
 
 
 }
