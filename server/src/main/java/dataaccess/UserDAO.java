@@ -1,4 +1,4 @@
 package dataaccess;
 
-public class AuthDao {
+public class UserDAO {
 }
