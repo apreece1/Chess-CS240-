@@ -32,5 +32,19 @@ public class GameHandler {
         }
     }
 
+    public void createGame(Context ctx) {
+        try {
+            String authToken = ctx.header("authorization");
+            GameData request = gson.fromJson(ctx.body(), GameData.class);
+            int gameId = gameService.createGame(authToken, request.gameName());
+            ctx.status(200).json("{\"gameID\":" + gameId + "}");
+        } catch (DataAccessException e) {
+            ctx.status(400).json(new ErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            ctx.status(500).json(new ErrorMessage("Error:" +e.getMessage()));
+        }
+    }
+
+
 
 }
