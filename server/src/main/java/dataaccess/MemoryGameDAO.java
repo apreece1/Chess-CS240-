@@ -28,7 +28,11 @@ public class MemoryGameDAO  implements GameDAO{
 
     @Override
     public GameData getGame(int gameID) throws DataAccessException {
-        return null;
+        var game = games.get(gameID);
+        if (game == null) {
+            throw new DataAccessException("Game not found");
+        }
+        return game;
     }
 
     @Override
