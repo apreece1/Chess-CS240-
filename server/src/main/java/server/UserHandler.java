@@ -47,6 +47,10 @@ public class UserHandler {
             ctx.status(200).json(result);
 
         } catch (DataAccessException e) {
+            String msg = e.getMessage();
+            if("User not found".equals(msg)) {
+                ctx.status(400).json(new ErrorMessage("Error: " + msg));
+            }
             ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
