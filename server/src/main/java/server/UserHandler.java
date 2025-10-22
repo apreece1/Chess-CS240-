@@ -31,9 +31,16 @@ public class UserHandler {
             UserData request = gson.fromJson(ctx.body(), UserData.class);
 
             if (request.username() == null || request.password() == null) {
-                ctx.status(400).json(new ErrorMessage("Error: Missing username or password"))
-
+                ctx.status(400).json(new ErrorMessage("Error: Missing username or password"));
+                return;
             }
+
+            AuthData result = userService.register(request);
+            ctx.status(200).json(result);
+
+        } catch (DataAccessException e) {
+            String msg = e.getMessage().toLowerCase();
+            if (msg.contains('already exists') || msg.contains("forbidden"))
 
 
         } catch (DataAccessException e) {
