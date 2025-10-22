@@ -46,6 +46,7 @@ public class UserHandler {
 
             if (request.username() == null || request.password() == null) {
                 ctx.status(400).json(new ErrorMessage("Error: Missing username or password"));
+                return;
             }
 
             AuthData result = userService.login(request.username(), request.password());
