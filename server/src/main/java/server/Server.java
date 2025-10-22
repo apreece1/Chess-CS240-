@@ -20,8 +20,14 @@ public class Server {
         this.userService = userService;
         this.authService = authService;
         this.gameService = gameService;
-        this.javalin = Javalin.create(config -> config.staticFiles.add("web"));
-        registerEndpoints();
+
+        Gson gson = new Gson();
+        this.javalin = Javalin.create(config -> {
+            config.staticFiles.add("web");
+            config.jsonMapper(new JsonMapper() {
+                @Override
+                public String toJsonString(Object obj)
+            }
     }
 
     public Server(){
