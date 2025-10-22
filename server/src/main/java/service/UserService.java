@@ -34,5 +34,17 @@ public class UserService {
 
     }
 
+    public AuthData login(String username, String password) throws DataAccessException {
+        var user = userDAO.getUser(username);
+        if (user == null || !user.password().equals(password)) {
+            throw new DataAccessException("Error: unauthorized");
+        }
 
+        return authService.createAuth(username);
+    }
+
+    public void clear() throws DataAccessException{
+        userDAO.clear();
+    }
+    
 }
