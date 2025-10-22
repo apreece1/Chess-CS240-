@@ -21,23 +21,17 @@ public class Server {
         this.authService = authService;
         this.gameService = gameService;
 
-        Gson gson = new Gson();
-        this.javalin = Javalin.create(config -> {
-            config.staticFiles.add("web");
-            config.jsonMapper(new JsonMapper() {
-                @Override
-                public String toJsonString(Object obj) {
-                    return gson.toJson(obj);
-                }
-
-                @Override
-                public <T> T fromJsonString(String json, Class<T> targetClass) {
-                    return gson.fromJson(json, targetClass);
-                }
-
-                @Override
-                public
+        Gson gson = new GsonBuilder().create();
+        JsonMapper gsonMapper = new JsonMapper() {
+            @Override
+            public String toJsonString(Object obj, Type type) {
+                return gson.toJson(obj, type);
             }
+
+
+
+        registerEndpoints();
+
     }
 
     public Server(){
