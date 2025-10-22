@@ -2,7 +2,6 @@ package dataaccess;
 
 import model.AuthData;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Collection;
 
@@ -38,11 +37,11 @@ public class MemoryAuthDAO implements AuthDAO {
 
     @Override
     public Collection<AuthData> listAuths() throws DataAccessException {
-        return List.of();
+        return auths.values();
     }
 
     @Override
     public void clear() throws DataAccessException {
-
+       auths.clear();
     }
 }
