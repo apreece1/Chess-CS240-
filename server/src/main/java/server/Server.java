@@ -26,7 +26,17 @@ public class Server {
             config.staticFiles.add("web");
             config.jsonMapper(new JsonMapper() {
                 @Override
-                public String toJsonString(Object obj)
+                public String toJsonString(Object obj) {
+                    return gson.toJson(obj);
+                }
+
+                @Override
+                public <T> T fromJsonString(String json, Class<T> targetClass) {
+                    return gson.fromJson(json, targetClass);
+                }
+
+                @Override
+                public
             }
     }
 
