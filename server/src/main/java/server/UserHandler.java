@@ -31,9 +31,13 @@ public class UserHandler {
 
             ctx.status(200).json(result);
 
-            
+
         } catch (DataAccessException e) {
-            throw new RuntimeException(e);
+            ctx.status(400).json(new ErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
     }
+
+
 }
