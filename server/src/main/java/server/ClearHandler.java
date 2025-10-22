@@ -18,5 +18,14 @@ public class ClearHandler {
         this.gameService = gameService;
     }
 
-    public void clear(Context ctx)
+    public void clear(Context ctx) {
+        try {
+            userService.clear();
+            authService.clear();
+            gameService.clear();
+            ctx.status(200).json("{}");
+        } catch (Exception e) {
+            ctx.status(500).json("{\"message\": \"Error: " + e.getMessage() + "\"}");
+        }
+    }
 }
