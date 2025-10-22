@@ -41,6 +41,14 @@ public class GameService {
             throw new DataAccessException("Error: bad request");
         }
 
+        if (playerColor.equalsIgnoreCase("WHITE")) {
+            if (game.whiteUsername() != null && !game.whiteUsername().equals(username)) {
+                throw new DataAccessException("Error: already taken");
+            }
+            
+
+        }
+
     }
 
 
