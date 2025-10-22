@@ -18,5 +18,9 @@ public class GameHandler {
         this.authService = authService;
     }
 
+    private record ErrorMessage(String message) {}
+
+    
+
 
 }
