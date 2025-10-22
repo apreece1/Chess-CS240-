@@ -28,20 +28,12 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
-    public void deleteUser(String authToken) throws DataAccessException {
-        if (!auths.containsKey(authToken)) {
-            throw new DataAccessException("Auth token not found");
-        }
-        auths.remove(authToken);
-    }
-
-    @Override
-    public Collection<AuthData> listAuths() throws DataAccessException {
-        return auths.values();
+    public Collection<UserData> listUsers() throws DataAccessException {
+        return users.values();
     }
 
     @Override
     public void clear() throws DataAccessException {
-        auths.clear();
+        users.clear();
     }
 }
