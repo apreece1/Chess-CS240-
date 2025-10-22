@@ -8,6 +8,11 @@ import service.AuthService;
 
 public class Main {
     public static void main(String[] args) {
+        var authDAO = new MemoryAuthDAO();
+        var userDAO = new MemoryUserDAO();
+
+        var authService = new AuthService(authDAO);
+
         Server server = new Server();
         server.run(8080);
 
