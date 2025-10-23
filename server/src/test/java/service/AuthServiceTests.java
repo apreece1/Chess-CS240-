@@ -21,11 +21,6 @@ class AuthServiceTests {
     static class StubAuthService extends AuthService {
         private final List<AuthData> auths = new ArrayList<>();
 
-    }
-
-    static class StubAuthService extends AuthService {
-        private final List<AuthData> auths = new ArrayList<>();
-
         public StubAuthService() {
             super(null);
         }
@@ -42,5 +37,27 @@ class AuthServiceTests {
             if (authToken == null || authToken.isBlank()) {
                 throw new DataAccessException("Error: unauthorized");
             }
+            return auths.stream()
+                    .filter(a -> a.username().equals(authToken))
+                    .findFirst()
+                    .orElseThrow(() -> new DataAccessException("Error: unauthorized"));
+        }
 
-            
+        @Override
+        public void deleteAuth(String authToken) throws DataAccessException {
+            AuthData toRemove = auths.stream()
+                    .filter(a -> a.username().equals(authToken))
+                    .findFirst()
+                    .orElseThrow(() -> new DataAccessException("Auth token not found"));
+            auths.remove(toRemove);
+        }
+
+        @Override
+        public void clear() {
+            auths.clear();
+        }
+    }
+
+
+
+
