@@ -13,12 +13,20 @@ public class AuthService {
         this.authDAO = authDAO;
     }
 
+    public boolean isValidAuth(String authToken) {
+        try{
+
+        }
+    }
+
     public AuthData createAuth(String username) throws DataAccessException {
         String token = UUID.randomUUID().toString();
         AuthData auth = new AuthData(token, username);
         authDAO.createAuth(auth);
         return auth;
     }
+
+
 
     public AuthData getAuthDAO(String authToken) throws DataAccessException {
         return authDAO.getAuth(authToken);
