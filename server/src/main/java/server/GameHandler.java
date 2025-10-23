@@ -24,7 +24,7 @@ public class GameHandler {
         try {
             String authToken = ctx.header("authorization");
             var games = gameService.listGames(authToken);
-            ctx.status(200).json(games);
+            ctx.status(200).json(Map.of("game", games));
         } catch (DataAccessException e) {
             ctx.status(401).json(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
@@ -39,7 +39,7 @@ public class GameHandler {
             int gameId = gameService.createGame(authToken, request.gameName());
             ctx.status(200).json(Map.of("gameID", gameId));
         } catch (DataAccessException e) {
-            ctx.status(400).json(new ErrorMessage(e.getMessage()));
+            ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error:" +e.getMessage()));
         }
@@ -50,7 +50,7 @@ public class GameHandler {
             String authToken = ctx.header("authorization");
             JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
             gameService.joinGame(authToken, request.gameID(), request.playerColor());
-            ctx.status(200).json("{}");
+            ctx.status(200).json(Map.of());
         } catch (DataAccessException e) {
             ctx.status(400).json(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {

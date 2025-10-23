@@ -79,13 +79,8 @@ public class UserHandler {
     public void logout(Context ctx) {
         try {
             String authToken = ctx.header("authorization");
-
-            if (authToken == null || authToken.isEmpty()){
-                ctx.
-
-        }
-        userService.logout(authToken);
-        ctx.status(200).json(Map.of("message", "Logout successful"));
+            userService.logout(authToken);
+            ctx.status(200).json(Map.of("message", "Logout successful"));
 
         } catch (DataAccessException e) {
             ctx.status(401).json(new ErrorMessage("Error : " + e.getMessage()));
