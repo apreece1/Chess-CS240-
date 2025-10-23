@@ -1,5 +1,6 @@
 package mytest;
 
+import dataaccess.AuthDAO;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,9 @@ public class UserServiceTests {
 
     @BeforeEach
     void setup() {
-        userDAO = new userDAO();
-        authService = new AuthService(new AuthDOA());
+        userDAO = new UserDAO();
+        authDAO = new AuthDAO();
+        authService = new AuthService(new AuthDAO());
         userService = new UserService(userDAO, authService);
     }
 
@@ -27,7 +29,15 @@ public class UserServiceTests {
 
         userService.register(new UserData("testuser", "password", "test@mail,com"));
 
+        assertNotNull(userService.login("testuser", "password"));
 
+        userService.clear();
+
+        DataAccessException e = assertThrows(DataAccessException.class, () ->
+                userService.login("testuser", "password")
+        );
+
+        assertTrue(e.getMessage().contains("Error"));
     }
 
 }
