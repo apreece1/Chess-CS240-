@@ -13,12 +13,6 @@ public class AuthService {
         this.authDAO = authDAO;
     }
 
-    public boolean isValidAuth(String authToken) {
-        try{
-
-        }
-    }
-
     public AuthData createAuth(String username) throws DataAccessException {
         String token = UUID.randomUUID().toString();
         AuthData auth = new AuthData(token, username);
@@ -26,22 +20,15 @@ public class AuthService {
         return auth;
     }
 
-
-
     public AuthData getAuthDAO(String authToken) throws DataAccessException {
         return authDAO.getAuth(authToken);
     }
 
     public AuthData verifyAuth(String authToken) throws DataAccessException{
-        if (authToken == null || authToken.isBlank()) {
-            throw new DataAccessException("Error: Auth token not found");
-        }
         var auth = authDAO.getAuth(authToken);
-
         if (auth == null) {
-            throw new DataAccessException("Error: Auth token not found");
+            throw new DataAccessException("Error: unauthorized");
         }
-
         return auth;
     }
 

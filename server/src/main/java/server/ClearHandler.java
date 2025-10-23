@@ -1,5 +1,6 @@
 package server;
 
+import dataaccess.DataAccessException;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
@@ -19,20 +20,16 @@ public class ClearHandler {
         this.gameService = gameService;
     }
 
-    public void clear(Context ctx) {
-        try {
-            String authToken = ctx.header("authorization");
-            if (authToken == null || authToken.isBlank() || !authService.isValidAuth(authToken)) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
-                return;
-        }
-            userService.clear();
-            authService.clear();
-            gameService.clear();
+    public void clear(Context ctx) throws DataAccessException {
 
-            ctx.status(200).json(Map.of());
-        } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+        String authToken = ctx.header("Authorization");
+        if (authToken == null || authService.verifyAuth(authToken) == null) {
+            throw new DataAccessException("Error: unauthorized");
         }
+
+        userService.clear();
+        authService.clear();
+        gameService.clear();
+        ctx.status(200).json(Map.of());
     }
 }
