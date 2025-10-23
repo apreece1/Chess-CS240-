@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.javalin.json.JsonMapper;
 import java.lang.reflect.Type;
-import java.util.Map;
 
 
 public class Server {
@@ -62,10 +61,6 @@ public class Server {
         this.javalin = Javalin.create(config -> {
             config.staticFiles.add("web");
             config.jsonMapper(gsonMapper); // set Gson as JSON mapper
-        });
-
-        this.javalin.exception(Exception.class, (e, ctx) -> {
-            ctx.status(500).json(Map.of("message", "Error :" + e.getMessage()));
         });
 
         var authDAO = new dataaccess.MemoryAuthDAO();

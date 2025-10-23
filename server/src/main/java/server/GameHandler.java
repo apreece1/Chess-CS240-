@@ -26,7 +26,7 @@ public class GameHandler {
             var games = gameService.listGames(authToken);
             ctx.status(200).json(Map.of("games", games));
         } catch (DataAccessException e) {
-            ctx.status(401).json(new ErrorMessage(e.getMessage()));
+            ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error:" +e.getMessage()));
         }
