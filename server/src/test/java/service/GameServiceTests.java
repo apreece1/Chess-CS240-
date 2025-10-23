@@ -22,4 +22,18 @@ class GameServiceTests {
         gameService = new GameService(gameDAO, authService);
     }
 
-    
+    static class StubAuthService extends AuthService {
+        public StubAuthService() {
+            super(null); // we won't use the DAO
+        }
+
+        @Override
+        public AuthData verifyAuth(String authToken) throws DataAccessException {
+            if (authToken == null || authToken.isBlank()) {
+                throw new DataAccessException("Error: unauthorized");
+            }
+            // Return a username based on token to simulate multiple users
+            return new AuthData(authToken, "user_" + authToken);
+        }
+    }
+
