@@ -43,10 +43,10 @@ public class GameService {
         }
 
         if (playerColor.equalsIgnoreCase("WHITE")) {
-            if (game.whiteUsername() != null && !game.whiteUsername().equals(username)) {
+            if (game.getWhiteUsername() != null && !game.getWhiteUsername().equals(username)) {
                 throw new DataAccessException("Error: already taken");
             }
-            game = new GameData(game.gameID(), game.whiteUsername(), username, game.gameName(), game.game());
+            game.setWhiteUsername(username);
         } else if (playerColor.equalsIgnoreCase("BLACK")) {
             if (game.blackUsername() != null && !game.blackUsername().equals(username)){
                 throw new DataAccessException("Error: already taken");
