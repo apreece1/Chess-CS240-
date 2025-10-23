@@ -22,46 +22,13 @@ public class Server {
         this.authService = authService;
         this.gameService = gameService;
 
-        Gson gson = new GsonBuilder().create();
-        JsonMapper gsonMapper = new JsonMapper() {
-            @Override
-            public String toJsonString(Object obj, Type type) {
-                return gson.toJson(obj, type);
-            }
-
-            @Override
-            public <T> T fromJsonString(String json, Type targetType) {
-                return gson.fromJson(json, targetType);
-            }
-        };
-
-        this.javalin = Javalin.create(config -> {
-            config.staticFiles.add("web");
-            config.jsonMapper(gsonMapper); // set Gson as JSON mapper
-        });
-
+        this.javalin = createJavalin();
         registerEndpoints();
 
     }
 
     public Server(){
-        Gson gson = new GsonBuilder().create();
-        JsonMapper gsonMapper = new JsonMapper() {
-            @Override
-            public String toJsonString(Object obj, Type type) {
-                return gson.toJson(obj, type);
-            }
-
-            @Override
-            public <T> T fromJsonString(String json, Type targetType) {
-                return gson.fromJson(json, targetType);
-            }
-        };
-
-        this.javalin = Javalin.create(config -> {
-            config.staticFiles.add("web");
-            config.jsonMapper(gsonMapper); // set Gson as JSON mapper
-        });
+        this.javalin = createJavalin();
 
         var authDAO = new dataaccess.MemoryAuthDAO();
         var userDAO = new dataaccess.MemoryUserDAO();
@@ -101,4 +68,25 @@ public class Server {
     public void stop() {
         javalin.stop();
     }
+
+    private Javalin createJavalin() {
+        Gson gson = new GsonBuilder().create();
+        JsonMapper gsonMapper = new JsonMapper() {
+            @Override
+            public String toJsonString(Object obj, Type type) {
+                return gson.toJson(obj, type);
+            }
+
+            @Override
+            public <T> T fromJsonString(String json, Type targetType) {
+                return gson.fromJson(json, targetType);
+            }
+        };
+
+        return Javalin.create(config -> {
+            config.staticFiles.add("web");
+            config.jsonMapper(gsonMapper);
+        });
+    }
+
 }
