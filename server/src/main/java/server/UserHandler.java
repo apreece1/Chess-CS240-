@@ -40,17 +40,12 @@ public class UserHandler {
                 result = userService.register(request);
                 ctx.status(200).json(result);
             } catch (DataAccessException e) {
-                if(e.getMessage().toLowerCase().contains("already exists")) {
-                    ctx.status(200).json(Map.of("success", true));
+                String msg = e.getMessage().toLowerCase();
+                if (msg.contains("forbidden") || msg.contains("already exists")) {
+                    ctx.status(403).json(new ErrorMessage(e.getMessage()));
+                } else {
+                    ctx.status(400).json(new ErrorMessage(e.getMessage()));
                 }
-            }
-
-        } catch (DataAccessException e) {
-            String msg = e.getMessage().toLowerCase();
-            if (msg.contains("already exists") || msg.contains("forbidden")) {
-                ctx.status(403).json(new ErrorMessage(e.getMessage()));
-            } else {
-                ctx.status(400).json(new ErrorMessage(e.getMessage()));
             }
 
         } catch (com.google.gson.JsonSyntaxException e) {
