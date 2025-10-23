@@ -37,3 +37,16 @@ class UserServiceTests {
         // second registration should throw
         assertThrows(DataAccessException.class, () -> userService.register(user));
     }
+
+    @Test
+    void testLoginUnauthorized() {
+        UserData user = new UserData("user1", "pass", "a@b.com");
+        try {
+            userService.register(user);
+        } catch (DataAccessException ignored) {}
+
+        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
+            userService.login("user1", "wrongpass");
+        });
+        assertTrue(exception.getMessage().contains("unauthorized"));
+    }
