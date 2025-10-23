@@ -43,9 +43,6 @@ public class GameService {
 
         }
 
-        if (playerColor == null || playerColor.isBlank()) {
-            return;
-        }
 
         if (playerColor.equalsIgnoreCase("WHITE")) {
             if (game.getWhiteUsername() != null && !game.getWhiteUsername().equals(username)) {
