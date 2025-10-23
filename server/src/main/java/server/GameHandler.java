@@ -48,6 +48,11 @@ public class GameHandler {
     public void joinGame(Context ctx) {
         try {
             String authToken = ctx.header("authorization");
+            if(authToken == null || authToken.isBlank()) {
+                ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
+                return;
+            }
+
             JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
 
             String playerColor = request.playerColor();
