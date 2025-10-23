@@ -82,13 +82,15 @@ public class GameHandler {
                 gameService.joinGame(authToken, request.gameID(), request.playerColor());
                 ctx.status(200).json(Map.of());
              } catch (DataAccessException e) {
-            if ("Error: already taken".equals(e.getMessage())) {
-                ctx.status(403).json(new ErrorMessage(e.getMessage()));
-            } else {
-                ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
+                if (e.getMessage().contains("Auth token")) {
+                    ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
+                } else if ("Error: already taken".equals(e.getMessage())) {
+                    ctx.status(403).json(new ErrorMessage(e.getMessage()));
+                } else {
+                    ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
                 }
             } catch (Exception e) {
-            ctx.status(500).json(new ErrorMessage("Error:" + e.getMessage()));
+                ctx.status(500).json(new ErrorMessage("Error:" + e.getMessage()));
             }
     }
 
