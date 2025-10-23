@@ -49,10 +49,20 @@ public class GameHandler {
         try {
             String authToken = ctx.header("authorization");
             JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
+
+            String playerColor = request.playerColor();
+            if (playerColor == null || playerColor.isBlank()) {
+                throw new DataAccessException("Error: bad request");
+            }
+
             gameService.joinGame(authToken, request.gameID(), request.playerColor());
             ctx.status(200).json(Map.of());
         } catch (DataAccessException e) {
-            ctx.status(400).json(new ErrorMessage(e.getMessage()));
+            if ("Error: already taken".equals(e.getMessage())) {
+                ctx.status(403).json(new ErrorMessage(e.getMessage()));
+            } else {
+                ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
+                }
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error:" + e.getMessage()));
         }
