@@ -24,7 +24,7 @@ class GameServiceTests {
 
     static class StubAuthService extends AuthService {
         public StubAuthService() {
-            super(null); // we won't use the DAO
+            super(null);
         }
 
         @Override
@@ -32,7 +32,6 @@ class GameServiceTests {
             if (authToken == null || authToken.isBlank()) {
                 throw new DataAccessException("Error: unauthorized");
             }
-            // Return a username based on token to simulate multiple users
             return new AuthData(authToken, "user_" + authToken);
         }
     }
@@ -47,5 +46,36 @@ class GameServiceTests {
         assertEquals(1, games.size());
     }
 
-    
+    void testJoinGame() throws DataAccessException {
+        String token = "valid-token";
+        int gameID = gameService.createGame(token, "My Game");
+
+        gameService.joinGame(token, gameID, "WHITE");
+
+        var game = gameService.listGames(token).stream()
+                .filter(g -> g.getGameID() == gameID)
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals("user_valid-token", game.getWhiteUsername());
+    }
+
+    @Test
+    void testJoinGameAlreadyTaken() throws DataAccessException {
+        String token1 = "token1";
+        String token2 = "token2";
+
+        int gameID = gameService.createGame(token1, "My Game");
+
+        gameService.joinGame(token1, gameID, "WHITE");
+        
+        DataAccessException ex = assertThrows(DataAccessException.class, () -> {
+            gameService.joinGame(token2, gameID, "WHITE");
+        });
+        assertTrue(ex.getMessage().contains("already taken"));
+    }
+
+
+
+
 
