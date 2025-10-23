@@ -33,20 +33,32 @@ public class GameHandler {
     }
 
     public void createGame(Context ctx) {
+        String authToken = ctx.header("authorization");
+
+        if (authToken == null || authToken.isBlank()) {
+            ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
+            return;
+        }
+
         try {
-            String authToken = ctx.header("authorization");
             GameData request = gson.fromJson(ctx.body(), GameData.class);
+
             int gameId = gameService.createGame(authToken, request.getGameName());
             ctx.status(200).json(Map.of("gameID", gameId));
+
         } catch (DataAccessException e) {
-            ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
+            if("Error: unauthorized".equalsIgnoreCase(e.getMessage())){
+                ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
+            } else {
+                ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
+            }
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error:" +e.getMessage()));
         }
     }
 
     public void joinGame(Context ctx) {
-            String authToken = ctx.header("Authorization");
+            String authToken = ctx.header("authorization");
             if (authToken == null || authToken.isBlank()) {
                 ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
                 return;

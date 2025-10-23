@@ -27,7 +27,7 @@ public class AuthService {
     public AuthData verifyAuth(String authToken) throws DataAccessException{
         var auth = authDAO.getAuth(authToken);
         if (auth == null) {
-            throw new DataAccessException("Error: unauthorized");
+            throw new DataAccessException("Error: Auth token not found");
         }
         return auth;
     }
