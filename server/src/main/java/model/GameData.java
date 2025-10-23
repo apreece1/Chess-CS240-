@@ -16,7 +16,7 @@ public class GameData  {
         this.gameName = gameName;
     }
 
-    public GameData
+    public GameData(int gameID)
 
 
     public int getGameID() { return gameID; }
