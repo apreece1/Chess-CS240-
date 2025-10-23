@@ -24,7 +24,7 @@ public class GameHandler {
         try {
             String authToken = ctx.header("authorization");
             var games = gameService.listGames(authToken);
-            ctx.status(200).json(Map.of("game", games));
+            ctx.status(200).json(Map.of("games", games));
         } catch (DataAccessException e) {
             ctx.status(401).json(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
