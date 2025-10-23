@@ -46,6 +46,7 @@ class GameServiceTests {
         assertEquals(1, games.size());
     }
 
+    @Test
     void testJoinGame() throws DataAccessException {
         String token = "valid-token";
         int gameID = gameService.createGame(token, "My Game");
@@ -68,12 +69,41 @@ class GameServiceTests {
         int gameID = gameService.createGame(token1, "My Game");
 
         gameService.joinGame(token1, gameID, "WHITE");
-        
+
         DataAccessException ex = assertThrows(DataAccessException.class, () -> {
             gameService.joinGame(token2, gameID, "WHITE");
         });
         assertTrue(ex.getMessage().contains("already taken"));
     }
+
+    @Test
+    void testCreateGameBadRequest() {
+        String token = "valid-token";
+        DataAccessException ex1 = assertThrows(DataAccessException.class, () -> {
+            gameService.createGame(token, null);
+        });
+        assertTrue(ex1.getMessage().contains("bad request"));
+
+        DataAccessException ex2 = assertThrows(DataAccessException.class, () -> {
+            gameService.createGame(token, "  ");
+        });
+        assertTrue(ex2.getMessage().contains("bad request"));
+    }
+
+    @Test
+    void testClear() throws DataAccessException {
+        String token = "valid-token";
+        int gameID = gameService.createGame(token, "My Game");
+
+        Collection<GameData> gamesBefore = gameService.listGames(token);
+        assertEquals(1, gamesBefore.size());
+
+        gameService.clear();
+
+        Collection<GameData> gamesAfter = gameService.listGames(token);
+        assertEquals(0, gamesAfter.size());
+    }
+}
 
 
 
