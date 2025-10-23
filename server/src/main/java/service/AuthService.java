@@ -20,10 +20,6 @@ public class AuthService {
         return auth;
     }
 
-    public AuthData getAuthDAO(String authToken) throws DataAccessException {
-        return authDAO.getAuth(authToken);
-    }
-
     public AuthData verifyAuth(String authToken) throws DataAccessException{
         var auth = authDAO.getAuth(authToken);
         if (auth == null) {
