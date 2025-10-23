@@ -1,5 +1,6 @@
 package mytest;
 
+import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.UserService;
@@ -23,6 +24,9 @@ public class UserServiceTests {
 
     @Test
     void testClearDeleteUsersAndTokens() throws DataAccessException {
+
+        userService.register(new UserData("testuser", "password", "test@mail,com"));
+
 
     }
 
