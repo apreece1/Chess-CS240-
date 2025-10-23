@@ -10,3 +10,16 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+class GameServiceTests {
+
+    private GameService gameService;
+
+    @BeforeEach
+    void setUp() {
+        MemoryGameDAO gameDAO = new MemoryGameDAO();
+        StubAuthService authService = new StubAuthService();
+        gameService = new GameService(gameDAO, authService);
+    }
+
+    
