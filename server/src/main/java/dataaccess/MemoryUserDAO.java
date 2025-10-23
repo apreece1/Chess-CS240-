@@ -28,11 +28,6 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
-    public Collection<UserData> listUsers() throws DataAccessException {
-        return users.values();
-    }
-
-    @Override
     public void clear() throws DataAccessException {
         users.clear();
     }
