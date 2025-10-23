@@ -50,3 +50,22 @@ class UserServiceTests {
         });
         assertTrue(exception.getMessage().contains("unauthorized"));
     }
+
+    @Test
+    void testClear() {
+        UserData user = new UserData("user1", "pass", "a@b.com");
+        try {
+            userService.register(user);
+        } catch (DataAccessException ignored) {}
+
+        try {
+            userService.clear();
+        } catch (DataAccessException ignored) {}
+
+        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
+            userService.login("user1", "pass");
+        });
+        // It might say unauthorized or not found, depending on DAO implementation
+        assertTrue(exception.getMessage().contains("unauthorized") || exception.getMessage().contains("not found"));
+    }
+}
