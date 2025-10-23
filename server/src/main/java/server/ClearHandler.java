@@ -20,13 +20,14 @@ public class ClearHandler {
     }
 
     public void clear(Context ctx) {
+        String authToken = ctx.header("authorization")
         try {
             userService.clear();
             authService.clear();
             gameService.clear();
-            ctx.status(200).json(Map.of("success",true));
+            ctx.status(200).json(Map.of());
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+            ctx.status(500).json(Map.of("message", "Error: " + (e.getMessage() != null ? e.getMessage() : "internal server error")));
         }
     }
 }
