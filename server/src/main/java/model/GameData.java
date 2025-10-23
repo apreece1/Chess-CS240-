@@ -17,13 +17,23 @@ public class GameData  {
     }
 
     public GameData(int gameID, String gameName, String whiteUsername, String blackUsername, ChessGame game){
-        this
+        this.gameID = gameID;
+        this.gameName = gameName;
+        this.whiteUsername = whiteUsername;
+        this.blackUsername = blackUsername;
+        this.game = game;
     }
 
 
     public int getGameID() { return gameID; }
+    public void setGameID(String game) { this.gameID = gameID; }
+
     public String getGameName() { return gameName; }
+    public void setGameName(String gameName) { this.gameName = gameName; }
+
     public String getWhiteUsername() { return whiteUsername; }
+    public setWhiteUsername(String whiteUsername) { this.whiteUsername = whiteUsername; }
+
     public void setWhiteUsername(String whiteUsername) { this.whiteUsername = whiteUsername; }
     public String getBlackUsername() { return blackUsername; }
     public void setBlackUsername(String blackUsername) { this.blackUsername = blackUsername; }
