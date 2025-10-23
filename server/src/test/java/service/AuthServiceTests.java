@@ -58,6 +58,34 @@ class AuthServiceTests {
         }
     }
 
+    @Test
+    void testCreateAndVerifyAuth() throws DataAccessException {
+        AuthData auth = authService.createAuth("user1");
+        assertNotNull(auth);
+
+        AuthData verified = authService.verifyAuth("user1");
+        assertEquals("user1", verified.username());
+    }
+
+    @Test
+    void testVerifyAuthUnauthorized() {
+        DataAccessException ex = assertThrows(DataAccessException.class, () -> authService.verifyAuth(""));
+        assertTrue(ex.getMessage().contains("unauthorized"));
+    }
+
+    @Test
+    void testDeleteAuth() throws DataAccessException {
+        authService.createAuth("user2");
+        authService.deleteAuth("user2");
+
+        DataAccessException ex = assertThrows(DataAccessException.class, () -> authService.verifyAuth("user2"));
+        assertTrue(ex.getMessage().contains("unauthorized"));
+    }
+}
+
+
+
+
 
 
 
