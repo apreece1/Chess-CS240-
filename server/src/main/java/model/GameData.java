@@ -16,7 +16,9 @@ public class GameData  {
         this.gameName = gameName;
     }
 
-    public GameData(int gameID)
+    public GameData(int gameID, String gameName, String whiteUsername, String blackUsername, ChessGame game){
+        this
+    }
 
 
     public int getGameID() { return gameID; }
