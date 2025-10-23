@@ -21,11 +21,15 @@ public class ClearHandler {
 
     public void clear(Context ctx) {
         try {
-            String authToken = ctx.header
+            String authToken = ctx.header("authorization");
+            if (authToken == null || authToken.isBlank() || !authService.isValidAuth(authToken)) {
+                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                return;
         }
             userService.clear();
             authService.clear();
             gameService.clear();
+
             ctx.status(200).json(Map.of());
         } catch (Exception e) {
             ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
