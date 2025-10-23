@@ -14,6 +14,16 @@ public class UserServiceTests {
     private AuthService authService;
     private UserDAO userDAO;
 
-    @
+    @BeforeEach
+    void setup() {
+        userDAO = new userDAO();
+        authService = new AuthService(new AuthDOA());
+        userService = new UserService(userDAO, authService);
+    }
+
+    @Test
+    void testClearDeleteUsersAndTokens() throws DataAccessException {
+
+    }
 
 }
