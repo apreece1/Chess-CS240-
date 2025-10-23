@@ -46,31 +46,39 @@ public class GameHandler {
     }
 
     public void joinGame(Context ctx) {
-        try {
-            String authToken = ctx.header("authorization");
-            if(authToken == null || authToken.isBlank()) {
+            String authToken = ctx.header("Authorization");
+            if (authToken == null || authToken.isBlank()) {
                 ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
                 return;
             }
 
-            JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
+            JoinGameRequest request;
+            try {
+                request = gson.fromJson(ctx.body(), JoinGameRequest.class);
+            } catch (Exception e) {
+                ctx.status(400).json(new ErrorMessage("Error: bad request"));
+                return;
+            }
+
 
             String playerColor = request.playerColor();
             if (playerColor == null || playerColor.isBlank()) {
-                throw new DataAccessException("Error: bad request");
+                ctx.status(400).json(new ErrorMessage("Error: bad request"));
+                return;
             }
 
-            gameService.joinGame(authToken, request.gameID(), request.playerColor());
-            ctx.status(200).json(Map.of());
-        } catch (DataAccessException e) {
+            try{
+                gameService.joinGame(authToken, request.gameID(), request.playerColor());
+                ctx.status(200).json(Map.of());
+             } catch (DataAccessException e) {
             if ("Error: already taken".equals(e.getMessage())) {
                 ctx.status(403).json(new ErrorMessage(e.getMessage()));
             } else {
                 ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
                 }
-        } catch (Exception e) {
+            } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error:" + e.getMessage()));
-        }
+            }
     }
 
     private record JoinGameRequest(int gameID, String playerColor) {
