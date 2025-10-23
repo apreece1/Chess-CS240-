@@ -14,6 +14,8 @@ public record GameData {
         this.gameName = gameName;
     }
 
+    public int get
+
 
 }
 
