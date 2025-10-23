@@ -28,10 +28,10 @@ public class GameService {
             throw new DataAccessException("Error: bad request");
         }
 
-        GameData newGame = new GameData(0, null, null, gameName, new ChessGame());
+        GameData newGame = new GameData(0, gameName, null, null, new ChessGame());
         return gameDAO.createGame(newGame);
-
     }
+
 
     public void joinGame(String authToken, int gameID, String playerColor) throws DataAccessException {
         var auth = verifyAuth(authToken);
@@ -48,10 +48,10 @@ public class GameService {
             }
             game.setWhiteUsername(username);
         } else if (playerColor.equalsIgnoreCase("BLACK")) {
-            if (game.blackUsername() != null && !game.blackUsername().equals(username)){
+            if (game.getBlackUsername() != null && !game.getBlackUsername().equals(username)){
                 throw new DataAccessException("Error: already taken");
             }
-            game = new GameData(game.gameID(), game.whiteUsername(), username, game.gameName(), game.game());
+            game.setBlackUsername(username);
         } else {
             throw new DataAccessException("Error: bad request");
         }
