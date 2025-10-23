@@ -37,3 +37,15 @@ class GameServiceTests {
         }
     }
 
+    @Test
+    void testCreateGame() throws DataAccessException {
+        String token = "valid-token";
+        int gameID = gameService.createGame(token, "My Game");
+
+        assertTrue(gameID > 0);
+        Collection<GameData> games = gameService.listGames(token);
+        assertEquals(1, games.size());
+    }
+
+    
+
