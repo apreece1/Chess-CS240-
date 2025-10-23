@@ -40,6 +40,11 @@ public class GameService {
 
         if (game == null) {
             throw new DataAccessException("Error: bad request");
+
+        }
+
+        if (playerColor == null || playerColor.isBlank()) {
+            return;
         }
 
         if (playerColor.equalsIgnoreCase("WHITE")) {
