@@ -21,15 +21,15 @@ public class ClearHandler {
     }
 
     public void clear(Context ctx) throws DataAccessException {
-
-        String authToken = ctx.header("Authorization");
-        if (authToken == null || authService.verifyAuth(authToken) == null) {
-            throw new DataAccessException("Error: unauthorized");
+        try {
+            userService.clear();
+            authService.clear();
+            gameService.clear();
+            ctx.status(200).json(Map.of());
+        } catch (DataAccessException e) {
+            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+        } catch (Exception e) {
+            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
         }
-
-        userService.clear();
-        authService.clear();
-        gameService.clear();
-        ctx.status(200).json(Map.of());
     }
 }
