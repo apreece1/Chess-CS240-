@@ -14,7 +14,12 @@ public record GameData {
         this.gameName = gameName;
     }
 
-    public int get
+    public int getGameID() { return gameID; }
+    public String getGameName() { return gameName; }
+    public String getWhiteUsername() { return whiteUsername; }
+    public void setWhiteUsername(String whiteUsername) { this.whiteUsername = whiteUsername; }
+    public String getBlackUsername() { return blackUsername; }
+    public void setBlackUsername(String blackUsername)
 
 
 }
