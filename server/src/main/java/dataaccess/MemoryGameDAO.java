@@ -15,10 +15,10 @@ public class MemoryGameDAO  implements GameDAO{
         int gameID = nextGameID++;
         var newGame = new GameData(
                 gameID,
-                game.whiteUsername(),
-                game.blackUsername(),
-                game.gameName(),
-                game.game()
+                game.getWhiteUsername(),
+                game.getBlackUsername(),
+                game.getGameName(),
+                game.getGame()
         );
         games.put(gameID, newGame);
         return gameID;
@@ -41,10 +41,10 @@ public class MemoryGameDAO  implements GameDAO{
 
     @Override
     public void updateGame(GameData game) throws DataAccessException {
-        if (!games.containsKey(game.gameID())){
+        if (!games.containsKey(game.getGameID())){
             throw new DataAccessException("Game not found");
         }
-        games.put(game.gameID(), game);
+        games.put(game.getGameID(), game);
 
     }
 
