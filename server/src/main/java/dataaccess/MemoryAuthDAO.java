@@ -35,10 +35,6 @@ public class MemoryAuthDAO implements AuthDAO {
         auths.remove(authToken);
     }
 
-    @Override
-    public Collection<AuthData> listAuths() throws DataAccessException {
-        return auths.values();
-    }
 
     @Override
     public void clear() throws DataAccessException {
