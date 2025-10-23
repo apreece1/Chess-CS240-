@@ -9,6 +9,11 @@ public record GameData {
     String gameName;
     ChessGame game;
 
+    public GameData(int gameID, String gameName) {
+        this.gameID = gameID;
+        this.gameName = gameName;
+    }
+
 
 }
 
