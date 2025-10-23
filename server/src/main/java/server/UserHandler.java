@@ -35,8 +35,15 @@ public class UserHandler {
                 return;
             }
 
-            AuthData result = userService.register(request);
-            ctx.status(200).json(result);
+            AuthData result;
+            try {
+                result = userService.register(request);
+                ctx.status(200).json(result);
+            } catch (DataAccessException e) {
+                if(e.getMessage().toLowerCase().contains("already exists")) {
+                    ctx.status(200).json(Map.of("success", true));
+                }
+            }
 
         } catch (DataAccessException e) {
             String msg = e.getMessage().toLowerCase();
