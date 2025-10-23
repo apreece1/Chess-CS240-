@@ -20,18 +20,15 @@ public class ClearHandler {
     }
 
     public void clear(Context ctx) {
-        String authToken = ctx.header("authorization");
-        if(authToken == null || authToken.isBlank()) {
-            ctx.status(401).json(Map.of("message", "Error: Auth token not found"));
-            return;
-        }
         try {
+            String authToken = ctx.header
+        }
             userService.clear();
             authService.clear();
             gameService.clear();
             ctx.status(200).json(Map.of());
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + (e.getMessage() != null ? e.getMessage() : "internal server error")));
+            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
         }
     }
 }
