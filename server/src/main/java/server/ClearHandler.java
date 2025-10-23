@@ -20,7 +20,11 @@ public class ClearHandler {
     }
 
     public void clear(Context ctx) {
-        String authToken = ctx.header("authorization")
+        String authToken = ctx.header("authorization");
+        if(authToken == null || authToken.isBlank()) {
+            ctx.status(401).json(Map.of("message", "Error: Auth token not found"));
+            return;
+        }
         try {
             userService.clear();
             authService.clear();
