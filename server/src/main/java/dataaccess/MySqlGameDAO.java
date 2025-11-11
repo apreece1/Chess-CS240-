@@ -115,6 +115,9 @@ public class MySqlGameDAO implements GameDAO {
             if (rows == 0) {
                 throw new DataAccessException("Game not found");
             }
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to update game", ex);
         }
+    }
 
 }
