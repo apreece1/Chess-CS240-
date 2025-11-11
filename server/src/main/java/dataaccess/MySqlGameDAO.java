@@ -52,5 +52,20 @@ public class MySqlGameDAO implements GameDAO{
             stmt.setInt(1, gameID);
             var rs = stmt.executeQuery();
 
+            if (!rs.next()) {
+                throw new DataAccessException("Game not found");
+            }
+
+            ChessGame chessGame = gson.fromJson(rs.getString("chessGame"), ChessGame.class);
+
+            return new GameData(
+                    rs.getInt("gameID"),
+                    rs.getString("gameName"),
+                    rs.getString("whiteUsername"),
+                    rs.getString("blackUsername"),
+                    chessGame
+            );
+
+
 
         }
