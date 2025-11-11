@@ -47,7 +47,17 @@ public class MySqlAuthDAO {
     public void deleteAuth(String authToken) throws DataAccessException {
         String sql = "DELETE FROM AuthToken WHERE authToken = ?";
         try (var conn = DatabaseManager.getConnection();
+
              var stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, authToken);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new DataAccessException("Auth token not found");
+            }
+
+            
+
+        }
 
 }
 
