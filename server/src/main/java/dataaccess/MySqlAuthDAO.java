@@ -27,8 +27,14 @@ public class MySqlAuthDAO {
     public AuthData getAuth(String authToken) throws DataAccessException {
         String sql = "SELECT authToken, username FROM AuthToken WHERE authToken = ?";
         try (var conn = DatabaseManager.getConnection();
+             
              var stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, authToken);
+            var rs = stmt.executeQuery();
 
+            if (!rs.next()) {
+                throw new DataAccessException("Auth token not found");
+            }
 
 
         }
