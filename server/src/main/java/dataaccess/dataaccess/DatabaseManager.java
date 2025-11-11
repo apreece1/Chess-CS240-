@@ -98,5 +98,12 @@ public class DatabaseManager {
             FOREIGN KEY (player_black_id) REFERENCES user(id)
         );
     """;
-
+        try (var conn = getConnection();
+             var stmt = conn.createStatement()) {
+            stmt.executeUpdate(createUserTable);
+            stmt.executeUpdate(createGameTable);
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to create tables", ex);
+        }
+    }
 }
