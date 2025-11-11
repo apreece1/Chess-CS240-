@@ -55,7 +55,7 @@ public class DatabaseManager {
     }
 
     private static void loadPropertiesFromResources() {
-        try (var propStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("db.properties")) {
+        try (var propStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("resources/db.properties")) {
             if (propStream == null) {
                 throw new Exception("Unable to load db.properties");
             }
@@ -121,8 +121,10 @@ public class DatabaseManager {
                     System.out.println("Test query result: " + rs.getInt(1));
                 }
             }
+            System.out.println("Database and tables are ready!");
+        } catch (DataAccessException | SQLException e) {
+            e.printStackTrace();
 
-
+        }
     }
-
 }
