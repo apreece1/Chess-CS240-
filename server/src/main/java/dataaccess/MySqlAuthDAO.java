@@ -61,6 +61,10 @@ public class MySqlAuthDAO {
     }
 
 
-    
+    @Override
+    public void clear() throws DataAccessException {
+        String sql = "DELETE FROM AuthToken";
+        try (var conn = DatabaseManager.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
 }
 
