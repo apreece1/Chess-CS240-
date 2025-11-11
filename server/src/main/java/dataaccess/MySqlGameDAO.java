@@ -19,5 +19,11 @@ public class MySqlGameDAO implements GameDAO{
         this.gson = new GsonBuilder().create();
     }
 
-    
+    @Override
+    public int createGame(GameData game) throws DataAccessException {
+        String sql = "INSERT INTO Game (gameName, whiteUsername, blackUsername, chessGame) VALUES (?, ?, ?, ?)";
+        try (var conn = DatabaseManager.getConnection();
+             var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            
+        }
 }
