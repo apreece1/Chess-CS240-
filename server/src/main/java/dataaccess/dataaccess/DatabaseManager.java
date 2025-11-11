@@ -79,31 +79,4 @@ public class DatabaseManager {
 
     /** making tables**/
 
-    static public void initializeTables() throws DataAccessException {
-        String createUserTable = """
-        CREATE TABLE IF NOT EXISTS user (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(255) UNIQUE NOT NULL,
-            password_hash VARCHAR(255) NOT NULL
-        );
-    """;
-
-        String createGameTable = """
-        CREATE TABLE IF NOT EXISTS game (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            player_white_id INT NOT NULL,
-            player_black_id INT NOT NULL,
-            game_state TEXT NOT NULL,
-            FOREIGN KEY (player_white_id) REFERENCES user(id),
-            FOREIGN KEY (player_black_id) REFERENCES user(id)
-        );
-    """;
-        try (var conn = getConnection();
-             var stmt = conn.createStatement()) {
-            stmt.executeUpdate(createUserTable);
-            stmt.executeUpdate(createGameTable);
-        } catch (SQLException ex) {
-            throw new DataAccessException("failed to create tables", ex);
-        }
-    }
 }
