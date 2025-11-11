@@ -89,8 +89,14 @@ public class DatabaseManager {
                 email VARCHAR(256) NOT NULL
             )
             """,
-
+                """
+            CREATE TABLE IF NOT EXISTS AuthToken (
+                authToken VARCHAR(256) NOT NULL PRIMARY KEY,
+                username VARCHAR(256) NOT NULL
+            )
+            """,
                 
+
         }
 
 }
