@@ -95,8 +95,18 @@ public class DatabaseManager {
                 username VARCHAR(256) NOT NULL
             )
             """,
-                
+                """
+            CREATE TABLE IF NOT EXISTS Game (
+                gameID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                gameName VARCHAR(256) NOT NULL,
+                whiteUsername VARCHAR(256) DEFAULT NULL,
+                blackUsername VARCHAR(256) DEFAULT NULL,
+                -- The game state is serialized to a JSON string
+                chessGame LONGTEXT NOT NULL
+            )
+            """
+        };
 
-        }
+        
 
 }
