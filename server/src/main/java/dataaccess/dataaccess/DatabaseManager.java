@@ -79,4 +79,8 @@ public class DatabaseManager {
 
     /** making tables**/
 
+    static public void createTables() throws DataAccessException {
+        // SQL statements for creating your tables (User, Game, AuthToken)
+        String[] createStatements = {
+
 }
