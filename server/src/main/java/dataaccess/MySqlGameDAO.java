@@ -15,7 +15,6 @@ public class MySqlGameDAO implements GameDAO{
     private final Gson gson;
 
     public MySqlGameDAO() {
-        // Create Gson instance (add type adapters if needed for interfaces)
         this.gson = new GsonBuilder().create();
     }
 
@@ -24,6 +23,18 @@ public class MySqlGameDAO implements GameDAO{
         String sql = "INSERT INTO Game (gameName, whiteUsername, blackUsername, chessGame) VALUES (?, ?, ?, ?)";
         try (var conn = DatabaseManager.getConnection();
              var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, game.getGameName());
+            stmt.setString(2, game.getWhiteUsername());
+            stmt.setString(3, game.getBlackUsername());
+            stmt.setString(4, gson.toJson(game.getGame())); // serialize ChessGame to JSON
+            stmt.executeUpdate();
             
+            var rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new DataAccessException("Failed to retrieve generated gameID");
+            }
         }
 }
