@@ -66,6 +66,9 @@ public class MySqlGameDAO implements GameDAO{
                     chessGame
             );
 
-
-
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to get game", ex);
         }
+    }
+}
+
