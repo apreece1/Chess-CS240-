@@ -106,4 +106,15 @@ public class DatabaseManager {
             throw new DataAccessException("failed to create tables", ex);
         }
     }
+    public static void main(String[] args) {
+        try {
+
+            createDatabase();
+
+            initializeTables();
+
+
+
+    }
+
 }
