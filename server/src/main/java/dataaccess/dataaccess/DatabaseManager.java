@@ -88,4 +88,15 @@ public class DatabaseManager {
         );
     """;
 
+        String createGameTable = """
+        CREATE TABLE IF NOT EXISTS game (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            player_white_id INT NOT NULL,
+            player_black_id INT NOT NULL,
+            game_state TEXT NOT NULL,
+            FOREIGN KEY (player_white_id) REFERENCES user(id),
+            FOREIGN KEY (player_black_id) REFERENCES user(id)
+        );
+    """;
+
 }
