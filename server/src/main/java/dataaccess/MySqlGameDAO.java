@@ -42,4 +42,15 @@ public class MySqlGameDAO implements GameDAO{
         }
 
     }
-}
+
+    @Override
+    public GameData getGame(int gameID) throws DataAccessException {
+        String sql = "SELECT gameID, gameName, whiteUsername, blackUsername, chessGame FROM Game WHERE gameID = ?";
+        try (var conn = DatabaseManager.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, gameID);
+            var rs = stmt.executeQuery();
+
+
+        }
