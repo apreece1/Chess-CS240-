@@ -29,12 +29,17 @@ public class MySqlGameDAO implements GameDAO{
             stmt.setString(3, game.getBlackUsername());
             stmt.setString(4, gson.toJson(game.getGame())); // serialize ChessGame to JSON
             stmt.executeUpdate();
-            
+
             var rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 return rs.getInt(1);
             } else {
                 throw new DataAccessException("Failed to retrieve generated gameID");
             }
+
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to create game", ex);
         }
+
+    }
 }
