@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class MySqlGameDAO implements GameDAO{
+public class MySqlGameDAO implements GameDAO {
 
     private final Gson gson;
 
@@ -70,5 +70,26 @@ public class MySqlGameDAO implements GameDAO{
             throw new DataAccessException("Failed to get game", ex);
         }
     }
-}
 
+    @Override
+    public Collection<GameData> listGames() throws DataAccessException {
+        String sql = "SELECT gameID, gameName, whiteUsername, blackUsername, chessGame FROM Game";
+        try (var conn = DatabaseManager.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+
+            var rs = stmt.executeQuery();
+            Collection<GameData> games = new ArrayList<>();
+
+            while (rs.next()) {
+                ChessGame chessGame = gson.fromJson(rs.getString("chessGame"), ChessGame.class);
+                GameData gameData = new GameData(
+                        rs.getInt("gameID"),
+                        rs.getString("gameName"),
+                        rs.getString("whiteUsername"),
+                        rs.getString("blackUsername"),
+                        chessGame
+                );
+                games.add(gameData);
+            }
+
+}
