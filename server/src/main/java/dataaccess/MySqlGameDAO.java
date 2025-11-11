@@ -97,6 +97,12 @@ public class MySqlGameDAO implements GameDAO {
         } catch (SQLException ex) {
             throw new DataAccessException("Failed to list games", ex);
         }
-
     }
+
+    @Override
+    public void updateGame(GameData game) throws DataAccessException {
+        String sql = "UPDATE Game SET gameName = ?, whiteUsername = ?, blackUsername = ?, chessGame = ? WHERE gameID = ?";
+        try (var conn = DatabaseManager.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+
 }
