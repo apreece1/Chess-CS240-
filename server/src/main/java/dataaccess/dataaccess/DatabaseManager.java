@@ -113,6 +113,14 @@ public class DatabaseManager {
 
             initializeTables();
 
+            try (var conn = getConnection();
+                 var stmt = conn.createStatement()) {
+
+                var rs = stmt.executeQuery("SELECT 1+1");
+                if (rs.next()) {
+                    System.out.println("Test query result: " + rs.getInt(1));
+                }
+            }
 
 
     }
