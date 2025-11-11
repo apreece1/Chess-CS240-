@@ -120,6 +120,18 @@ public class MySqlGameDAO implements GameDAO {
         }
     }
 
-    
+    @Override
+    public void clear() throws DataAccessException {
+        String sql = "DELETE FROM Game";
+        try (var conn = DatabaseManager.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+
+            stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to clear games", ex);
+        }
+    }
+
 
 }
