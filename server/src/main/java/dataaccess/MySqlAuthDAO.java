@@ -42,6 +42,12 @@ public class MySqlAuthDAO {
             throw new DataAccessException("Failed to get auth token", ex);
         }
     }
-    
+
+    @Override
+    public void deleteAuth(String authToken) throws DataAccessException {
+        String sql = "DELETE FROM AuthToken WHERE authToken = ?";
+        try (var conn = DatabaseManager.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+
 }
 
