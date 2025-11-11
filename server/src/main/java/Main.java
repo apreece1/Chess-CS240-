@@ -24,7 +24,7 @@ public class Main {
 
         var authDAO = new MySqlAuthDAO();
         var userDAO = new MySqlUserDAO();
-        var gameDAO = new MeySqlGameDAO();
+        var gameDAO = new MySqlGameDAO();
 
         var authService = new AuthService(authDAO);
         var userService = new UserService(userDAO, authService);
