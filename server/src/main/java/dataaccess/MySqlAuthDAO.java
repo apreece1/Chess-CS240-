@@ -55,9 +55,12 @@ public class MySqlAuthDAO {
                 throw new DataAccessException("Auth token not found");
             }
 
-            
-
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to delete auth token", ex);
         }
+    }
 
+
+    
 }
 
