@@ -10,5 +10,5 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class MySqlGameDAO {
+public class MySqlGameDAO implements GameDAO{
 }
