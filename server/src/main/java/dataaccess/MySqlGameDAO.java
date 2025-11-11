@@ -92,4 +92,11 @@ public class MySqlGameDAO implements GameDAO {
                 games.add(gameData);
             }
 
+            return games;
+
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to list games", ex);
+        }
+
+    }
 }
