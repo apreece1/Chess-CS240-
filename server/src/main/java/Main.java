@@ -22,9 +22,9 @@ public class Main {
             return;
         }
 
-        var authDAO = new MemoryAuthDAO();
-        var userDAO = new MemoryUserDAO();
-        var gameDAO = new MemoryGameDAO();
+        var authDAO = new MySqlAuthDAO();
+        var userDAO = new MySqlUserDAO();
+        var gameDAO = new MeySqlGameDAO();
 
         var authService = new AuthService(authDAO);
         var userService = new UserService(userDAO, authService);
