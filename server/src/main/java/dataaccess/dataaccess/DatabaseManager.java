@@ -106,25 +106,4 @@ public class DatabaseManager {
             throw new DataAccessException("failed to create tables", ex);
         }
     }
-    public static void main(String[] args) {
-        try {
-
-            createDatabase();
-
-            initializeTables();
-
-            try (var conn = getConnection();
-                 var stmt = conn.createStatement()) {
-
-                var rs = stmt.executeQuery("SELECT 1+1");
-                if (rs.next()) {
-                    System.out.println("Test query result: " + rs.getInt(1));
-                }
-            }
-            System.out.println("Database and tables are ready!");
-        } catch (DataAccessException | SQLException e) {
-            e.printStackTrace();
-
-        }
-    }
 }
