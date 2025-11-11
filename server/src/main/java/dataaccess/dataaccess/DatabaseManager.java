@@ -107,6 +107,15 @@ public class DatabaseManager {
             """
         };
 
-        
+        try (var conn = getConnection()) {
+            for (String statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to create tables", ex);
+        }
+    }
 
 }

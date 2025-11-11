@@ -1,9 +1,10 @@
-import dataaccess.GameDAO;
+import dataaccess.*;
+import dataaccess.dataaccess.DatabaseManager;
 import server.Server;
 
-import dataaccess.MemoryUserDAO;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
+import dataaccess.MySqlAuthDAO;
+import dataaccess.MySqlUserDAO;
+import dataaccess.MySqlGameDAO;
 import service.UserService;
 import service.AuthService;
 import service.GameService;
@@ -11,6 +12,16 @@ import service.GameService;
 
 public class Main {
     public static void main(String[] args) {
+        try {
+            DatabaseManager.createDatabase();
+            DatabaseManager.createTables();
+            System.out.println("Database and tables initialized successfully.");
+        } catch (DataAccessException e) {
+            System.err.println("Fatal Error: Could not initialize database. Exiting.");
+            e.printStackTrace();
+            return;
+        }
+
         var authDAO = new MemoryAuthDAO();
         var userDAO = new MemoryUserDAO();
         var gameDAO = new MemoryGameDAO();
