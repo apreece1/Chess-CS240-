@@ -105,4 +105,16 @@ public class MySqlGameDAO implements GameDAO {
         try (var conn = DatabaseManager.getConnection();
              var stmt = conn.prepareStatement(sql)) {
 
+            stmt.setString(1, game.getGameName());
+            stmt.setString(2, game.getWhiteUsername());
+            stmt.setString(3, game.getBlackUsername());
+            stmt.setString(4, gson.toJson(game.getGame()));
+            stmt.setInt(5, game.getGameID());
+
+            int rows = stmt.executeUpdate();
+            if (rows == 0) {
+                throw new DataAccessException("Game not found");
+            }
+        }
+
 }
