@@ -6,7 +6,7 @@ import model.AuthData;
 import java.sql.*;
 
 
-public class MySqlAuthDAO {
+public class MySqlAuthDAO implements AuthDAO {
 
     @Override
     public void createAuth(AuthData auth) throws DataAccessException {
@@ -66,5 +66,11 @@ public class MySqlAuthDAO {
         String sql = "DELETE FROM AuthToken";
         try (var conn = DatabaseManager.getConnection();
              var stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to clear auth tokens", ex);
+        }
+    }
 }
 
