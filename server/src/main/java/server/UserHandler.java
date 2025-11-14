@@ -62,7 +62,7 @@ public class UserHandler {
         } catch (com.google.gson.JsonSyntaxException e) {
            ctx.status(400).json(new ErrorMessage("Error: Bad request"));
         } catch (DataAccessException e) {
-            ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
+            ctx.status(500).json(new ErrorMessage("Internal Server Error: " + e.getMessage()));
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
