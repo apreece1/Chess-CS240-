@@ -1,6 +1,7 @@
 package dataaccess;
 
 
+import dataaccess.dataaccess.DatabaseManager;
 import model.UserData;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -72,5 +73,20 @@ public class MySqlUserDAO implements UserDAO{
             throw new DataAccessException("Unable to read user: " + e.getMessage());
         }
 
+    }
+
+    @Override
+    public void clear() throws DataAccessException {
+        String sql = "DELETE FROM user";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Unable to clear user table: " + e.getMessage());
+        }
+    }
 
 }
