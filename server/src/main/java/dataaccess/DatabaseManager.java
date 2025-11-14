@@ -44,9 +44,7 @@ public class DatabaseManager {
     public static Connection getConnection() throws DataAccessException {
         try {
             //do not wrap the following line with a try-with-resources
-            var conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
-            conn.setCatalog(databaseName);
-            return conn;
+            return DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
         } catch (SQLException ex) {
             throw new DataAccessException("failed to get connection", ex);
         }
@@ -72,7 +70,7 @@ public class DatabaseManager {
 
         var host = props.getProperty("db.host");
         var port = Integer.parseInt(props.getProperty("db.port"));
-        connectionUrl = String.format("jdbc:mysql://%s:%d", host, port);
+        connectionUrl = String.format("jdbc:mysql://%s:%d/%s", host, port, databaseName);
     }
 
     /** making tables**/
