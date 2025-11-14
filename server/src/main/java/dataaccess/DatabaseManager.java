@@ -14,6 +14,12 @@ public class DatabaseManager {
      */
     static {
         loadPropertiesFromResources();
+        try {
+            createDatabase();
+            createTables();
+        } catch (DataAccessException ex) {
+            throw new RuntimeException("Failed to initialize database", ex);
+        }
     }
 
     /**
@@ -45,7 +51,9 @@ public class DatabaseManager {
     public static Connection getConnection() throws DataAccessException {
         try {
             //do not wrap the following line with a try-with-resources
-            return DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
+            Connection conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
+            conn.setAutoCommit(true);
+            return conn;
         } catch (SQLException ex) {
             throw new DataAccessException("failed to get connection", ex);
         }
@@ -80,20 +88,20 @@ public class DatabaseManager {
         // SQL statements for creating your tables (User, Game, AuthToken)
         String[] createStatements = {
                 """
-            CREATE TABLE IF NOT EXISTS User (
+            CREATE TABLE IF NOT EXISTS user (
                 username VARCHAR(256) NOT NULL PRIMARY KEY,
                 password VARCHAR(256) NOT NULL,
                 email VARCHAR(256) NOT NULL
             )
             """,
                 """
-            CREATE TABLE IF NOT EXISTS AuthToken (
+            CREATE TABLE IF NOT EXISTS authToken (
                 authToken VARCHAR(256) NOT NULL PRIMARY KEY,
                 username VARCHAR(256) NOT NULL
             )
             """,
                 """
-            CREATE TABLE IF NOT EXISTS Game (
+            CREATE TABLE IF NOT EXISTS game (
                 gameID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 gameName VARCHAR(256) NOT NULL,
                 whiteUsername VARCHAR(256) DEFAULT NULL,

@@ -1,5 +1,6 @@
 package server;
 
+import dataaccess.DataAccessException;
 import io.javalin.*;
 import service.UserService;
 import service.AuthService;
@@ -24,6 +25,7 @@ public class Server {
 
         this.javalin = createJavalin();
         registerEndpoints();
+        registerExceptionHandlers();
 
     }
 
@@ -47,7 +49,7 @@ public class Server {
         GameHandler gameHandler = new GameHandler(gameService);
         ClearHandler clearHandler = new ClearHandler(userService, authService, gameService);
 
-        // Register your endpoints and exception handlers here.
+
         javalin.post("/user", userHandler::register);
         javalin.post("/session", userHandler::login);
         javalin.delete("/session", userHandler::logout);
@@ -58,6 +60,13 @@ public class Server {
 
         javalin.delete("/db", clearHandler::clear);
 
+    }
+
+    private void registerExceptionHandlers() {
+        javalin.exception(DataAccessException.class, (e, ctx) -> {
+            ctx.status(500);
+            ctx.json("{\"error\":\"Internal Server Error\",\"message\":\"" + e.getMessage() + "\"}");
+        });
     }
 
     public int run(int desiredPort) {
