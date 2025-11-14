@@ -22,9 +22,19 @@ public class Main {
             return;
         }
 
-        var authDAO = new MySqlAuthDAO();
-        var userDAO = new MySqlUserDAO();
-        var gameDAO = new MySqlGameDAO();
+        MySqlAuthDAO authDAO;
+        MySqlUserDAO userDAO;
+        MySqlGameDAO gameDAO;
+
+        try {
+            authDAO = new MySqlAuthDAO();
+            userDAO = new MySqlUserDAO();
+            gameDAO = new MySqlGameDAO();
+        } catch (DataAccessException e) {
+            System.err.println("Fatal Error: Could not initialize DAO classes. Exiting.");
+            e.printStackTrace();
+            return;
+        }
 
         var authService = new AuthService(authDAO);
         var userService = new UserService(userDAO, authService);
