@@ -75,7 +75,7 @@ public class UserHandler {
             ctx.status(200).json(Map.of("message", "Logout successful"));
 
         } catch (DataAccessException e) {
-            ctx.status(401).json(new ErrorMessage("Error : " + e.getMessage()));
+            ctx.status(500).json(new ErrorMessage("Internal Server Error: " + e.getMessage()));
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
