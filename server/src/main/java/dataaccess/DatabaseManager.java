@@ -80,6 +80,9 @@ public class DatabaseManager {
         var host = props.getProperty("db.host");
         var port = Integer.parseInt(props.getProperty("db.port"));
         connectionUrl = String.format("jdbc:mysql://%s:%d/%s", host, port, databaseName);
+
+        System.out.println("DEBUG: Database connection URL = " + connectionUrl);
+        System.out.println("DEBUG: DB user = " + dbUsername);
     }
 
     /** making tables**/

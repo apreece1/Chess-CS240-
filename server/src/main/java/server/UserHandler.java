@@ -35,21 +35,13 @@ public class UserHandler {
                 return;
             }
 
-            AuthData result;
-            try {
-                result = userService.register(request);
-                ctx.status(200).json(result);
-            } catch (DataAccessException e) {
-                String msg = e.getMessage().toLowerCase();
-                if (msg.contains("forbidden") || msg.contains("already exists")) {
-                    ctx.status(403).json(new ErrorMessage("Error : " + e.getMessage()));
-                } else {
-                    ctx.status(500).json(new ErrorMessage("Internal server error: " + e.getMessage()));
-                }
-            }
+            AuthData result = userService.register(request);
+            ctx.status(200).json(result);
 
         } catch (com.google.gson.JsonSyntaxException e) {
             ctx.status(400).json(new ErrorMessage("Error: Bad request"));
+        } catch (DataAccessException e) {
+            ctx.status(500).json(new ErrorMessage("Internal Server Error: " + e.getMessage()));
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
