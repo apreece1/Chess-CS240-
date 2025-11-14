@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class MySqlUserDAO implements UserDAO{
 
@@ -35,10 +36,12 @@ public class MySqlUserDAO implements UserDAO{
     public void createUser(UserData user) throws DataAccessException {
         String sql = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
 
+        String hashedPassword = BCrypt.hashpw(user.password(), BCrypt.gensalt());
+
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.username());
-            stmt.setString(2, user.password());  // later: hash with BCrypt
+            stmt.setString(2, hashedPassword);  // later: hash with BCrypt
             stmt.setString(3, user.email());
 
             stmt.executeUpdate();

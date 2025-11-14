@@ -32,15 +32,23 @@ public class Server {
     public Server(){
         this.javalin = createJavalin();
 
-        var authDAO = new dataaccess.MemoryAuthDAO();
-        var userDAO = new dataaccess.MemoryUserDAO();
-        var gameDAO = new dataaccess.MemoryGameDAO();
+        try {
+
+        var authDAO = new dataaccess.MySqlAuthDAO();
+        var userDAO = new dataaccess.MySqlUserDAO();
+        var gameDAO = new dataaccess.MySqlGameDAO();
 
         this.authService = new AuthService(authDAO);
         this.userService = new UserService(userDAO, authService);
         this.gameService = new GameService(gameDAO, authService);
 
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to initialize DAOs", e);
+        }
+
         registerEndpoints();
+        registerExceptionHandlers();
     }
 
     private void registerEndpoints(){
