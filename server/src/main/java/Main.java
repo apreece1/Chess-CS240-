@@ -1,5 +1,5 @@
 import dataaccess.*;
-import dataaccess.dataaccess.DatabaseManager;
+import dataaccess.DatabaseManager;
 import server.Server;
 
 import dataaccess.MySqlAuthDAO;
