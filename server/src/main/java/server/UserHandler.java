@@ -44,7 +44,7 @@ public class UserHandler {
                 if (msg.contains("forbidden") || msg.contains("already exists")) {
                     ctx.status(403).json(new ErrorMessage("Error : " + e.getMessage()));
                 } else {
-                    ctx.status(400).json(new ErrorMessage("Error :" + e.getMessage()));
+                    ctx.status(500).json(new ErrorMessage("Internal server error: " + e.getMessage()));
                 }
             }
 

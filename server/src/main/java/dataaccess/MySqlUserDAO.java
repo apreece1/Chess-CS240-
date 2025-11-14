@@ -91,4 +91,15 @@ public class MySqlUserDAO implements UserDAO{
         }
     }
 
+    public boolean verifyLogin(String username, String password) throws DataAccessException {
+        try {
+            UserData user = getUser(username); // fetch user from DB
+            return BCrypt.checkpw(password, user.password()); // compare input to hash
+        } catch (DataAccessException e) {
+            // user not found or DB error
+            return false;
+        }
+    }
+
+
 }

@@ -36,7 +36,7 @@ public class UserService {
 
     public AuthData login(String username, String password) throws DataAccessException {
         var user = userDAO.getUser(username);
-        if (user == null || !user.password().equals(password)) {
+        if (user == null || !org.mindrot.jbcrypt.BCrypt.checkpw(password, user.password())) {
             throw new DataAccessException("Error: unauthorized");
         }
 
@@ -52,5 +52,14 @@ public class UserService {
         userDAO.clear();
         authService.clear();
     }
+
+    public boolean verifyLogin(String username, String password) throws DataAccessException {
+        UserData user = userDAO.getUser(username);
+        if (user == null) return false;
+        return org.mindrot.jbcrypt.BCrypt.checkpw(password, user.password());
+    }
+
+
+
 
 }

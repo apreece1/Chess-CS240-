@@ -28,6 +28,7 @@ public class AuthService {
         return auth;
     }
 
+
     public void deleteAuth(String authToken) throws DataAccessException {
         authDAO.deleteAuth(authToken);
     }
