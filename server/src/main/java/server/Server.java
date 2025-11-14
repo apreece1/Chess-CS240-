@@ -72,6 +72,8 @@ public class Server {
 
     private void registerExceptionHandlers() {
         javalin.exception(DataAccessException.class, (e, ctx) -> {
+            e.printStackTrace();
+
             ctx.status(500);
             ctx.json("{\"error\":\"Internal Server Error\",\"message\":\"" + e.getMessage() + "\"}");
         });

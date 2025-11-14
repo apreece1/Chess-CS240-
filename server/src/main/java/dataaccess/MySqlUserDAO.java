@@ -34,12 +34,15 @@ public class MySqlUserDAO implements UserDAO{
 
     @Override
     public void createUser(UserData user) throws DataAccessException {
+
+
         String sql = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
 
         String hashedPassword = BCrypt.hashpw(user.password(), BCrypt.gensalt());
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            System.out.println("DEBUG: Connected to DB, inserting user " + user.username());
             stmt.setString(1, user.username());
             stmt.setString(2, hashedPassword);  // later: hash with BCrypt
             stmt.setString(3, user.email());
@@ -47,6 +50,7 @@ public class MySqlUserDAO implements UserDAO{
             stmt.executeUpdate();
 
         } catch (SQLException e) {
+            System.out.println("DEBUG: DB Error: " + e.getMessage());
             throw new DataAccessException("Unable to insert user: " + e.getMessage());
         }
     }
@@ -59,20 +63,20 @@ public class MySqlUserDAO implements UserDAO{
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-
-            if (!rs.next()) {
-                throw new DataAccessException("User not found");
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new UserData(
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email")
+                    );
+                } else {
+                    return null;
+                }
             }
 
-            return new UserData(
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("email")
-            );
-
-        } catch (SQLException e) {
-            throw new DataAccessException("Unable to read user: " + e.getMessage());
+        } catch (SQLException ex) {
+            throw new DataAccessException("Failed to query user", ex);
         }
 
     }
@@ -92,14 +96,11 @@ public class MySqlUserDAO implements UserDAO{
     }
 
     public boolean verifyLogin(String username, String password) throws DataAccessException {
-        try {
-            UserData user = getUser(username); // fetch user from DB
-            return BCrypt.checkpw(password, user.password()); // compare input to hash
-        } catch (DataAccessException e) {
-            // user not found or DB error
-            return false;
-        }
+        UserData user = getUser(username); // let exceptions propagate
+        if (user == null) return false;    // wrong username
+        return BCrypt.checkpw(password, user.password());
     }
+
 
 
 }
