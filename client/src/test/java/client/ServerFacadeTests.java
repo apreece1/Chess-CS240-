@@ -79,6 +79,13 @@ public class ServerFacadeTests {
                 facade.createGame("bad-token", "TestGame"));
     }
 
+    @Test
+    void joinGameNegativeBadGameId() throws Exception {
+        var auth = facade.register("player1", "password", "p1@email.com");
+        assertThrows(Exception.class, () ->
+                facade.joinGame(auth.authToken(), 999999, "WHITE"));
+    }
+
 
 
 }
