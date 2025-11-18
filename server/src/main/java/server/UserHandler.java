@@ -10,7 +10,10 @@ import model.AuthData;
 import model.LoginRequest;
 import dataaccess.DataAccessException;
 
+import java.sql.SQLException;
 import java.util.Map;
+
+
 
 public class UserHandler {
 
@@ -25,6 +28,13 @@ public class UserHandler {
     }
 
     private record ErrorMessage(String message) {}
+
+    private boolean isDatabaseFailure(DataAccessException e) {
+        return e.getCause() instanceof SQLException
+                || (e.getMessage() != null
+                && e.getMessage().toLowerCase().contains("failed to get connection"));
+    }
+
 
     public void register(Context ctx) {
         try {
@@ -41,7 +51,14 @@ public class UserHandler {
         } catch (com.google.gson.JsonSyntaxException e) {
             ctx.status(400).json(new ErrorMessage("Error: Bad request"));
         } catch (DataAccessException e) {
-            ctx.status(500).json(new ErrorMessage("Internal Server Error: " + e.getMessage()));
+            String msg = e.getMessage();
+            if (msg != null && msg.toLowerCase().contains("already taken")) {
+                ctx.status(403).json(new ErrorMessage("Error: already taken"));
+            } else if (isDatabaseFailure(e)) {
+                ctx.status(500).json(new ErrorMessage("Internal Server Error"));
+            } else {
+                ctx.status(500).json(new ErrorMessage("Internal Server Error"));
+            }
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
