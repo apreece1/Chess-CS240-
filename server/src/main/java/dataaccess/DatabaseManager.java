@@ -84,7 +84,17 @@ public class DatabaseManager {
             )
             """;
 
-
+        String createAuthTable = """
+            CREATE TABLE IF NOT EXISTS authToken (
+                authToken  VARCHAR(256) NOT NULL PRIMARY KEY,
+                username   VARCHAR(256) NOT NULL,
+                INDEX(username),
+                CONSTRAINT fk_auth_user
+                    FOREIGN KEY (username)
+                    REFERENCES user(username)
+                    ON DELETE CASCADE
+            )
+            """;
 
 
 }
