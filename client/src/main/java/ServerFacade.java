@@ -69,6 +69,15 @@ public class ServerFacade {
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Content-Type", "application/json");
 
+        if (authToken != null) {
+            connection.setRequestProperty("authorization", authToken);
+        }
 
+        if (requestBody != null) {
+            connection.setDoOutput(true);
+            try (var out = new OutputStreamWriter(connection.getOutputStream())) {
+                out.write(gson.toJson(requestBody));
+            }
+        }
 
     }
