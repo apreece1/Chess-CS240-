@@ -36,5 +36,30 @@ public class SQLUserDAOTest {
         assertDoesNotThrow(() -> userDAO.clear());
     }
 
+    @Test
+    void createUser_positive_insertsUser() throws DataAccessException {
+        var user = new UserData("josh", "password", "josh@example.com");
+
+        userDAO.createUser(user);
+        var fromDb = userDAO.getUser("josh");
+
+        assertNotNull(fromDb);
+        assertEquals("josh", fromDb.username());
+        assertEquals("password", fromDb.password());
+        assertEquals("josh@example.com", fromDb.email());
+    }
+
+    @Test
+    void createUser_negative_duplicateUsername_throws() throws DataAccessException {
+        var user1 = new UserData("josh", "pw1", "one@example.com");
+        var user2 = new UserData("josh", "pw2", "two@example.com");
+
+        userDAO.createUser(user1);
+
+        assertThrows(DataAccessException.class, () -> userDAO.createUser(user2),
+                "Expected duplicate username to throw DataAccessException");
+    }
+
+
 
 }
