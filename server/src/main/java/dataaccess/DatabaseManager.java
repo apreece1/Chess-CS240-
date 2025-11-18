@@ -14,6 +14,12 @@ public class DatabaseManager {
      */
     static {
         loadPropertiesFromResources();
+        try {
+            createDatabase();
+            createTables();
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Failed to initialize database", e);
+        }
     }
 
     /**
@@ -44,7 +50,6 @@ public class DatabaseManager {
      */
     public static Connection getConnection() throws DataAccessException {
         try {
-            //do not wrap the following line with a try-with-resources
             Connection conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
             conn.setAutoCommit(true);
             return conn;
