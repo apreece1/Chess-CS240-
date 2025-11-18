@@ -74,4 +74,15 @@ public class DatabaseManager {
         var port = Integer.parseInt(props.getProperty("db.port"));
         connectionUrl = String.format("jdbc:mysql://%s:%d", host, port);
     }
+
+    public static void createTables() throws DataAccessException {
+        String createUserTable = """
+            CREATE TABLE IF NOT EXISTS user (
+                username   VARCHAR(256) NOT NULL PRIMARY KEY,
+                password   VARCHAR(256) NOT NULL,
+                email      VARCHAR(256) NOT NULL
+            )
+            """;
+
+
 }
