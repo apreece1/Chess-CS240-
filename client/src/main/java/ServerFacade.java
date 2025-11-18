@@ -46,5 +46,18 @@ public class ServerFacade {
         return ((Number) resp.get("gameID")).intValue();
     }
 
+    public void joinGame(String authToken, int gameID, String playerColor) throws Exception {
+        Object body = Map.of(
+                "gameID", gameID,
+                "playerColor", playerColor
+        );
+        makeRequest("PUT", "/game", body, Void.class, authToken);
+    }
+
+    public void clear() throws Exception {
+        makeRequest("DELETE", "/db", null, Void.class, null);
+    }
+
+
 
 }
