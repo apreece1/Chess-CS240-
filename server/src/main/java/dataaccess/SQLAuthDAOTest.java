@@ -48,6 +48,31 @@ public class SQLAuthDAOTest {
         assertThrows(DataAccessException.class, () -> authDAO.createAuth(null));
     }
 
-    
+    @Test
+    void getAuth_positive_existingToken() throws DataAccessException {
+        AuthData auth = authDAO.createAuth("josh");
 
+        AuthData fromDb = authDAO.getAuth(auth.authToken());
+        assertNotNull(fromDb);
+        assertEquals("josh", fromDb.username());
+    }
+
+    @Test
+    void getAuth_negative_unknownToken_returnsNull() throws DataAccessException {
+        AuthData fromDb = authDAO.getAuth("fake-token");
+        assertNull(fromDb);
+    }
+
+    @Test
+    void deleteAuth_positive_existingToken() throws DataAccessException {
+        AuthData auth = authDAO.createAuth("josh");
+        authDAO.deleteAuth(auth.authToken());
+
+        assertNull(authDAO.getAuth(auth.authToken()));
+    }
+
+    @Test
+    void deleteAuth_negative_nonExistingToken_noException() {
+        assertDoesNotThrow(() -> authDAO.deleteAuth("fake-token"));
+    }
 }
