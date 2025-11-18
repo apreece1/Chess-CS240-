@@ -3,8 +3,7 @@ package client;
 import org.junit.jupiter.api.*;
 import server.Server;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServerFacadeTests {
@@ -48,6 +47,14 @@ public class ServerFacadeTests {
         assertNotNull(auth.authToken());
     }
 
+    @Test
+    void loginNegativeWrongPassword() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        assertThrows(Exception.class, () ->
+                facade.login("player1", "wrong"));
+    }
+
+    
 
 
 }
