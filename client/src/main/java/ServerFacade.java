@@ -36,6 +36,9 @@ public class ServerFacade {
         return makeRequest("POST", "/session", body, AuthData.class, null);
     }
 
+    public void logout(String authToken) throws Exception {
+        makeRequest("DELETE", "/session", null, Void.class, authToken);
+    }
 
 
 }
