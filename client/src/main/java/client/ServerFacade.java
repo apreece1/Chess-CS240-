@@ -2,12 +2,13 @@ package client;
 
 import com.google.gson.Gson;
 import model.AuthData;
+import java.util.List;
 import model.GameData;
+
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 public class ServerFacade {
@@ -100,4 +101,21 @@ public class ServerFacade {
             }
         }
 
+        if (status >= 200 && status < 300) {
+            if (responseType == Void.class || responseJson.isBlank()) {
+                return null;
+            }
+            return gson.fromJson(responseJson, responseType);
+        } else {
+            throw new Exception("HTTP " + status + ": " + responseJson);
+        }
     }
+
+    public List<GameData> listGames(String authToken) throws Exception {
+        Map<?, ?> resp = makeRequest("GET", "/game", null, Map.class, authToken);
+        var jsonElement = gson.toJsonTree(resp.get("games"));
+        GameData[] games = gson.fromJson(jsonElement, GameData[].class);
+        return List.of(games);
+    }
+
+}
