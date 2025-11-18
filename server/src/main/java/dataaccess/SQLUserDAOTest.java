@@ -60,6 +60,21 @@ public class SQLUserDAOTest {
                 "Expected duplicate username to throw DataAccessException");
     }
 
+    @Test
+    void getUser_positive_existingUser() throws DataAccessException {
+        var user = new UserData("josh", "password", "josh@example.com");
+        userDAO.createUser(user);
 
+        var fromDb = userDAO.getUser("josh");
 
+        assertNotNull(fromDb);
+        assertEquals("josh", fromDb.username());
+    }
+
+    @Test
+    void getUser_negative_nonExistingUser_returnsNull() throws DataAccessException {
+        var fromDb = userDAO.getUser("noSuchUser");
+        assertNull(fromDb, "Expected null for non-existing user");
+    }
 }
+
