@@ -26,15 +26,27 @@ public class GameHandler {
 
     public void listGames(Context ctx) {
         try {
-            String authToken = ctx.header("authorization");
+            String authToken = ctx.header("Authorization");
+            if (authToken == null || authToken.isBlank()) {
+                ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
+                return;
+            }
             var games = gameService.listGames(authToken);
             ctx.status(200).json(Map.of("games", games));
         } catch (DataAccessException e) {
+
+            String msg = e.getMessage();
+            String lower = (msg == null) ? "" : msg.toLowerCase();
+
+
+
             if (isDatabaseFailure(e)) {
                 ctx.status(500).json(new ErrorMessage("Error: internal server error"));
-            } else {
-                ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
-            }
+            }else if (lower.contains("unauthorized") || lower.contains("auth token")) {
+                    ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
+                } else {
+                    ctx.status(500).json(new ErrorMessage("Error: internal server error"));
+                }
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error:" + e.getMessage()));
         }
@@ -42,11 +54,12 @@ public class GameHandler {
 
 
     public void createGame(Context ctx) {
-        String authToken = ctx.header("authorization");
+        String authToken = ctx.header("Authorization");
 
         try {
             if (authToken == null || authToken.isBlank()) {
-                throw new DataAccessException("Auth token not found");
+                ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
+                return;
             }
 
             GameData request = gson.fromJson(ctx.body(), GameData.class);
@@ -56,8 +69,10 @@ public class GameHandler {
 
         } catch (DataAccessException e) {
             String msg = e.getMessage();
-            if (msg != null && msg.contains("Auth token")) {
-                ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
+            String lower = (msg == null) ? "" : msg.toLowerCase();
+
+            if (lower.contains("unauthorized") || lower.contains("auth token")) {
+                ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
             } else if (isDatabaseFailure(e)) {
                 ctx.status(500).json(new ErrorMessage("Error: internal server error"));
             } else {
@@ -70,9 +85,9 @@ public class GameHandler {
     }
 
     public void joinGame(Context ctx) {
-            String authToken = ctx.header("authorization");
+            String authToken = ctx.header("Authorization");
             if (authToken == null || authToken.isBlank()) {
-                ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
+                ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
                 return;
             }
 
@@ -96,8 +111,10 @@ public class GameHandler {
                 ctx.status(200).json(Map.of());
             } catch (DataAccessException e) {
                 String msg = e.getMessage();
-                if (msg != null && msg.contains("Auth token")) {
-                    ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
+                String lower = (msg == null) ? "" : msg.toLowerCase();
+
+                if (lower.contains("unauthorized") || lower.contains("auth token")) {
+                    ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
                 } else if ("Error: already taken".equals(msg)) {
                     ctx.status(403).json(new ErrorMessage(msg));
                 } else if (isDatabaseFailure(e)) {
