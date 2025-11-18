@@ -58,6 +58,17 @@ public class ServerFacade {
         makeRequest("DELETE", "/db", null, Void.class, null);
     }
 
+    private <T> T makeRequest(String method, String path,
+                              Object requestBody,
+                              Class<T> responseType,
+                              String authToken) throws Exception {
+        var url = new URL(baseUrl + path);
+        var connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod(method);
+        connection.setDoInput(true);
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Content-Type", "application/json");
 
 
-}
+
+    }
