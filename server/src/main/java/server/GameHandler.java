@@ -6,7 +6,7 @@ import service.AuthService;
 import model.GameData;
 import dataaccess.DataAccessException;
 import service.GameService;
-
+import java.sql.SQLException;
 import java.util.Map;
 
 public class GameHandler {
@@ -18,6 +18,11 @@ public class GameHandler {
         this.gameService = gameService;
     }
 
+    private boolean isDatabaseFailure(DataAccessException e) {
+        return e.getCause() instanceof SQLException
+                || (e.getMessage() != null && e.getMessage().toLowerCase().contains("failed to get connection"));
+    }
+
     private record ErrorMessage(String message) {}
 
     public void listGames(Context ctx) {
@@ -26,11 +31,16 @@ public class GameHandler {
             var games = gameService.listGames(authToken);
             ctx.status(200).json(Map.of("games", games));
         } catch (DataAccessException e) {
-            ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
+            if (isDatabaseFailure(e)) {
+                ctx.status(500).json(new ErrorMessage("Error: internal server error"));
+            } else {
+                ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
+            }
         } catch (Exception e) {
-            ctx.status(500).json(new ErrorMessage("Error:" +e.getMessage()));
+            ctx.status(500).json(new ErrorMessage("Error:" + e.getMessage()));
         }
     }
+
 
     public void createGame(Context ctx) {
         String authToken = ctx.header("authorization");
@@ -46,15 +56,14 @@ public class GameHandler {
             ctx.status(200).json(Map.of("gameID", gameId));
 
         } catch (DataAccessException e) {
-            if(e.getMessage().contains("Auth token")){
+            if (e.getMessage() != null && e.getMessage().contains("Auth token")) {
                 ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
+            } else if (isDatabaseFailure(e)) {
+                ctx.status(500).json(new ErrorMessage("Error: internal server error"));
             } else {
                 ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
             }
-        } catch (Exception e) {
-            ctx.status(500).json(new ErrorMessage("Error:" +e.getMessage()));
         }
-    }
 
     public void joinGame(Context ctx) {
             String authToken = ctx.header("authorization");
@@ -81,17 +90,20 @@ public class GameHandler {
             try{
                 gameService.joinGame(authToken, request.gameID(), request.playerColor());
                 ctx.status(200).json(Map.of());
-             } catch (DataAccessException e) {
-                if (e.getMessage().contains("Auth token")) {
+            } catch (DataAccessException e) {
+                String msg = e.getMessage();
+                if (msg != null && msg.contains("Auth token")) {
                     ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
-                } else if ("Error: already taken".equals(e.getMessage())) {
-                    ctx.status(403).json(new ErrorMessage(e.getMessage()));
+                } else if ("Error: already taken".equals(msg)) {
+                    ctx.status(403).json(new ErrorMessage(msg));
+                } else if (isDatabaseFailure(e)) {
+                    ctx.status(500).json(new ErrorMessage("Error: internal server error"));
                 } else {
-                    ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
+                    // remaining logic errors (bad gameID, etc.) can still be 400
+                    ctx.status(400).json(new ErrorMessage("Error: " + msg));
                 }
-            } catch (Exception e) {
-                ctx.status(500).json(new ErrorMessage("Error:" + e.getMessage()));
             }
+
     }
 
     private record JoinGameRequest(int gameID, String playerColor) {
