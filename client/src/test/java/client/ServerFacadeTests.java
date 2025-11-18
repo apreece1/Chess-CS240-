@@ -73,6 +73,11 @@ public class ServerFacadeTests {
     }
 
 
+    @Test
+    void createGameNegativeUnauthorized() {
+        assertThrows(Exception.class, () ->
+                facade.createGame("bad-token", "TestGame"));
+    }
 
 
 
