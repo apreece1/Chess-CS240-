@@ -1,6 +1,7 @@
 package server;
 
 import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
 import io.javalin.*;
 import service.UserService;
 import service.AuthService;
@@ -30,23 +31,26 @@ public class Server {
     }
 
     public Server(){
-        this.javalin = createJavalin();
 
         try {
+            DatabaseManager.createDatabase();
+            DatabaseManager.createTables();
 
-        var authDAO = new dataaccess.MySqlAuthDAO();
-        var userDAO = new dataaccess.MySqlUserDAO();
-        var gameDAO = new dataaccess.MySqlGameDAO();
 
-        this.authService = new AuthService(authDAO);
-        this.userService = new UserService(userDAO, authService);
-        this.gameService = new GameService(gameDAO, authService);
+            var authDAO = new dataaccess.MySqlAuthDAO();
+            var userDAO = new dataaccess.MySqlUserDAO();
+            var gameDAO = new dataaccess.MySqlGameDAO();
+
+            this.authService = new AuthService(authDAO);
+            this.userService = new UserService(userDAO, authService);
+            this.gameService = new GameService(gameDAO, authService);
 
         } catch (DataAccessException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to initialize DAOs", e);
         }
 
+        this.javalin = createJavalin();
         registerEndpoints();
         registerExceptionHandlers();
     }

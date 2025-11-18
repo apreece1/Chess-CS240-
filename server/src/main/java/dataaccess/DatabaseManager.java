@@ -14,21 +14,14 @@ public class DatabaseManager {
      */
     static {
         loadPropertiesFromResources();
-        try {
-            createDatabase();
-            createTables();
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Failed to initialize database", e);
-        }
     }
 
     /**
      * Creates the database if it does not already exist.
      */
     static public void createDatabase() throws DataAccessException {
-        String urlWithoutDb = connectionUrl.substring(0, connectionUrl.lastIndexOf("/"));
         var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
-        try (var conn = DriverManager.getConnection(urlWithoutDb, dbUsername, dbPassword);
+        try (var conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -48,10 +41,11 @@ public class DatabaseManager {
      * }
      * </code>
      */
-    public static Connection getConnection() throws DataAccessException {
+    static Connection getConnection() throws DataAccessException {
         try {
-            Connection conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
-            conn.setAutoCommit(true);
+            //do not wrap the following line with a try-with-resources
+            var conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
+            conn.setCatalog(databaseName);
             return conn;
         } catch (SQLException ex) {
             throw new DataAccessException("failed to get connection", ex);
@@ -78,51 +72,6 @@ public class DatabaseManager {
 
         var host = props.getProperty("db.host");
         var port = Integer.parseInt(props.getProperty("db.port"));
-        connectionUrl = String.format("jdbc:mysql://%s:%d/%s", host, port, databaseName);
-
-        System.out.println("DEBUG: Database connection URL = " + connectionUrl);
-        System.out.println("DEBUG: DB user = " + dbUsername);
+        connectionUrl = String.format("jdbc:mysql://%s:%d", host, port);
     }
-
-    /** making tables**/
-
-    static public void createTables() throws DataAccessException {
-        // SQL statements for creating your tables (User, Game, AuthToken)
-        String[] createStatements = {
-                """
-            CREATE TABLE IF NOT EXISTS user (
-                username VARCHAR(256) NOT NULL PRIMARY KEY,
-                password VARCHAR(256) NOT NULL,
-                email VARCHAR(256) NOT NULL
-            )
-            """,
-                """
-            CREATE TABLE IF NOT EXISTS authToken (
-                authToken VARCHAR(256) NOT NULL PRIMARY KEY,
-                username VARCHAR(256) NOT NULL
-            )
-            """,
-                """
-            CREATE TABLE IF NOT EXISTS game (
-                gameID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                gameName VARCHAR(256) NOT NULL,
-                whiteUsername VARCHAR(256) DEFAULT NULL,
-                blackUsername VARCHAR(256) DEFAULT NULL,
-                -- The game state is serialized to a JSON string
-                chessGame LONGTEXT NOT NULL
-            )
-            """
-        };
-
-        try (var conn = getConnection()) {
-            for (String statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException("Failed to create tables", ex);
-        }
-    }
-
 }
