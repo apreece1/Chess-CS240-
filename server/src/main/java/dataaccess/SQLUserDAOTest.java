@@ -18,4 +18,23 @@ public class SQLUserDAOTest {
         userDAO.clear();
     }
 
+    @Test
+    void clear_positive_clearsAllUsers() throws DataAccessException {
+        var user = new UserData("josh", "password", "josh@example.com");
+        userDAO.createUser(user);
+
+        assertNotNull(userDAO.getUser("josh"));
+
+        userDAO.clear();
+
+        var fromDb = userDAO.getUser("josh");
+        assertNull(fromDb, "Expected user to be removed after clear()");
+    }
+
+    @Test
+    void clear_negative_onEmptyTable_noException() {
+        assertDoesNotThrow(() -> userDAO.clear());
+    }
+
+
 }
