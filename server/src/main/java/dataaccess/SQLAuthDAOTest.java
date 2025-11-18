@@ -4,8 +4,9 @@ import model.AuthData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SQLAuthDAOTest {
 
@@ -19,12 +20,14 @@ public class SQLAuthDAOTest {
 
     @Test
     void clear_positive_clearsAllAuths() throws DataAccessException {
-        AuthData auth = authDAO.createAuth("josh");
-        assertNotNull(authDAO.getAuth(auth.authToken()));
+        String token = UUID.randomUUID().toString();
+        AuthData auth = new AuthData(token, "josh");
+
+        authDAO.createAuth(auth);
+        assertNotNull(authDAO.getAuth(token));
 
         authDAO.clear();
-
-        assertNull(authDAO.getAuth(auth.authToken()));
+        assertNull(authDAO.getAuth(token));
     }
 
     @Test
@@ -32,47 +35,60 @@ public class SQLAuthDAOTest {
         assertDoesNotThrow(() -> authDAO.clear());
     }
 
-
     @Test
     void createAuth_positive_createsUniqueToken() throws DataAccessException {
-        AuthData auth1 = authDAO.createAuth("josh");
-        AuthData auth2 = authDAO.createAuth("josh");
+        String token1 = UUID.randomUUID().toString();
+        String token2 = UUID.randomUUID().toString();
 
-        assertNotNull(auth1);
-        assertNotNull(auth2);
-        assertNotEquals(auth1.authToken(), auth2.authToken());
+        AuthData auth1 = new AuthData(token1, "josh");
+        AuthData auth2 = new AuthData(token2, "josh");
+
+        authDAO.createAuth(auth1);
+        authDAO.createAuth(auth2);
+
+        assertNotNull(authDAO.getAuth(token1));
+        assertNotNull(authDAO.getAuth(token2));
+        assertNotEquals(token1, token2);
     }
 
     @Test
     void createAuth_negative_nullUsername_throws() {
-        assertThrows(DataAccessException.class, () -> authDAO.createAuth(null));
+        String token = UUID.randomUUID().toString();
+        AuthData bad = new AuthData(token, null);
+
+        assertThrows(DataAccessException.class, () -> authDAO.createAuth(bad));
     }
 
     @Test
     void getAuth_positive_existingToken() throws DataAccessException {
-        AuthData auth = authDAO.createAuth("josh");
+        String token = UUID.randomUUID().toString();
+        AuthData auth = new AuthData(token, "josh");
 
-        AuthData fromDb = authDAO.getAuth(auth.authToken());
+        authDAO.createAuth(auth);
+
+        AuthData fromDb = authDAO.getAuth(token);
         assertNotNull(fromDb);
         assertEquals("josh", fromDb.username());
     }
 
     @Test
     void getAuth_negative_unknownToken_returnsNull() throws DataAccessException {
-        AuthData fromDb = authDAO.getAuth("fake-token");
-        assertNull(fromDb);
+        assertNull(authDAO.getAuth("fake-token"));
     }
 
     @Test
     void deleteAuth_positive_existingToken() throws DataAccessException {
-        AuthData auth = authDAO.createAuth("josh");
-        authDAO.deleteAuth(auth.authToken());
+        String token = UUID.randomUUID().toString();
+        AuthData auth = new AuthData(token, "josh");
 
-        assertNull(authDAO.getAuth(auth.authToken()));
+        authDAO.createAuth(auth);
+
+        authDAO.deleteAuth(token);
+        assertNull(authDAO.getAuth(token));
     }
 
     @Test
-    void deleteAuth_negative_nonExistingToken_noException() {
-        assertDoesNotThrow(() -> authDAO.deleteAuth("fake-token"));
+    void deleteAuth_negative_nonExistingToken_throws() {
+        assertThrows(DataAccessException.class, () -> authDAO.deleteAuth("fake-token"));
     }
 }
