@@ -77,9 +77,17 @@ public class UserHandler {
             ctx.status(200).json(result);
 
         } catch (com.google.gson.JsonSyntaxException e) {
-           ctx.status(400).json(new ErrorMessage("Error: Bad request"));
+            ctx.status(400).json(new ErrorMessage("Error: Bad request"));
         } catch (DataAccessException e) {
-            ctx.status(500).json(new ErrorMessage("Internal Server Error: " + e.getMessage()));
+            String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
+
+            if (msg.contains("unauthorized")) {
+                ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
+            } else if (isDatabaseFailure(e)) {
+                ctx.status(500).json(new ErrorMessage("Internal Server Error"));
+            } else {
+                ctx.status(500).json(new ErrorMessage("Internal Server Error"));
+            }
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
@@ -92,7 +100,11 @@ public class UserHandler {
             ctx.status(200).json(Map.of("message", "Logout successful"));
 
         } catch (DataAccessException e) {
-            ctx.status(500).json(new ErrorMessage("Internal Server Error: " + e.getMessage()));
+            if (isDatabaseFailure(e)) {
+                ctx.status(500).json(new ErrorMessage("Internal Server Error"));
+            } else {
+                ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
+            }
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
