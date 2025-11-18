@@ -19,7 +19,7 @@ public class MySqlGameDAO implements GameDAO {
 
     @Override
     public int createGame(GameData game) throws DataAccessException {
-        String sql = "INSERT INTO Game (gameName, whiteUsername, blackUsername, chessGame) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO game (gameName, whiteUsername, blackUsername, chessGame) VALUES (?, ?, ?, ?)";
         try (var conn = DatabaseManager.getConnection();
              var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -44,7 +44,7 @@ public class MySqlGameDAO implements GameDAO {
 
     @Override
     public GameData getGame(int gameID) throws DataAccessException {
-        String sql = "SELECT gameID, gameName, whiteUsername, blackUsername, chessGame FROM Game WHERE gameID = ?";
+        String sql = "SELECT gameID, gameName, whiteUsername, blackUsername, chessGame FROM game WHERE gameID = ?";
         try (var conn = DatabaseManager.getConnection();
              var stmt = conn.prepareStatement(sql)) {
 
@@ -52,7 +52,7 @@ public class MySqlGameDAO implements GameDAO {
             var rs = stmt.executeQuery();
 
             if (!rs.next()) {
-                throw new DataAccessException("Game not found");
+                return null;
             }
 
             ChessGame chessGame = gson.fromJson(rs.getString("chessGame"), ChessGame.class);
@@ -72,7 +72,7 @@ public class MySqlGameDAO implements GameDAO {
 
     @Override
     public Collection<GameData> listGames() throws DataAccessException {
-        String sql = "SELECT gameID, gameName, whiteUsername, blackUsername, chessGame FROM Game";
+        String sql = "SELECT gameID, gameName, whiteUsername, blackUsername, chessGame FROM game";
         try (var conn = DatabaseManager.getConnection();
              var stmt = conn.prepareStatement(sql)) {
 
@@ -100,7 +100,7 @@ public class MySqlGameDAO implements GameDAO {
 
     @Override
     public void updateGame(GameData game) throws DataAccessException {
-        String sql = "UPDATE Game SET gameName = ?, whiteUsername = ?, blackUsername = ?, chessGame = ? WHERE gameID = ?";
+        String sql = "UPDATE game SET gameName = ?, whiteUsername = ?, blackUsername = ?, chessGame = ? WHERE gameID = ?";
         try (var conn = DatabaseManager.getConnection();
              var stmt = conn.prepareStatement(sql)) {
 
@@ -121,7 +121,7 @@ public class MySqlGameDAO implements GameDAO {
 
     @Override
     public void clear() throws DataAccessException {
-        String sql = "DELETE FROM Game";
+        String sql = "DELETE FROM game";
         try (var conn = DatabaseManager.getConnection();
              var stmt = conn.prepareStatement(sql)) {
 

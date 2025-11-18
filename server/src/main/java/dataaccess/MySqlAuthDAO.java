@@ -51,7 +51,11 @@ public class MySqlAuthDAO implements AuthDAO {
              var stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, authToken);
-            stmt.executeUpdate();
+            int rows = stmt.executeUpdate();
+
+            if (rows == 0) {
+                throw new DataAccessException("unauthorized");
+            }
 
 
         } catch (SQLException ex) {

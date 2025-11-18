@@ -99,16 +99,22 @@ public class UserHandler {
             userService.logout(authToken);
             ctx.status(200).json(Map.of("message", "Logout successful"));
 
+
         } catch (DataAccessException e) {
-            if (isDatabaseFailure(e)) {
+            String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
+
+            if (msg.contains("unauthorized")) {
+                // e.g. second logout, or bogus token
+                ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
+            } else if (isDatabaseFailure(e)) {
                 ctx.status(500).json(new ErrorMessage("Internal Server Error"));
             } else {
-                ctx.status(401).json(new ErrorMessage("Error: " + e.getMessage()));
+                ctx.status(500).json(new ErrorMessage("Internal Server Error"));
             }
+
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
     }
-
 
 }
