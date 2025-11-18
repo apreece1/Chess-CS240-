@@ -56,14 +56,19 @@ public class GameHandler {
             ctx.status(200).json(Map.of("gameID", gameId));
 
         } catch (DataAccessException e) {
-            if (e.getMessage() != null && e.getMessage().contains("Auth token")) {
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("Auth token")) {
                 ctx.status(401).json(new ErrorMessage("Error: Auth token not found"));
             } else if (isDatabaseFailure(e)) {
                 ctx.status(500).json(new ErrorMessage("Error: internal server error"));
             } else {
-                ctx.status(400).json(new ErrorMessage("Error: " + e.getMessage()));
+                // logic errors -> 400
+                ctx.status(400).json(new ErrorMessage("Error: " + msg));
             }
+        } catch (Exception e) {
+            ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
+    }
 
     public void joinGame(Context ctx) {
             String authToken = ctx.header("authorization");
