@@ -96,5 +96,15 @@ public class DatabaseManager {
             )
             """;
 
+        String createGameTable = """
+            CREATE TABLE IF NOT EXISTS game (
+                gameID         INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                gameName       VARCHAR(256) NOT NULL,
+                whiteUsername  VARCHAR(256),
+                blackUsername  VARCHAR(256),
+                chessGame      LONGTEXT NOT NULL
+            )
+            """;
+
 
 }
