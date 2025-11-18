@@ -28,4 +28,14 @@ public class ServerFacade {
         return makeRequest("POST", "/user", body, AuthData.class, null);
     }
 
+    public AuthData login(String username, String password) throws Exception {
+        var body = Map.of(
+                "username", username,
+                "password", password
+        );
+        return makeRequest("POST", "/session", body, AuthData.class, null);
+    }
+
+
+
 }
