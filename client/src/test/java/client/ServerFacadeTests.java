@@ -3,6 +3,9 @@ package client;
 import org.junit.jupiter.api.*;
 import server.Server;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class ServerFacadeTests {
 
@@ -29,8 +32,14 @@ public class ServerFacadeTests {
 
 
     @Test
-    public void sampleTest() {
-        Assertions.assertTrue(true);
+    void registerPositive() throws Exception {
+        var auth = facade.register("player1", "password", "p1@email.com");
+        assertNotNull(auth);
+        assertNotNull(auth.authToken());
+        assertTrue(auth.authToken().length() > 5);
     }
+
+
+
 
 }
