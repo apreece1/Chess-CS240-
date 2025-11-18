@@ -40,5 +40,11 @@ public class ServerFacade {
         makeRequest("DELETE", "/session", null, Void.class, authToken);
     }
 
+    public int createGame(String authToken, String gameName) throws Exception {
+        var body = Map.of("gameName", gameName);
+        Map<?,?> resp = makeRequest("POST", "/game", body, Map.class, authToken);
+        return ((Number) resp.get("gameID")).intValue();
+    }
+
 
 }
