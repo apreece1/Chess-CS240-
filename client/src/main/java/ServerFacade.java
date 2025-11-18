@@ -87,6 +87,17 @@ public class ServerFacade {
                 : connection.getErrorStream();
 
 
-
+        String responseJson = "";
+        if (stream != null) {
+            try (var reader = new InputStreamReader(stream)) {
+                var sb = new StringBuilder();
+                char[] buf = new char[1024];
+                int len;
+                while ((len = reader.read(buf)) != -1) {
+                    sb.append(buf, 0, len);
+                }
+                responseJson = sb.toString();
+            }
+        }
 
     }
