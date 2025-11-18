@@ -49,4 +49,27 @@ public class ChessClient {
         return true;
     }
 
+    private void printPreloginHelp() {
+        System.out.println("""
+                Commands:
+                  help     - Show this help
+                  login    - Login to account
+                  register - Create a new account
+                  quit     - Exit program
+                """);
+    }
+
+    private void login() throws Exception {
+        System.out.print("Username: ");
+        String u = scanner.nextLine().trim();
+        System.out.print("Password: ");
+        String p = scanner.nextLine().trim();
+
+        currentUser = facade.login(u, p);
+        System.out.println("Logged in as " + u);
+        state = State.POSTLOGIN;
+    }
+
+
+
 }
