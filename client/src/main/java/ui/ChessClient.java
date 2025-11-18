@@ -84,5 +84,22 @@ public class ChessClient {
         state = State.POSTLOGIN;
     }
 
+    private boolean postloginLoop() throws Exception {
+        System.out.print("\n[Postlogin] Enter command (help, logout, create, list, play, observe, quit): ");
+        String cmd = scanner.nextLine().trim().toLowerCase();
+
+        switch (cmd) {
+            case "help" -> printPostloginHelp();
+            case "logout" -> logout();
+            case "create" -> createGame();
+            case "list" -> listGames();
+            case "play" -> playGame();
+            case "observe" -> observeGame();
+            case "quit" -> { return false; }
+            default -> System.out.println("Unknown command. Type 'help'.");
+        }
+        return true;
+    }
+
 
 }
