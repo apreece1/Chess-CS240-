@@ -14,10 +14,7 @@ public class UserService {
         this.authService = authService;
     }
 
-    // Validation errors throw DataAccessException with specific message → handled as 400
-    // Real DB errors bubble up → handled as 500
     public AuthData register(UserData user) throws DataAccessException {
-        // --- Validation first ---
         if (user.username() == null || user.username().isBlank() ||
                 user.password() == null || user.password().isBlank()) {
             throw new DataAccessException("bad request");
@@ -29,17 +26,14 @@ public class UserService {
                 throw new DataAccessException("already taken");
             }
         } catch (DataAccessException e) {
-            // Only ignore "user not found" messages
             if (!e.getMessage().toLowerCase().contains("not found")) {
-                // Real DB failure → bubble up
                 throw e;
             }
         }
 
         try {
-            userDAO.createUser(user);  // Could throw real DB errors
+            userDAO.createUser(user);
         } catch (DataAccessException e) {
-            // Any exception here is a DB failure → bubble up
             throw e;
         }
 
@@ -51,12 +45,11 @@ public class UserService {
         try {
             user = userDAO.getUser(username);
         } catch (DataAccessException e) {
-            // DB failure → bubble up
             throw e;
         }
 
         if (user == null || !org.mindrot.jbcrypt.BCrypt.checkpw(password, user.password())) {
-            throw new DataAccessException("unauthorized"); // 400 or 401 depending on handler
+            throw new DataAccessException("unauthorized");
         }
 
         return authService.createAuth(username);
