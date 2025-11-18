@@ -40,6 +40,14 @@ public class ServerFacadeTests {
     }
 
 
+    @Test
+    void loginPositive() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        var auth = facade.login("player1", "password");
+        assertNotNull(auth);
+        assertNotNull(auth.authToken());
+    }
+
 
 
 }
