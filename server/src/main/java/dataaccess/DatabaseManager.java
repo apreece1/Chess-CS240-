@@ -106,5 +106,18 @@ public class DatabaseManager {
             )
             """;
 
-
+        try (var conn = getConnection()) {
+            try (var stmt = conn.prepareStatement(createUserTable)) {
+                stmt.executeUpdate();
+            }
+            try (var stmt = conn.prepareStatement(createAuthTable)) {
+                stmt.executeUpdate();
+            }
+            try (var stmt = conn.prepareStatement(createGameTable)) {
+                stmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to create tables", ex);
+        }
+    }
 }
