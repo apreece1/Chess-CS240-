@@ -80,4 +80,13 @@ public class ServerFacade {
             }
         }
 
+        int status = connection.getResponseCode();
+
+        InputStream stream = (status >= 200 && status < 300)
+                ? connection.getInputStream()
+                : connection.getErrorStream();
+
+
+
+
     }
