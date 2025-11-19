@@ -63,6 +63,36 @@ public class BoardPrinter {
         System.out.println();
     }
 
+    private static String initialPiece(int rank, char file) {
+        return switch (rank) {
+            case 2 -> EscapeSequences.WHITE_PAWN;
+            case 7 -> EscapeSequences.BLACK_PAWN;
+
+            case 1 -> switch (file) {
+                case 'a','h' -> EscapeSequences.WHITE_ROOK;
+                case 'b','g' -> EscapeSequences.WHITE_KNIGHT;
+                case 'c','f' -> EscapeSequences.WHITE_BISHOP;
+                case 'd' -> EscapeSequences.WHITE_QUEEN;
+                case 'e' -> EscapeSequences.WHITE_KING;
+                default -> EscapeSequences.EMPTY;
+            };
+
+            case 8 -> switch (file) {
+                case 'a','h' -> EscapeSequences.BLACK_ROOK;
+                case 'b','g' -> EscapeSequences.BLACK_KNIGHT;
+                case 'c','f' -> EscapeSequences.BLACK_BISHOP;
+                case 'd' -> EscapeSequences.BLACK_QUEEN;
+                case 'e' -> EscapeSequences.BLACK_KING;
+                default -> EscapeSequences.EMPTY;
+            };
+
+            default -> EscapeSequences.EMPTY;
+        };
+    }
+
+
+}
+
 
 
 
