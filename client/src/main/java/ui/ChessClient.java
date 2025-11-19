@@ -36,6 +36,25 @@ public class ChessClient {
         System.out.println("Goodbye!");
     }
 
+    private boolean preloginLoop() throws Exception {
+        System.out.print("\n[Prelogin] Enter command (help, login, register, quit): ");
+        String cmd = scanner.nextLine().trim().toLowerCase();
+
+        switch (cmd) {
+            case "help" -> printPreloginHelp();
+            case "login" -> login();
+            case "register" -> register();
+            case "quit" -> { return false; }
+            default -> System.out.println("Unknown command. Type 'help'.");
+        }
+        return true;
+    }
+
+
+    
+
+
+
 
 
 
