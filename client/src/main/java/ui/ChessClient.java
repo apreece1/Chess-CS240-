@@ -71,6 +71,139 @@ public class ChessClient {
         state = State.POSTLOGIN;
     }
 
+    private void register() throws Exception {
+        System.out.print("Username: ");
+        String u = scanner.nextLine().trim();
+        System.out.print("Password: ");
+        String p = scanner.nextLine().trim();
+        System.out.print("Email: ");
+        String e = scanner.nextLine().trim();
+
+        currentUser = facade.register(u, p, e);
+        System.out.println("Registered and logged in as " + u);
+        state = State.POSTLOGIN;
+    }
+
+    private boolean postloginLoop() throws Exception {
+        System.out.print("\n[Postlogin] Enter command (help, logout, create, list, play, observe, quit): ");
+        String cmd = scanner.nextLine().trim().toLowerCase();
+
+        switch (cmd) {
+            case "help" -> printPostloginHelp();
+            case "logout" -> logout();
+            case "create" -> createGame();
+            case "list" -> listGames();
+            case "play" -> playGame();
+            case "observe" -> observeGame();
+            case "quit" -> { return false; }
+            default -> System.out.println("Unknown command. Type 'help'.");
+        }
+        return true;
+    }
+
+    private void printPostloginHelp() {
+        System.out.println("""
+                Commands:
+                  help    - Show this help
+                  logout  - Logout
+                  create  - Create a new game
+                  list    - List existing games
+                  play    - Join a game as a player
+                  observe - Observe a game
+                  quit    - Exit program
+                """);
+    }
+
+    private void logout() throws Exception {
+        if (currentUser != null) {
+            facade.logout(currentUser.authToken());
+        }
+        currentUser = null;
+        lastGames.clear();
+        state = State.PRELOGIN;
+        System.out.println("Logged out.");
+    }
+
+    private void createGame() throws Exception {
+        System.out.print("Game name: ");
+        String name = scanner.nextLine().trim();
+        if (name.isBlank()) {
+            System.out.println("Game name cannot be empty.");
+            return;
+        }
+        int gameID = facade.createGame(currentUser.authToken(), name);
+        System.out.println("Created game '" + name + "' (internal id " + gameID + ").");
+    }
+
+    private void listGames() throws Exception {
+        lastGames = facade.listGames(currentUser.authToken());
+        if (lastGames.isEmpty()) {
+            System.out.println("No games found.");
+            return;
+        }
+        int i = 1;
+        for (GameData g : lastGames) {
+            String white = g.getWhiteUsername() == null ? "-" : g.getWhiteUsername();
+            String black = g.getBlackUsername() == null ? "-" : g.getBlackUsername();
+            System.out.printf("%d. %s (white: %s, black: %s)%n", i++, g.getGameName(), white, black);
+        }
+    }
+
+    private void playGame() throws Exception {
+        if (lastGames.isEmpty()) {
+            System.out.println("No games listed. Use 'list' first.");
+            return;
+        }
+        System.out.print("Game number: ");
+        int index = parseIntSafe(scanner.nextLine());
+        if (index < 1 || index > lastGames.size()) {
+            System.out.println("Invalid game number.");
+            return;
+        }
+        GameData game = lastGames.get(index - 1);
+
+        System.out.print("Color (WHITE/BLACK): ");
+        String color = scanner.nextLine().trim().toUpperCase();
+        if (!color.equals("WHITE") && !color.equals("BLACK")) {
+            System.out.println("Invalid color.");
+            return;
+        }
+
+        facade.joinGame(currentUser.authToken(), game.getGameID(), color);
+        System.out.println("Joined game '" + game.getGameName() + "' as " + color + ".");
+        BoardPrinter.printInitialBoard(color.equals("WHITE"));
+    }
+
+    private void observeGame() throws Exception {
+        if (lastGames.isEmpty()) {
+            System.out.println("No games listed. Use 'list' first.");
+            return;
+        }
+        System.out.print("Game number: ");
+        int index = parseIntSafe(scanner.nextLine());
+        if (index < 1 || index > lastGames.size()) {
+            System.out.println("Invalid game number.");
+            return;
+        }
+        GameData game = lastGames.get(index - 1);
+
+        facade.joinGame(currentUser.authToken(), game.getGameID(), null);
+        System.out.println("Observing game '" + game.getGameName() + "'.");
+        BoardPrinter.printInitialBoard(true);
+    }
+
+    private int parseIntSafe(String s) {
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
+    }
+}
+
+
+
+
 
 
 
