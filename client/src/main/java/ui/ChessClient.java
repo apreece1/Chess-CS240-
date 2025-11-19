@@ -21,5 +21,22 @@ public class ChessClient {
         this.facade = facade;
     }
 
+    public void run() {
+        System.out.println("♕ Welcome to CS 240 Chess!");
+        boolean running = true;
+
+        while (running) {
+            try {
+                running = (state == State.PRELOGIN) ? preloginLoop() : postloginLoop();
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Goodbye!");
+    }
+
+
+
 
 }
