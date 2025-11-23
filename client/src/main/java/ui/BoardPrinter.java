@@ -35,5 +35,13 @@ public class BoardPrinter {
         printFileLabels(files);
     }
 
-    
+    private static void printFileLabels(char[] files) {
+        System.out.print("  ");
+        for (char c : files) {
+            System.out.print(EscapeSequences.SET_TEXT_BOLD + " " + c + " " + EscapeSequences.RESET_TEXT_BOLD_FAINT);
+        }
+        System.out.println();
+    }
+
+
 
