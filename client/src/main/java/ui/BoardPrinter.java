@@ -19,5 +19,21 @@ public class BoardPrinter {
         for (int rank = startRank; (step > 0 ? rank <= endRank : rank >= endRank); rank += step) {
             System.out.print(EscapeSequences.SET_TEXT_BOLD + rank + " " + EscapeSequences.RESET_TEXT_BOLD_FAINT);
 
-            
+            for (int f = 0; f < 8; f++) {
+                boolean light = ((rank + f) % 2 == 0);
+                String bg = light ? EscapeSequences.SET_BG_COLOR_LIGHT_GREY
+                        : EscapeSequences.SET_BG_COLOR_DARK_GREY;
+
+                char file = files[f];
+                String piece = initialPiece(rank, file);
+
+                System.out.print(bg + piece + EscapeSequences.RESET_BG_COLOR);
+            }
+            System.out.println();
+        }
+
+        printFileLabels(files);
+    }
+
+    
 
