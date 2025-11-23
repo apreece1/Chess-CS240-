@@ -61,6 +61,7 @@ public class ServerFacade {
                               Object requestBody,
                               Class<T> responseType,
                               String authToken) throws Exception {
+        
         var url = new URL(baseUrl + path);
         var connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(method);
