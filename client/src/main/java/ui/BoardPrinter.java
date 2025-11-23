@@ -57,5 +57,19 @@ public class BoardPrinter {
                 default -> EscapeSequences.EMPTY;
             };
 
+            case 8 -> switch (file) {
+                case 'a','h' -> EscapeSequences.BLACK_ROOK;
+                case 'b','g' -> EscapeSequences.BLACK_KNIGHT;
+                case 'c','f' -> EscapeSequences.BLACK_BISHOP;
+                case 'd' -> EscapeSequences.BLACK_QUEEN;
+                case 'e' -> EscapeSequences.BLACK_KING;
+                default -> EscapeSequences.EMPTY;
+            };
+
+            default -> EscapeSequences.EMPTY;
+        };
+    }
+}
+
 
 
