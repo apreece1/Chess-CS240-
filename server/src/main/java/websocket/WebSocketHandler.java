@@ -30,7 +30,11 @@ public class WebSocketHandler {
         System.out.println("[WS CLOSE] " + session.getId());
     }
 
-    
-
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+        System.out.println("[WS ERROR] " + throwable.getMessage());
     }
+
+
+}
 
