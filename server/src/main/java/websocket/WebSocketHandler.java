@@ -40,7 +40,16 @@ public class WebSocketHandler {
                 case RESIGN -> handleResign(ctx, command);
             }
 
-            
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendError(ctx, "Error: " + e.getMessage());
+        }
+    }
+
+    
+
+
+
 
 
 
