@@ -113,7 +113,15 @@ public class WebSocketHandler {
             send(ctx2, load);
         }
 
+        ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+        note.setMessage(username + " made a move");
 
-
-
+        for (var ctx2 : connections.getOthersInGame(cmd.getGameID(), ctx)) {
+            send(ctx2, note);
+        }
     }
+
+
+
+
+}
