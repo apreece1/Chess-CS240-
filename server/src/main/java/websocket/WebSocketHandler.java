@@ -31,7 +31,16 @@ public class WebSocketHandler {
     public void onMessage(WsContext ctx) {
         try {
             String rawJson = ctx.message();
-            UserGameCommand command = gson.fromJ
+            UserGameCommand command = gson.fromJson(rawJson, UserGameCommand.class);
+
+            switch (command.getCommandType()) {
+                case CONNECT -> handleConnect(ctx, command);
+                case MAKE_MOVE -> handleMakeMove(ctx, command);
+                case LEAVE -> handleLeave(ctx, command);
+                case RESIGN -> handleResign(ctx, command);
+            }
+
+            
 
 
 
