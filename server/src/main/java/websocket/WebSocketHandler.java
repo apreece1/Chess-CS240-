@@ -62,10 +62,21 @@ public class WebSocketHandler {
             return;
         }
 
+        var gameData = gameService.getGame(cmd.getGameID());
+        if (gameData == null) {
+            sendError(ctx, "Error: game not found");
+            return;
+        }
+
+        String username = auth.username();
+
+        connections.addConnection(cmd.getGameID(), username, ctx);
 
 
 
 
 
 
-}
+
+
+    }
