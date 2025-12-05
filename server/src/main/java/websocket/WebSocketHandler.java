@@ -28,6 +28,10 @@ public class WebSocketHandler {
         System.out.println("[WS CONNECT] " + ctx.sessionId());
     }
 
+    public void onMessage(WsContext ctx) {
+        try {
+            String rawJson = ctx.message();
+            UserGameCommand command = gson.fromJ
 
 
 
