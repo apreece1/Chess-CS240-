@@ -9,4 +9,11 @@ import service.GameService;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
-public class WebSocketHandler {}
+public class WebSocketHandler {
+
+    private final AuthService authService;
+    private final GameService gameService;
+    private final ConnectionManager connections;
+    private final Gson gson = new Gson();
+
+}
