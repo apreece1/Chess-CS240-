@@ -31,5 +31,10 @@ public class ConnectionManager {
         Integer gameId = ctx.attribute("gameId");
         if (gameId == null) return;
         var list = connections.get(gameId);
+        if (list == null) return;
+        list.removeIf(c -> c.ctx.sessionId().equals(ctx.sessionId()));
+    }
+
+
 
 }
