@@ -46,7 +46,15 @@ public class WebSocketHandler {
         }
     }
 
-    
+    public void onClose(WsContext ctx) {
+        connections.removeConnection(ctx);
+    }
+
+    public void onError(WsContext ctx) {
+        System.out.println("WebSocket error: " + ctx.error());
+    }
+
+
 
 
 
