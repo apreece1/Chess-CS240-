@@ -35,6 +35,14 @@ public class ConnectionManager {
         list.removeIf(c -> c.ctx.sessionId().equals(ctx.sessionId()));
     }
 
+    public List<WsContext> getAllInGame(int gameId) {
+        var list = connections.get(gameId);
+        if (list == null) return List.of();
+        return list.stream().map(c -> c.ctx).toList();
+    }
+
+    p
+
 
 
 }
