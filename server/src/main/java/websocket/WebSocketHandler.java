@@ -106,6 +106,13 @@ public class WebSocketHandler {
         gameData = gameService.getGame(cmd.getGameID());
 
 
+        ServerMessage load = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);
+        load.setGame(gameData);
+
+        for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
+            send(ctx2, load);
+        }
+
 
 
 
