@@ -50,7 +50,7 @@ public class ServerMessage {
     }
 
     public void setErrorMessage(String errorMessage) {
-
+        this.errorMessage = errorMessage;
     }
 
 
