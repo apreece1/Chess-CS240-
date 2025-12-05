@@ -38,7 +38,7 @@ public class ServerMessage {
     }
 
     public String getErrorMessage(){
-        return errorMessage();
+        return errorMessage;
     }
 
     @Override
