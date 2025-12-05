@@ -44,6 +44,10 @@ public class UserGameCommand {
         return gameID;
     }
 
+    public ChessMove getMove() {
+        return move;
+    }
+
     public void setMove(ChessMove move) {
         this.move = move;
     }
