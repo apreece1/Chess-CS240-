@@ -76,13 +76,13 @@ public class WebSocketHandler {
         load.setGame(gameData);
         send(ctx, load);
 
-        
+        ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+        note.setMessage(username + " connected");
 
-
-
-
-
-
-
-
+        for (var other : connections.getOthersInGame(cmd.getGameID(), ctx)) {
+            send(other, note);
+        }
     }
+
+
+}
