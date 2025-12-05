@@ -98,6 +98,14 @@ public class WebSocketHandler {
         }
 
 
+        ChessMove move = cmd.getMove();
+        String username = auth.username();
+
+        gameService.makeMove(cmd.getGameID(), username, move);
+
+        gameData = gameService.getGame(cmd.getGameID());
+
+
 
 
 
