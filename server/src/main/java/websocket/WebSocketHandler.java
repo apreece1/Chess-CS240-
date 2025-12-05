@@ -16,6 +16,9 @@ public class WebSocketHandler {
         System.out.println("[WS OPEN] " + session.getId());
     }
 
+    @OnMessage
+    public void onMessage(Session session, String message) {
+        System.out.println("[WS IN] " + message);
 
 }
 
