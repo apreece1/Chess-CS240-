@@ -20,5 +20,11 @@ public class WebSocketHandler {
     public void onMessage(Session session, String message) {
         System.out.println("[WS IN] " + message);
 
-}
+        UserGameCommand command = gson.fromJson(message, UserGameCommand.class);
+
+        System.out.println("[COMMAND] " + command.getCommandType());
+    }
+
+
+    }
 
