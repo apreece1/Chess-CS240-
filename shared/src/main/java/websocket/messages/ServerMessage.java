@@ -41,6 +41,14 @@ public class ServerMessage {
         return errorMessage;
     }
 
+    public void setGame(Object game) {
+        this.game = game;
+    }
+
+    public void SetMessage(String message) {
+        this.
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
