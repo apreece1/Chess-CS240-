@@ -45,9 +45,14 @@ public class ServerMessage {
         this.game = game;
     }
 
-    public void SetMessage(String message) {
-        this.
+    public void setMessage(String message) {
+        this.message = message;
     }
+
+    public void setErrorMessage(String errorMessage) {
+
+    }
+
 
     @Override
     public boolean equals(Object o) {
