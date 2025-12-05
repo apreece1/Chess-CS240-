@@ -25,6 +25,10 @@ public class WebSocketHandler {
         System.out.println("[COMMAND] " + command.getCommandType());
     }
 
+    @OnClose
+    public void onClose(Session session) {
+        System.out.println("[WS CLOSE] " + session.getId());
+    }
 
     }
 
