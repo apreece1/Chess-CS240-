@@ -20,7 +20,13 @@ public class ConnectionManager {
         Connection c = new Connection();
         c.gameId = gameId;
         c.username = username;
-        c.
+        c.ctx = ctx;
+        list.add(c);
+
+        ctx.attribute("gameId", gameId);
+        ctx.attribute("username", username);
+    }
+
 
 
 }
