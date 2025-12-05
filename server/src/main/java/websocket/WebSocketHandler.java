@@ -1,40 +1,12 @@
 package websocket;
 
+import chess.ChessGame;
+import chess.ChessMove;
 import com.google.gson.Gson;
-import jakarta.websocket.*;
-import jakarta.websocket.server.ServerEndpoint;
+import io.javalin.websocket.WsContext;
+import service.AuthService;
+import service.GameService;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ServerMessage;
 
-
-@ServerEndpoint("/ws")
-public class WebSocketHandler {
-
-    private static final Gson gson = new Gson();
-
-    @OnOpen
-    public void onOpen(Session session) {
-        System.out.println("[WS OPEN] " + session.getId());
-    }
-
-    @OnMessage
-    public void onMessage(Session session, String message) {
-        System.out.println("[WS IN] " + message);
-
-        UserGameCommand command = gson.fromJson(message, UserGameCommand.class);
-
-        System.out.println("[COMMAND] " + command.getCommandType());
-    }
-
-    @OnClose
-    public void onClose(Session session) {
-        System.out.println("[WS CLOSE] " + session.getId());
-    }
-
-    @OnError
-    public void onError(Session session, Throwable throwable) {
-        System.out.println("[WS ERROR] " + throwable.getMessage());
-    }
-
-
-}
-
+public class WebSocketHandler {}
