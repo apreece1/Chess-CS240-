@@ -41,8 +41,12 @@ public class ConnectionManager {
         return list.stream().map(c -> c.ctx).toList();
     }
 
-    p
-
-
-
+    public List<WsContext> getOthersInGame(int gameId, WsContext exclude) {
+        var list = connections.get(gameId);
+        if (list == null) return List.of();
+        return list.stream()
+                .map(c -> c.ctx)
+                .filter(ctx -> !ctx.sessionId().equals(exclude.sessionId()))
+                .toList();
+    }
 }
