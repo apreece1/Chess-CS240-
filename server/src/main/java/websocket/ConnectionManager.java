@@ -27,6 +27,9 @@ public class ConnectionManager {
         ctx.attribute("username", username);
     }
 
-
+    public void removeConnection(WsContext ctx) {
+        Integer gameId = ctx.attribute("gameId");
+        if (gameId == null) return;
+        var list = connections.get(gameId);
 
 }
