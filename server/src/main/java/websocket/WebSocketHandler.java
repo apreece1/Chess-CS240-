@@ -72,6 +72,12 @@ public class WebSocketHandler {
 
         connections.addConnection(cmd.getGameID(), username, ctx);
 
+        ServerMessage load = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);
+        load.setGame(gameData);
+        send(ctx, load);
+
+        
+
 
 
 
