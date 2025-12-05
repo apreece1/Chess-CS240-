@@ -11,6 +11,10 @@ import java.util.Objects;
 public class ServerMessage {
     ServerMessageType serverMessageType;
 
+    private Object game;
+    private String message;
+    private String errorMessage;
+
     public enum ServerMessageType {
         LOAD_GAME,
         ERROR,
