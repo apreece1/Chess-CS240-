@@ -128,8 +128,13 @@ public class WebSocketHandler {
         String username = auth.username();
         connections.removeConnection(ctx);
 
-        
+        ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+        note.setMessage(username + " left the game");
 
+        for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
+            send(ctx2, note);
+        }
+    }
 
 
 
