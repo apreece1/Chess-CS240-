@@ -160,12 +160,16 @@ public class WebSocketHandler {
             }
 
             String username = auth.username();
+            int gameID = cmd.getGameID();
+
+            gameService.removePlayerFromGame(gameID, username);
+
             connections.removeConnection(ctx);
 
             ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
             note.setMessage(username + " left the game");
 
-            for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
+            for (var ctx2 : connections.getAllInGame(gameID)) {
                 send(ctx2, note);
             }
 
@@ -173,6 +177,7 @@ public class WebSocketHandler {
             sendError(ctx, e.getMessage());
         }
     }
+
 
     private void handleResign(WsContext ctx, UserGameCommand cmd) {
         try {
