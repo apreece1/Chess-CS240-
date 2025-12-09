@@ -180,6 +180,23 @@ public class WebSocketHandler {
                     return;
                 }
 
+                int gameID = cmd.getGameID();
+                String username = auth.username();
+
+                try {
+                    gameService.resign(gameID, username);
+                } catch (DataAccessException e) {
+                    sendError(ctx, e.getMessage());
+                    return;
+                }
+
+                ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+                note.setMessage(username + " resigned");
+
+                for (var other : connections.getAllInGame(gameID)) {
+                    send(other, note);
+                }
+
 
             }
 
