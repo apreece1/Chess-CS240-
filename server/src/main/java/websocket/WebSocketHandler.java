@@ -119,6 +119,18 @@ public class WebSocketHandler {
             gameData = gameService.getGame(cmd.getGameID());
             ChessGame game = gameData.getGame();
 
+            ServerMessage load = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);
+            load.setGame(gameData);
+            for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
+                send(ctx2, load);
+            }
+
+            ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+            note.setMessage(username + " made a move");
+            for (var ctx2 : connections.getOthersInGame(cmd.getGameID(), ctx)) {
+                send(ctx2, note);
+            }
+
 
 
 
