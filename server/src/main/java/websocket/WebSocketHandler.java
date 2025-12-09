@@ -9,6 +9,9 @@ import service.GameService;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
+
+
+
 public class WebSocketHandler {
 
     private final AuthService authService;
@@ -51,7 +54,7 @@ public class WebSocketHandler {
     }
 
     public void onError(WsContext ctx) {
-        System.out.println("WebSocket error: " + ctx.error());
+        System.out.println("[WS ERROR] " + ctx.sessionId());
     }
 
 
