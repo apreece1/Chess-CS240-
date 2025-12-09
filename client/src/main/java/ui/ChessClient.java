@@ -245,6 +245,20 @@ public class ChessClient implements GameplayObserver {
                 """);
     }
 
+    private void redrawBoard() {
+        if (currentGame == null) {
+            System.out.println("No game loaded.");
+            return;
+        }
+        boolean whiteOnBottom = true;
+        if (currentUser != null &&
+                currentGame.getBlackUsername() != null &&
+                currentUser.username().equals(currentGame.getBlackUsername())) {
+            whiteOnBottom = false;
+        }
+        BoardPrinter.printInitialBoard(whiteOnBottom);
+    }
+
 
 
 
