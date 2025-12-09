@@ -136,6 +136,12 @@ public class WebSocketHandler {
         }
     }
 
+    private void handleResign(WsContext ctx, UserGameCommand cmd) {
+        var auth = authService.getAuth(cmd.getAuthToken());
+        if (auth == null) {
+            sendError(ctx, "Error: invalid auth token");
+            return;
+        }
 
 
 }
