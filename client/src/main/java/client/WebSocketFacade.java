@@ -38,7 +38,17 @@ public class WebSocketFacade {
             @Override
             public void onOpen(Session session, EndpointConfig config) {
                 session.addMessageHandler((MessageHandler.Whole<String>) WebSocketFacade.this::handleMessage);
-            }
+            }, ClientEndpointConfig.Builder.create().build(), URI.create(wsUrl));
+
+            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+            sendCommand(cmd);
+        }
+
+        public void makeMove(String authToken, int gameID, ChessMove move) throws IOException {
+            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID);
+            cmd.setMove(move);
+            sendCommand(cmd);
+        }
 
 
 }
