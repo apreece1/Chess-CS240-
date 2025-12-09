@@ -307,6 +307,16 @@ public class ChessClient implements GameplayObserver {
         }
     }
 
+    private void handleLeave(int gameID) throws Exception {
+        ws.leave(currentUser.authToken(), gameID);
+        ws.close();
+        ws = null;
+        currentGame = null;
+        System.out.println("Left game.");
+    }
+
+
+
 
 
 
