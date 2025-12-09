@@ -97,6 +97,20 @@ public class ChessClient implements GameplayObserver {
         state = State.POSTLOGIN;
     }
 
+    private void register() throws Exception {
+        System.out.print("Username: ");
+        String u = scanner.nextLine().trim();
+        System.out.print("Password: ");
+        String p = scanner.nextLine().trim();
+        System.out.print("Email: ");
+        String e = scanner.nextLine().trim();
+
+        currentUser = facade.register(u, p, e);
+        System.out.println("Registered and logged in as " + u);
+        state = State.POSTLOGIN;
+    }
+
+
 
 
 
