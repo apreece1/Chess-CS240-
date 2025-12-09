@@ -38,42 +38,56 @@ public class WebSocketFacade {
             @Override
             public void onOpen(Session session, EndpointConfig config) {
                 session.addMessageHandler((MessageHandler.Whole<String>) WebSocketFacade.this::handleMessage);
-            }, ClientEndpointConfig.Builder.create().build(), URI.create(wsUrl));
-
-            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
-            sendCommand(cmd);
-        }
-
-        public void makeMove(String authToken, int gameID, ChessMove move) throws IOException {
-            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID);
-            cmd.setMove(move);
-            sendCommand(cmd);
-        }
-
-        public void leave(String authToken, int gameID) throws IOException {
-            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID);
-            sendCommand(cmd);
-        }
-
-        public void resign(String authToken, int gameID) throws IOException {
-            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.RESIGN, authToken, gameID);
-            sendCommand(cmd);
-        }
-
-        public void close() throws IOException {
-            if (session != null && session.isOpen()) {
-                session.close();
             }
-        }
+        }, ClientEndpointConfig.Builder.create().build(), URI.create(wsUrl));
 
-        private void sendCommand(UserGameCommand cmd) throws IOException {
-            if (session == null || !session.isOpen()) {
-                throw new IOException("WebSocket is not connected");
-            }
-            String json = gson.toJson(cmd);
-            session.getAsyncRemote().sendText(json);
-        }
-
-
-
+        UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+        sendCommand(cmd);
     }
+
+    public void makeMove(String authToken, int gameID, ChessMove move) throws IOException {
+        UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID);
+        cmd.setMove(move);
+        sendCommand(cmd);
+    }
+
+    public void leave(String authToken, int gameID) throws IOException {
+        UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID);
+        sendCommand(cmd);
+    }
+
+    public void resign(String authToken, int gameID) throws IOException {
+        UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.RESIGN, authToken, gameID);
+        sendCommand(cmd);
+    }
+
+    public void close() throws IOException {
+        if (session != null && session.isOpen()) {
+            session.close();
+        }
+    }
+
+    private void sendCommand(UserGameCommand cmd) throws IOException {
+        if (session == null || !session.isOpen()) {
+            throw new IOException("WebSocket is not connected");
+        }
+        String json = gson.toJson(cmd);
+        session.getAsyncRemote().sendText(json);
+    }
+
+    private void handleMessage(String rawJson) {
+        try {
+            ServerMessage msg = gson.fromJson(rawJson, ServerMessage.class);
+            switch (msg.getServerMessageType()) {
+                case LOAD_GAME -> {
+                    GameData gameData = gson.fromJson(gson.toJson(msg.getGame()), GameData.class);
+                    observer.onLoadGame(gameData);
+                }
+                case NOTIFICATION -> observer.onNotification(msg.getMessage());
+                case ERROR -> observer.onError(msg.getErrorMessage());
+            }
+        } catch (Exception e) {
+            observer.onError("Error: " + e.getMessage());
+        }
+    }
+}
