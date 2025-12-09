@@ -212,6 +212,28 @@ public class ChessClient implements GameplayObserver {
         gameplayLoop(game.getGameID());
     }
 
+    private void gameplayLoop(int gameID) throws Exception {
+        boolean inGame = true;
+        while (inGame) {
+            System.out.print("\n[Game] Enter command (help, redraw, move, highlight, resign, leave): ");
+            String cmd = scanner.nextLine().trim().toLowerCase();
+
+            switch (cmd) {
+                case "help" -> printGameHelp();
+                case "redraw" -> redrawBoard();
+                case "move" -> handleMove(gameID);
+                case "highlight" -> handleHighlight();
+                case "resign" -> handleResign(gameID);
+                case "leave" -> {
+                    handleLeave(gameID);
+                    inGame = false;
+                }
+                default -> System.out.println("Unknown command. Type 'help'.");
+            }
+        }
+    }
+
+
 
 
 
