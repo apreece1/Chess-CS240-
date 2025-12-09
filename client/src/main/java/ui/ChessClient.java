@@ -387,11 +387,22 @@ public class ChessClient implements GameplayObserver {
             destSquares.add(end.getRow() + "," + end.getColumn());
         }
 
+        for (int rank = startRank; (step > 0 ? rank <= endRank : rank >= endRank); rank += step) {
+            System.out.print(EscapeSequences.SET_TEXT_BOLD + rank + " " + EscapeSequences.RESET_TEXT_BOLD_FAINT);
+
+            for (int f = 0; f < 8; f++) {
+                char file = files[f];
+                int col = fileToCol(file);
+
+                boolean isFrom = (from.getRow() == rank && from.getColumn() == col);
+                boolean isDest = destSquares.contains(rank + "," + col);
 
 
 
 
 
-}
+
+
+            }
 
 
