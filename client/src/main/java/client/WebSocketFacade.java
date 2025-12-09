@@ -66,5 +66,14 @@ public class WebSocketFacade {
             }
         }
 
+        private void sendCommand(UserGameCommand cmd) throws IOException {
+            if (session == null || !session.isOpen()) {
+                throw new IOException("WebSocket is not connected");
+            }
+            String json = gson.toJson(cmd);
+            session.getAsyncRemote().sendText(json);
+        }
 
-}
+
+
+    }
