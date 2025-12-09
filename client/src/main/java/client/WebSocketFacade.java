@@ -27,5 +27,18 @@ public class WebSocketFacade {
         this.observer = observer;
     }
 
+    public void connect(String authToken, int gameID) throws Exception {
+        if (session != null && session.isOpen()) {
+            return;
+        }
+
+        ClientManager client = ClientManager.createClient();
+
+        session = client.connectToServer(new Endpoint() {
+            @Override
+            public void onOpen(Session session, EndpointConfig config) {
+                session.addMessageHandler((MessageHandler.Whole<String>) WebSocketFacade.this::handleMessage);
+            }
+
 
 }
