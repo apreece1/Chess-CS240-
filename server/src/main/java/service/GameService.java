@@ -168,4 +168,25 @@ public class GameService {
         return gameDAO.getGame(gameID);
     }
 
+    public void removePlayerFromGame(int gameID, String username) throws DataAccessException {
+        var game = gameDAO.getGame(gameID);
+        if (game == null) {
+            throw new DataAccessException("Error: bad request");
+        }
+
+        boolean changed = false;
+
+        if (username.equals(game.getWhiteUsername())) {
+            game.setWhiteUsername(null);
+            changed = true;
+        } else if (username.equals(game.getBlackUsername())) {
+            game.setBlackUsername(null);
+            changed = true;
+        }
+
+        if (changed) {
+            gameDAO.updateGame(game);
+        }
+    }
+
 }
