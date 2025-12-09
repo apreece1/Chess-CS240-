@@ -278,6 +278,16 @@ public class ChessClient implements GameplayObserver {
             return;
         }
 
+        ChessMove move = new ChessMove(from, to, null);
+        ws.makeMove(currentUser.authToken(), gameID, move);
+    }
+
+    private void handleHighlight() {
+        if (currentGame == null) {
+            System.out.println("No game loaded.");
+            return;
+        }
+
 
 
 
