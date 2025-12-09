@@ -121,6 +121,36 @@ public class GameService {
     }
 
 
+    public void resign(int gameID, String username) throws DataAccessException {
+        GameData gameData = gameDAO.getGame(gameID);
+        if (gameData == null) {
+            throw new DataAccessException("Error: bad request");
+        }
+
+
+        if (completedGames.contains(gameID)) {
+            throw new DataAccessException("Error: game already over");
+        }
+
+        String white = gameData.getWhiteUsername();
+        String black = gameData.getBlackUsername();
+
+        boolean isWhite = username != null && username.equals(white);
+        boolean isBlack = username != null && username.equals(black);
+        boolean isPlayer = isWhite || isBlack;
+
+
+        if (!isPlayer) {
+            throw new DataAccessException("Error: observers cannot resign");
+        }
+
+        completedGames.add(gameID);
+
+        gameDAO.updateGame(gameData);
+    }
+
+
+
 
     public void clear() throws DataAccessException {
         gameDAO.clear();

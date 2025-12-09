@@ -3,6 +3,7 @@ package websocket;
 import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
 import io.javalin.websocket.WsContext;
 import service.AuthService;
 import service.GameService;
@@ -139,22 +140,36 @@ public class WebSocketHandler {
         }
     }
 
-    private void handleResign(WsContext ctx, UserGameCommand cmd) {
-        var auth = authService.getAuth(cmd.getAuthToken());
-        if (auth == null) {
-            sendError(ctx, "Error: invalid auth token");
-            return;
-        }
+    private void handleResign(io.javalin.websocket.WsContext ctx, UserGameCommand cmd) {
+        try {
+            var auth = authService.getAuth(cmd.getAuthToken());
+            if (auth == null) {
+                sendError(ctx, "Error: invalid auth token");
+                return;
+            }
 
-        gameService.resign(cmd.getGameID(), auth.username());
+            int gameID = cmd.getGameID();
+            String username = auth.username();
 
-        ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
-        note.setMessage(auth.username() + " resigned");
+            try {
+                gameService.resign(gameID, username);
+            } catch (DataAccessException e) {
+                sendError(ctx, e.getMessage());
+                return;
+            }
 
-        for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
-            send(ctx2, note);
+            ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+            note.setMessage(username + " resigned");
+
+            for (var other : connections.getAllInGame(gameID)) {
+                send(other, note);
+            }
+
+        } catch (Exception e) {
+            sendError(ctx, "Error: " + e.getMessage());
         }
     }
+
 
     private void send(WsContext ctx, ServerMessage msg) {
         ctx.send(gson.toJson(msg));
