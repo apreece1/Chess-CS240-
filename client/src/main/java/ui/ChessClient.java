@@ -23,6 +23,21 @@ public class ChessClient implements GameplayObserver {
     private GameData currentGame;
     private final Scanner scanner = new Scanner(System.in);
 
+    @Override
+    public void onLoadGame(GameData game) {
+
+    }
+
+    @Override
+    public void onNotification(String message) {
+
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+
+    }
+
     private enum State { PRELOGIN, POSTLOGIN }
     private State state = State.PRELOGIN;
 
@@ -315,16 +330,19 @@ public class ChessClient implements GameplayObserver {
         System.out.println("Left game.");
     }
 
-
-
-
-
-
-
-
-
-
-
+    private ChessPosition parsePosition(String algebraic) {
+        if (algebraic == null || algebraic.length() != 2) {
+            return null;
+        }
+        char file = Character.toLowerCase(algebraic.charAt(0));
+        char rank = algebraic.charAt(1);
+        if (file < 'a' || file > 'h' || rank < '1' || rank > '8') {
+            return null;
+        }
+        int col = file - 'a' + 1;
+        int row = rank - '0';
+        return new ChessPosition(row, col);
+    }
 
     private int parseIntSafe(String s) {
         try {
