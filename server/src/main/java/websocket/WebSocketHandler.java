@@ -58,6 +58,19 @@ public class WebSocketHandler {
         System.out.println("[WS ERROR] " + ctx.sessionId());
     }
 
+    private void handleConnect(WsContext ctx, UserGameCommand cmd) {
+        try {
+            var auth = authService.getAuth(cmd.getAuthToken());
+            if (auth == null) {
+                sendError(ctx, "Error: invalid auth token");
+                return;
+            }
+
+            var gameData = gameService.getGame(cmd.getGameID());
+            if (gameData == null) {
+                sendError(ctx, "Error: game not found");
+                return;
+            }
 
 
 
