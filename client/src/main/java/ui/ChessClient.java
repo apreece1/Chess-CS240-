@@ -287,6 +287,16 @@ public class ChessClient implements GameplayObserver {
             System.out.println("No game loaded.");
             return;
         }
+        System.out.print("Square to highlight (e.g., e2): ");
+        String posStr = scanner.nextLine().trim();
+        ChessPosition pos = parsePosition(posStr);
+        if (pos == null) {
+            System.out.println("Invalid coordinates.");
+            return;
+        }
+        System.out.println("Highlighting not yet implemented with BoardPrinter and currentGame.getGame().");
+    }
+
 
 
 
