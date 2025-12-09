@@ -149,7 +149,28 @@ public class WebSocketHandler {
             sendError(ctx, e.getMessage());
         }
 
-        
+        private void handleLeave(WsContext ctx, UserGameCommand cmd) {
+            try {
+                var auth = authService.getAuth(cmd.getAuthToken());
+                if (auth == null) {
+                    sendError(ctx, "Error: invalid auth token");
+                    return;
+                }
+
+                String username = auth.username();
+                connections.removeConnection(ctx);
+
+                ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+                note.setMessage(username + " left the game");
+
+                for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
+                    send(ctx2, note);
+                }
+
+            } catch (DataAccessException e) {
+                sendError(ctx, e.getMessage());
+            }
+        }
 
     }
 
