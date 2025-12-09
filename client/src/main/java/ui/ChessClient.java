@@ -190,6 +190,28 @@ public class ChessClient implements GameplayObserver {
             System.out.println("No games listed. Use 'list' first.");
             return;
         }
+        System.out.print("Game number: ");
+        int index = parseIntSafe(scanner.nextLine());
+        if (index < 1 || index > lastGames.size()) {
+            System.out.println("Invalid game number.");
+            return;
+        }
+        GameData game = lastGames.get(index - 1);
+
+        System.out.println("Observing game '" + game.getGameName() + "'.");
+        startGameplay(game);
+    }
+
+    private void startGameplay(GameData game) throws Exception {
+        currentGame = game;
+        if (ws != null) {
+            ws.close();
+        }
+        ws = new WebSocketFacade(port, this);
+        ws.connect(currentUser.authToken(), game.getGameID());
+        gameplayLoop(game.getGameID());
+    }
+
 
 
 
