@@ -29,4 +29,21 @@ public class ChessClient implements GameplayObserver {
         redrawBoard();
     }
 
-    
+    @Override
+    public void onNotification(String message) {
+        System.out.println("[Notification] " + message);
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+        System.out.println(errorMessage);
+    }
+
+    private enum State { PRELOGIN, POSTLOGIN }
+    private State state = State.PRELOGIN;
+
+    public ChessClient(ServerFacade facade) {
+        this.facade = facade;
+        this.port = facade.getPort();
+    }
+
