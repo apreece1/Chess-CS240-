@@ -363,6 +363,18 @@ public class ChessClient implements GameplayObserver {
         }
     }
 
+    public static void printGameWithHighlights(ChessGame game,
+                                               boolean whitePerspective,
+                                               ChessPosition from,
+                                               Collection<ChessMove> moves) {
+        System.out.println(EscapeSequences.ERASE_SCREEN);
+        printBoardWithHighlights(game, whitePerspective, from, moves);
+    }
+
+
+
+
+
 
 }
 
