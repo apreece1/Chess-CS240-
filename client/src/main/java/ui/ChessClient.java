@@ -371,6 +371,22 @@ public class ChessClient implements GameplayObserver {
         printBoardWithHighlights(game, whitePerspective, from, moves);
     }
 
+    private static void printBoardWithHighlights(ChessGame game,
+                                                 boolean whitePerspective,
+                                                 ChessPosition from,
+                                                 Collection<ChessMove> moves) {
+        ChessBoard board = game.getBoard();
+        char[] files = whitePerspective ? WHITE_FILES : BLACK_FILES;
+        int startRank = whitePerspective ? 8 : 1;
+        int endRank = whitePerspective ? 1 : 8;
+        int step = whitePerspective ? -1 : 1;
+
+        Set<String> destSquares = new HashSet<>();
+        for (ChessMove m : moves) {
+            ChessPosition end = m.getEndPosition();
+            destSquares.add(end.getRow() + "," + end.getColumn());
+        }
+
 
 
 
