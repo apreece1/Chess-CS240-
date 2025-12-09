@@ -153,6 +153,7 @@ public class GameService {
 
 
     public void clear() throws DataAccessException {
+        completedGames.clear();
         gameDAO.clear();
     }
 
