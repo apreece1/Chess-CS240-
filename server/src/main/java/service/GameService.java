@@ -66,6 +66,62 @@ public class GameService {
 
     }
 
+
+    public void makeMove(int gameID, String username, ChessMove move) throws DataAccessException {
+
+        GameData gameData = gameDAO.getGame(gameID);
+        if (gameData == null) {
+            throw new DataAccessException("Error: bad request");
+        }
+
+        // Game already over?
+        if (completedGames.contains(gameID)) {
+            throw new DataAccessException("Error: game already over");
+        }
+
+        ChessGame game = gameData.getGame();
+
+        String white = gameData.getWhiteUsername();
+        String black = gameData.getBlackUsername();
+
+        // Observer cannot move
+        ChessGame.TeamColor playerColor;
+        if (username.equals(white)) {
+            playerColor = ChessGame.TeamColor.WHITE;
+        } else if (username.equals(black)) {
+            playerColor = ChessGame.TeamColor.BLACK;
+        } else {
+            throw new DataAccessException("Error: observer cannot move");
+        }
+
+        // Wrong turn
+        if (game.getTeamTurn() != playerColor) {
+            throw new DataAccessException("Error: not your turn");
+        }
+
+        // Invalid move
+        try {
+            game.makeMove(move);
+        } catch (Exception ex) {
+            throw new DataAccessException("Error: invalid move");
+        }
+
+        // Save updated game
+        gameData.setGame(game);
+        gameDAO.updateGame(gameData);
+
+        // If game ended, mark it complete
+        if (game.isInCheckmate(ChessGame.TeamColor.WHITE) ||
+                game.isInCheckmate(ChessGame.TeamColor.BLACK) ||
+                game.isInStalemate(ChessGame.TeamColor.WHITE) ||
+                game.isInStalemate(ChessGame.TeamColor.BLACK)) {
+
+            completedGames.add(gameID);
+        }
+    }
+
+
+
     public void clear() throws DataAccessException {
         gameDAO.clear();
     }
