@@ -72,6 +72,23 @@ public class WebSocketHandler {
                 return;
             }
 
+            String username = auth.username();
+
+            connections.addConnection(cmd.getGameID(), username, ctx);
+
+            ServerMessage load = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);
+            load.setGame(gameData);
+            send(ctx, load);
+
+            ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+            note.setMessage(username + " connected");
+
+            for (var other : connections.getOthersInGame(cmd.getGameID(), ctx)) {
+                send(other, note);
+            }
+
+
+
 
 
 
