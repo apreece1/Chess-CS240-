@@ -25,7 +25,8 @@ public class ChessClient implements GameplayObserver {
 
     @Override
     public void onLoadGame(GameData game) {
-
+        this.currentGame = game;
+        redrawBoard();
     }
 
     @Override
