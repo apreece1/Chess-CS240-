@@ -17,4 +17,15 @@ import java.net.URI;
 
 public class WebSocketFacade {
 
+    private final String wsUrl;
+    private final GameplayObserver observer;
+    private final Gson gson = new Gson();
+    private Session session;
+
+    public WebSocketFacade(int port, GameplayObserver observer) {
+        this.wsUrl = "ws://localhost:" + port + "/ws";
+        this.observer = observer;
+    }
+
+
 }
