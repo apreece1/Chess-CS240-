@@ -1,3 +1,5 @@
+package websocket;
+
 import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
@@ -30,7 +32,6 @@ public class WebSocketHandler {
     public void onConnect(WsConnectContext ctx) {
         System.out.println("[WS CONNECT] " + ctx.sessionId());
     }
-
 
     public void onMessage(WsMessageContext ctx) {
         try {
@@ -148,62 +149,68 @@ public class WebSocketHandler {
         } catch (DataAccessException e) {
             sendError(ctx, e.getMessage());
         }
+    }
 
-        private void handleLeave(WsContext ctx, UserGameCommand cmd) {
+    private void handleLeave(WsContext ctx, UserGameCommand cmd) {
+        try {
+            var auth = authService.getAuth(cmd.getAuthToken());
+            if (auth == null) {
+                sendError(ctx, "Error: invalid auth token");
+                return;
+            }
+
+            String username = auth.username();
+            connections.removeConnection(ctx);
+
+            ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+            note.setMessage(username + " left the game");
+
+            for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
+                send(ctx2, note);
+            }
+
+        } catch (DataAccessException e) {
+            sendError(ctx, e.getMessage());
+        }
+    }
+
+    private void handleResign(WsContext ctx, UserGameCommand cmd) {
+        try {
+            var auth = authService.getAuth(cmd.getAuthToken());
+            if (auth == null) {
+                sendError(ctx, "Error: invalid auth token");
+                return;
+            }
+
+            int gameID = cmd.getGameID();
+            String username = auth.username();
+
             try {
-                var auth = authService.getAuth(cmd.getAuthToken());
-                if (auth == null) {
-                    sendError(ctx, "Error: invalid auth token");
-                    return;
-                }
-
-                String username = auth.username();
-                connections.removeConnection(ctx);
-
-                ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
-                note.setMessage(username + " left the game");
-
-                for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
-                    send(ctx2, note);
-                }
-
+                gameService.resign(gameID, username);
             } catch (DataAccessException e) {
                 sendError(ctx, e.getMessage());
-            }
-        }
-
-        private void handleResign(WsContext ctx, UserGameCommand cmd) {
-            try {
-                var auth = authService.getAuth(cmd.getAuthToken());
-                if (auth == null) {
-                    sendError(ctx, "Error: invalid auth token");
-                    return;
-                }
-
-                int gameID = cmd.getGameID();
-                String username = auth.username();
-
-                try {
-                    gameService.resign(gameID, username);
-                } catch (DataAccessException e) {
-                    sendError(ctx, e.getMessage());
-                    return;
-                }
-
-                ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
-                note.setMessage(username + " resigned");
-
-                for (var other : connections.getAllInGame(gameID)) {
-                    send(other, note);
-                }
-
-
+                return;
             }
 
+            ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+            note.setMessage(username + " resigned");
 
+            for (var other : connections.getAllInGame(gameID)) {
+                send(other, note);
+            }
 
-
-
-
-
+        } catch (DataAccessException e) {
+            sendError(ctx, e.getMessage());
         }
+    }
+
+    private void send(WsContext ctx, ServerMessage msg) {
+        ctx.send(gson.toJson(msg));
+    }
+
+    private void sendError(WsContext ctx, String text) {
+        ServerMessage err = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+        err.setErrorMessage(text);
+        send(ctx, err);
+    }
+}
