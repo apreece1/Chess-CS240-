@@ -233,6 +233,31 @@ public class ChessClient implements GameplayObserver {
         }
     }
 
+    private void printGameHelp() {
+        System.out.println("""
+                Gameplay commands:
+                  help      - Show this help
+                  redraw    - Redraw the chess board
+                  move      - Make a move
+                  highlight - Highlight legal moves for a piece
+                  resign    - Resign the game
+                  leave     - Leave the game and return to post-login menu
+                """);
+    }
+
+    private void redrawBoard() {
+        if (currentGame == null) {
+            System.out.println("No game loaded.");
+            return;
+        }
+        boolean whiteOnBottom = true;
+        if (currentUser != null &&
+                currentGame.getBlackUsername() != null &&
+                currentUser.username().equals(currentGame.getBlackUsername())) {
+            whiteOnBottom = false;
+        }
+
+
 
 
 
