@@ -41,7 +41,7 @@ public class BoardPrinter {
                 ChessPiece piece = board.getPiece(new ChessPosition(rank, col));
                 String symbol = pieceSymbol(piece);
 
-                System.out.print(bg + piece + EscapeSequences.RESET_BG_COLOR);
+                System.out.print(bg + symbol + EscapeSequences.RESET_BG_COLOR);
             }
             System.out.println();
         }
@@ -61,33 +61,20 @@ public class BoardPrinter {
         System.out.println();
     }
 
-    private static String initialPiece(int rank, char file) {
-        return switch (rank) {
-            case 2 -> EscapeSequences.WHITE_PAWN;
-            case 7 -> EscapeSequences.BLACK_PAWN;
+    private static String pieceSymbol(ChessPiece piece) {
+        if (piece == null) {
+            return EscapeSequences.EMPTY;
+        }
 
-            case 1 -> switch (file) {
-                case 'a','h' -> EscapeSequences.WHITE_ROOK;
-                case 'b','g' -> EscapeSequences.WHITE_KNIGHT;
-                case 'c','f' -> EscapeSequences.WHITE_BISHOP;
-                case 'd' -> EscapeSequences.WHITE_QUEEN;
-                case 'e' -> EscapeSequences.WHITE_KING;
-                default -> EscapeSequences.EMPTY;
-            };
-
-            case 8 -> switch (file) {
-                case 'a','h' -> EscapeSequences.BLACK_ROOK;
-                case 'b','g' -> EscapeSequences.BLACK_KNIGHT;
-                case 'c','f' -> EscapeSequences.BLACK_BISHOP;
-                case 'd' -> EscapeSequences.BLACK_QUEEN;
-                case 'e' -> EscapeSequences.BLACK_KING;
-                default -> EscapeSequences.EMPTY;
-            };
-
-            default -> EscapeSequences.EMPTY;
+        boolean white = piece.getTeamColor() == ChessGame.TeamColor.WHITE;
+        return switch (piece.getPieceType()) {
+            case KING -> white ? EscapeSequences.WHITE_KING : EscapeSequences.BLACK_KING;
+            case QUEEN -> white ? EscapeSequences.WHITE_QUEEN : EscapeSequences.BLACK_QUEEN;
+            case ROOK -> white ? EscapeSequences.WHITE_ROOK : EscapeSequences.BLACK_ROOK;
+            case BISHOP -> white ? EscapeSequences.WHITE_BISHOP : EscapeSequences.BLACK_BISHOP;
+            case KNIGHT -> white ? EscapeSequences.WHITE_KNIGHT : EscapeSequences.BLACK_KNIGHT;
+            case PAWN -> white ? EscapeSequences.WHITE_PAWN : EscapeSequences.BLACK_PAWN;
         };
     }
 }
-
-
 
