@@ -106,9 +106,23 @@ public class WebSocketHandler {
                 return;
             }
 
+            ChessMove move = cmd.getMove();
+            String username = auth.username();
+
+            try {
+                gameService.makeMove(cmd.getGameID(), username, move);
+            } catch (DataAccessException e) {
+                sendError(ctx, e.getMessage());
+                return;
+            }
+
+            gameData = gameService.getGame(cmd.getGameID());
+            ChessGame game = gameData.getGame();
 
 
 
 
 
-}
+
+
+        }
