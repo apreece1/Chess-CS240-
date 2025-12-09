@@ -297,6 +297,17 @@ public class ChessClient implements GameplayObserver {
         System.out.println("Highlighting not yet implemented with BoardPrinter and currentGame.getGame().");
     }
 
+    private void handleResign(int gameID) throws Exception {
+        System.out.print("Are you sure you want to resign? (y/n): ");
+        String ans = scanner.nextLine().trim().toLowerCase();
+        if (ans.equals("y") || ans.equals("yes")) {
+            ws.resign(currentUser.authToken(), gameID);
+        } else {
+            System.out.println("Resign cancelled.");
+        }
+    }
+
+
 
 
 
