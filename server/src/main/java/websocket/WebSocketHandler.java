@@ -49,5 +49,17 @@ public class WebSocketHandler {
         }
     }
 
+    public void onClose(WsCloseContext ctx) {
+        connections.removeConnection(ctx);
+        System.out.println("[WS CLOSE] " + ctx.sessionId());
+    }
+
+    public void onError(WsErrorContext ctx) {
+        System.out.println("[WS ERROR] " + ctx.sessionId());
+    }
+
+
+
+
 
 }
