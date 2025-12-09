@@ -82,5 +82,64 @@ public class BoardPrinter {
             case PAWN -> white ? EscapeSequences.WHITE_PAWN : EscapeSequences.BLACK_PAWN;
         };
     }
+
+    public static void printGameWithHighlights(ChessGame game,
+                                               boolean whitePerspective,
+                                               ChessPosition from,
+                                               Collection<ChessMove> moves) {
+        System.out.println(EscapeSequences.ERASE_SCREEN);
+        printBoardWithHighlights(game, whitePerspective, from, moves);
+    }
+
+    private static void printBoardWithHighlights(ChessGame game,
+                                                 boolean whitePerspective,
+                                                 ChessPosition from,
+                                                 Collection<ChessMove> moves) {
+        ChessBoard board = game.getBoard();
+        char[] files = whitePerspective ? WHITE_FILES : BLACK_FILES;
+        int startRank = whitePerspective ? 8 : 1;
+        int endRank = whitePerspective ? 1 : 8;
+        int step = whitePerspective ? -1 : 1;
+
+        // Precompute destination squares
+        Set<String> destSquares = new HashSet<>();
+        for (ChessMove m : moves) {
+            ChessPosition end = m.getEndPosition();
+            destSquares.add(end.getRow() + "," + end.getColumn());
+        }
+
+        for (int rank = startRank; (step > 0 ? rank <= endRank : rank >= endRank); rank += step) {
+            System.out.print(EscapeSequences.SET_TEXT_BOLD + rank + " " + EscapeSequences.RESET_TEXT_BOLD_FAINT);
+
+            for (int f = 0; f < 8; f++) {
+                char file = files[f];
+                int col = fileToCol(file);
+
+                boolean isFrom = (from.getRow() == rank && from.getColumn() == col);
+                boolean isDest = destSquares.contains(rank + "," + col);
+
+                // Decide background color
+                String bg;
+                if (isFrom) {
+                    bg = EscapeSequences.SET_BG_COLOR_DARK_GREEN;   // selected piece
+                } else if (isDest) {
+                    bg = EscapeSequences.SET_BG_COLOR_GREEN;        // legal moves
+                } else {
+                    boolean light = ((rank + f) % 2 == 0);
+                    bg = light ? EscapeSequences.SET_BG_COLOR_LIGHT_GREY
+                            : EscapeSequences.SET_BG_COLOR_DARK_GREY;
+                }
+
+                ChessPiece piece = board.getPiece(new ChessPosition(rank, col));
+                String symbol = pieceSymbol(piece);
+
+                System.out.print(bg + symbol + EscapeSequences.RESET_BG_COLOR);
+            }
+            System.out.println();
+        }
+
+        printFileLabels(files);
+    }
+
 }
 
