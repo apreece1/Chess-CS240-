@@ -2,7 +2,7 @@ package client;
 
 import ui.ChessClient;
 
-public class Main {
+public class clientMain {
     public static void main(String[] args) {
         int port = 8081;  // must match your server port
 

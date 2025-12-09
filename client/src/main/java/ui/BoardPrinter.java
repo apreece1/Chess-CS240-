@@ -4,6 +4,12 @@ import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessPiece;
 import chess.ChessPosition;
+import chess.ChessMove;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class BoardPrinter {
 

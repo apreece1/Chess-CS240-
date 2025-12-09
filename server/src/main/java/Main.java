@@ -42,7 +42,7 @@ public class Main {
 
 
         Server server = new Server(userService, authService, gameService);
-        server.run(8081;
+        server.run(8081);
 
         System.out.println("♕ 240 Chess Server");
     }
