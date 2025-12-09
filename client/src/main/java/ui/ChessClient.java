@@ -31,12 +31,12 @@ public class ChessClient implements GameplayObserver {
 
     @Override
     public void onNotification(String message) {
-
+        System.out.println("[Notification] " + message);
     }
 
     @Override
     public void onError(String errorMessage) {
-
+        System.out.println(errorMessage);
     }
 
     private enum State { PRELOGIN, POSTLOGIN }
