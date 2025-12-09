@@ -13,9 +13,14 @@ public class ServerFacade {
 
     private final String baseUrl;
     private final Gson gson = new Gson();
+    private final int port;
 
     public ServerFacade(int port) {
         this.baseUrl = "http://localhost:" + port;
+    }
+
+    public int getPort(){
+        return port;
     }
 
     public AuthData register(String username, String password, String email) throws Exception {
