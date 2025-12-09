@@ -172,6 +172,27 @@ public class ChessClient implements GameplayObserver {
             System.out.println("No games found.");
             return;
         }
+        int i = 1;
+        for (GameData g : lastGames) {
+            String white = g.getWhiteUsername() == null ? "-" : g.getWhiteUsername();
+            String black = g.getBlackUsername() == null ? "-" : g.getBlackUsername();
+            System.out.printf("%d. %s (white: %s, black: %s)%n", i++, g.getGameName(), white, black);
+        }
+    }
+
+    private void playGame() throws Exception {
+        if (lastGames.isEmpty()) {
+            System.out.println("No games listed. Use 'list' first.");
+            return;
+        }
+        System.out.print("Game number: ");
+        int index = parseIntSafe(scanner.nextLine());
+        if (index < 1 || index > lastGames.size()) {
+            System.out.println("Invalid game number.");
+            return;
+        }
+        GameData game = lastGames.get(index - 1);
+
         System.out.print("Color (WHITE/BLACK): ");
         String color = scanner.nextLine().trim().toUpperCase();
         if (!color.equals("WHITE") && !color.equals("BLACK")) {
@@ -256,19 +277,98 @@ public class ChessClient implements GameplayObserver {
                 currentUser.username().equals(currentGame.getBlackUsername())) {
             whiteOnBottom = false;
         }
+        BoardPrinter.printGame(currentGame.getGame(), whiteOnBottom);
+    }
 
+    private void handleMove(int gameID) throws Exception {
+        if (currentGame == null) {
+            System.out.println("No game loaded.");
+            return;
+        }
+        System.out.print("From (e.g., e2): ");
+        String fromStr = scanner.nextLine().trim();
+        System.out.print("To (e.g., e4): ");
+        String toStr = scanner.nextLine().trim();
 
+        ChessPosition from = parsePosition(fromStr);
+        ChessPosition to = parsePosition(toStr);
+        if (from == null || to == null) {
+            System.out.println("Invalid coordinates.");
+            return;
+        }
 
+        ChessMove move = new ChessMove(from, to, null);
+        ws.makeMove(currentUser.authToken(), gameID, move);
+    }
 
+    private void handleHighlight() {
+        if (currentGame == null) {
+            System.out.println("No game loaded.");
+            return;
+        }
 
+        System.out.print("Square to highlight (e.g., e2): ");
+        String posStr = scanner.nextLine().trim();
+        ChessPosition pos = parsePosition(posStr);
+        if (pos == null) {
+            System.out.println("Invalid coordinates.");
+            return;
+        }
 
+        var game = currentGame.getGame();
+        var moves = game.validMoves(pos);
+        if (moves == null || moves.isEmpty()) {
+            System.out.println("No legal moves from " + posStr + ".");
+            return;
+        }
 
+        boolean whiteOnBottom = true;
+        if (currentUser != null &&
+                currentGame.getBlackUsername() != null &&
+                currentUser.username().equals(currentGame.getBlackUsername())) {
+            whiteOnBottom = false;
+        }
 
+        BoardPrinter.printGameWithHighlights(game, whiteOnBottom, pos, moves);
+    }
 
+    private void handleResign(int gameID) throws Exception {
+        System.out.print("Are you sure you want to resign? (y/n): ");
+        String ans = scanner.nextLine().trim().toLowerCase();
+        if (ans.equals("y") || ans.equals("yes")) {
+            ws.resign(currentUser.authToken(), gameID);
+        } else {
+            System.out.println("Resign cancelled.");
+        }
+    }
 
+    private void handleLeave(int gameID) throws Exception {
+        ws.leave(currentUser.authToken(), gameID);
+        ws.close();
+        ws = null;
+        currentGame = null;
+        System.out.println("Left game.");
+    }
 
+    private ChessPosition parsePosition(String algebraic) {
+        if (algebraic == null || algebraic.length() != 2) {
+            return null;
+        }
+        char file = Character.toLowerCase(algebraic.charAt(0));
+        char rank = algebraic.charAt(1);
+        if (file < 'a' || file > 'h' || rank < '1' || rank > '8') {
+            return null;
+        }
+        int col = file - 'a' + 1;
+        int row = rank - '0';
+        return new ChessPosition(row, col);
+    }
 
-
-
-
-
+    private int parseIntSafe(String s) {
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
+    }
+}
