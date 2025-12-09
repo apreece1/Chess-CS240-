@@ -143,5 +143,16 @@ public class WebSocketHandler {
             return;
         }
 
+        gameService.resign(cmd.getGameID(), auth.username());
+
+        ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+        note.setMessage(auth.username() + " resigned");
+
+        for (var ctx2 : connections.getAllInGame(cmd.getGameID())) {
+            send(ctx2, note);
+        }
+    }
+
+
 
 }
