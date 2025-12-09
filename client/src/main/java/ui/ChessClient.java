@@ -8,7 +8,6 @@ import client.GameplayObserver;
 import model.AuthData;
 import model.GameData;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -156,7 +155,6 @@ public class ChessClient implements GameplayObserver {
         System.out.println("Logged out.");
     }
 
-
     private void createGame() throws Exception {
         System.out.print("Game name: ");
         String name = scanner.nextLine().trim();
@@ -208,7 +206,6 @@ public class ChessClient implements GameplayObserver {
         startGameplay(game);
     }
 
-
     private void observeGame() throws Exception {
         if (lastGames.isEmpty()) {
             System.out.println("No games listed. Use 'list' first.");
@@ -225,7 +222,6 @@ public class ChessClient implements GameplayObserver {
         System.out.println("Observing game '" + game.getGameName() + "'.");
         startGameplay(game);
     }
-
 
     private void startGameplay(GameData game) throws Exception {
         currentGame = game;
@@ -270,8 +266,6 @@ public class ChessClient implements GameplayObserver {
                 """);
     }
 
-
-
     private void redrawBoard() {
         if (currentGame == null) {
             System.out.println("No game loaded.");
@@ -285,7 +279,6 @@ public class ChessClient implements GameplayObserver {
         }
         BoardPrinter.printGame(currentGame.getGame(), whiteOnBottom);
     }
-
 
     private void handleMove(int gameID) throws Exception {
         if (currentGame == null) {
@@ -313,6 +306,7 @@ public class ChessClient implements GameplayObserver {
             System.out.println("No game loaded.");
             return;
         }
+
         System.out.print("Square to highlight (e.g., e2): ");
         String posStr = scanner.nextLine().trim();
         ChessPosition pos = parsePosition(posStr);
@@ -320,7 +314,22 @@ public class ChessClient implements GameplayObserver {
             System.out.println("Invalid coordinates.");
             return;
         }
-        System.out.println("Highlighting not yet implemented with BoardPrinter and currentGame.getGame().");
+
+        var game = currentGame.getGame();
+        var moves = game.validMoves(pos);
+        if (moves == null || moves.isEmpty()) {
+            System.out.println("No legal moves from " + posStr + ".");
+            return;
+        }
+
+        boolean whiteOnBottom = true;
+        if (currentUser != null &&
+                currentGame.getBlackUsername() != null &&
+                currentUser.username().equals(currentGame.getBlackUsername())) {
+            whiteOnBottom = false;
+        }
+
+        BoardPrinter.printGameWithHighlights(game, whiteOnBottom, pos, moves);
     }
 
     private void handleResign(int gameID) throws Exception {
@@ -362,47 +371,4 @@ public class ChessClient implements GameplayObserver {
             return -1;
         }
     }
-
-    public static void printGameWithHighlights(ChessGame game,
-                                               boolean whitePerspective,
-                                               ChessPosition from,
-                                               Collection<ChessMove> moves) {
-        System.out.println(EscapeSequences.ERASE_SCREEN);
-        printBoardWithHighlights(game, whitePerspective, from, moves);
-    }
-
-    private static void printBoardWithHighlights(ChessGame game,
-                                                 boolean whitePerspective,
-                                                 ChessPosition from,
-                                                 Collection<ChessMove> moves) {
-        ChessBoard board = game.getBoard();
-        char[] files = whitePerspective ? WHITE_FILES : BLACK_FILES;
-        int startRank = whitePerspective ? 8 : 1;
-        int endRank = whitePerspective ? 1 : 8;
-        int step = whitePerspective ? -1 : 1;
-
-        Set<String> destSquares = new HashSet<>();
-        for (ChessMove m : moves) {
-            ChessPosition end = m.getEndPosition();
-            destSquares.add(end.getRow() + "," + end.getColumn());
-        }
-
-        for (int rank = startRank; (step > 0 ? rank <= endRank : rank >= endRank); rank += step) {
-            System.out.print(EscapeSequences.SET_TEXT_BOLD + rank + " " + EscapeSequences.RESET_TEXT_BOLD_FAINT);
-
-            for (int f = 0; f < 8; f++) {
-                char file = files[f];
-                int col = fileToCol(file);
-
-                boolean isFrom = (from.getRow() == rank && from.getColumn() == col);
-                boolean isDest = destSquares.contains(rank + "," + col);
-
-
-
-
-
-
-
-            }
-
-
+}
