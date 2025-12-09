@@ -172,6 +172,25 @@ public class ChessClient implements GameplayObserver {
             System.out.println("No games found.");
             return;
         }
+        System.out.print("Color (WHITE/BLACK): ");
+        String color = scanner.nextLine().trim().toUpperCase();
+        if (!color.equals("WHITE") && !color.equals("BLACK")) {
+            System.out.println("Invalid color.");
+            return;
+        }
+
+        facade.joinGame(currentUser.authToken(), game.getGameID(), color);
+        System.out.println("Joined game '" + game.getGameName() + "' as " + color + ".");
+
+        startGameplay(game);
+    }
+
+    private void observeGame() throws Exception {
+        if (lastGames.isEmpty()) {
+            System.out.println("No games listed. Use 'list' first.");
+            return;
+        }
+
 
 
 
