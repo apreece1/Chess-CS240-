@@ -27,6 +27,10 @@ public class WebSocketHandler {
         this.connections = connections;
     }
 
+    public void onConnect(WsConnectContext ctx) {
+        System.out.println("[WS CONNECT] " + ctx.sessionId());
+    }
 
+    
 
 }
