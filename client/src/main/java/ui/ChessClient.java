@@ -155,6 +155,25 @@ public class ChessClient implements GameplayObserver {
         System.out.println("Logged out.");
     }
 
+    private void createGame() throws Exception {
+        System.out.print("Game name: ");
+        String name = scanner.nextLine().trim();
+        if (name.isBlank()) {
+            System.out.println("Game name cannot be empty.");
+            return;
+        }
+        int gameID = facade.createGame(currentUser.authToken(), name);
+        System.out.println("Created game '" + name + "' (internal id " + gameID + ").");
+    }
+
+    private void listGames() throws Exception {
+        lastGames = facade.listGames(currentUser.authToken());
+        if (lastGames.isEmpty()) {
+            System.out.println("No games found.");
+            return;
+        }
+
+
 
 
 
