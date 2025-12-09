@@ -127,7 +127,21 @@ public class ChessClient implements GameplayObserver {
         return true;
     }
 
-    
+    private void printPostloginHelp() {
+        System.out.println("""
+                Commands:
+                  help    - Show this help
+                  logout  - Logout
+                  create  - Create a new game
+                  list    - List existing games
+                  play    - Join a game as a player
+                  observe - Observe a game
+                  quit    - Exit program
+                """);
+    }
+
+
+
 
 
 
