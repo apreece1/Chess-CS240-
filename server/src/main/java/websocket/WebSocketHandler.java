@@ -153,6 +153,13 @@ public class WebSocketHandler {
         }
     }
 
+    private void send(WsContext ctx, ServerMessage msg) {
+        ctx.send(gson.toJson(msg));
+    }
 
-
+    private void sendError(WsContext ctx, String text) {
+        ServerMessage err = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+        err.setErrorMessage(text);
+        send(ctx, err);
+    }
 }
