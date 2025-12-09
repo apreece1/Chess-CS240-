@@ -25,6 +25,7 @@ public class ChessClient implements GameplayObserver {
 
     @Override
     public void onLoadGame(GameData game) {
+        System.out.println("[CLIENT] LOAD_GAME received for gameID=" + game.getGameID());
         this.currentGame = game;
         redrawBoard();
     }

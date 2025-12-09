@@ -77,7 +77,10 @@ public class WebSocketFacade {
 
     private void handleMessage(String rawJson) {
         try {
+            System.out.println("[WS RAW] " + rawJson);
+
             ServerMessage msg = gson.fromJson(rawJson, ServerMessage.class);
+            System.out.println("[WS TYPE] " + msg.getServerMessageType());
             switch (msg.getServerMessageType()) {
                 case LOAD_GAME -> {
                     GameData gameData = gson.fromJson(gson.toJson(msg.getGame()), GameData.class);
