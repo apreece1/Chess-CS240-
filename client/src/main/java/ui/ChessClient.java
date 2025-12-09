@@ -197,8 +197,10 @@ public class ChessClient implements GameplayObserver {
 
         facade.joinGame(currentUser.authToken(), game.getGameID(), color);
         System.out.println("Joined game '" + game.getGameName() + "' as " + color + ".");
-        BoardPrinter.printInitialBoard(color.equals("WHITE"));
+
+        startGameplay(game);
     }
+
 
     private void observeGame() throws Exception {
         if (lastGames.isEmpty()) {
