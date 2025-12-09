@@ -15,8 +15,12 @@ import java.util.Scanner;
 
 public class ChessClient implements GameplayObserver {
     private final ServerFacade facade;
+    private final int port;
+    private WebSocketFacade ws;
+
     private AuthData currentUser;
     private List<GameData> lastGames = new ArrayList<>();
+    private GameData currentGame;
     private final Scanner scanner = new Scanner(System.in);
 
     private enum State { PRELOGIN, POSTLOGIN }
@@ -24,6 +28,7 @@ public class ChessClient implements GameplayObserver {
 
     public ChessClient(ServerFacade facade) {
         this.facade = facade;
+        this.port = facade.getPort();
     }
 
     public void run() {
@@ -196,6 +201,19 @@ public class ChessClient implements GameplayObserver {
         System.out.println("Observing game '" + game.getGameName() + "'.");
         BoardPrinter.printInitialBoard(true);
     }
+
+    private void startGameplay(GameData game) throws Exception {
+        currentGame = game;
+        if (ws != null) {
+            ws.close();
+        }
+        ws = new WebSocketFacade(port, this);
+        ws.connect(currentUser.authToken(), game.getGameID());
+        gameplayLoop(game.getGameID());
+    }
+
+
+
 
     private int parseIntSafe(String s) {
         try {
