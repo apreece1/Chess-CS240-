@@ -31,6 +31,23 @@ public class WebSocketHandler {
         System.out.println("[WS CONNECT] " + ctx.sessionId());
     }
 
-    
+
+    public void onMessage(WsMessageContext ctx) {
+        try {
+            String rawJson = ctx.message();
+            UserGameCommand command = gson.fromJson(rawJson, UserGameCommand.class);
+
+            switch (command.getCommandType()) {
+                case CONNECT -> handleConnect(ctx, command);
+                case MAKE_MOVE -> handleMakeMove(ctx, command);
+                case LEAVE -> handleLeave(ctx, command);
+                case RESIGN -> handleResign(ctx, command);
+            }
+
+        } catch (Exception e) {
+            sendError(ctx, "Error: " + e.getMessage());
+        }
+    }
+
 
 }
