@@ -5,11 +5,15 @@ import model.AuthData;
 import model.GameData;
 import chess.ChessGame;
 import java.util.Collection;
+import chess.ChessMove;
 
 public class GameService {
 
     private final GameDAO gameDAO;
     private final AuthService authService;
+
+    private final java.util.Set<Integer> completedGames =
+            java.util.concurrent.ConcurrentHashMap.newKeySet();
 
     public GameService(GameDAO gameDAO, AuthService authService) {
         this.gameDAO = gameDAO;
@@ -72,6 +76,10 @@ public class GameService {
             throw new DataAccessException("Error: unauthorized");
         }
         return auth;
+    }
+
+    public GameData getGame(int gameID) throws DataAccessException {
+        return gameDAO.getGame(gameID);
     }
 
 }
