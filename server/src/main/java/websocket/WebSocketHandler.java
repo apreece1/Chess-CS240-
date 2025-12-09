@@ -131,6 +131,28 @@ public class WebSocketHandler {
                 send(ctx2, note);
             }
 
+            if (game.isInCheck(ChessGame.TeamColor.WHITE) ||
+                    game.isInCheck(ChessGame.TeamColor.BLACK) ||
+                    game.isInCheckmate(ChessGame.TeamColor.WHITE) ||
+                    game.isInCheckmate(ChessGame.TeamColor.BLACK) ||
+                    game.isInStalemate(ChessGame.TeamColor.WHITE) ||
+                    game.isInStalemate(ChessGame.TeamColor.BLACK)) {
+
+                ServerMessage status = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+                status.setMessage("Game status changed");
+                for (var c : connections.getAllInGame(cmd.getGameID())) {
+                    send(c, status);
+                }
+            }
+
+        } catch (DataAccessException e) {
+            sendError(ctx, e.getMessage());
+        }
+
+        
+
+    }
+
 
 
 
