@@ -16,7 +16,13 @@ public class BoardPrinter {
         printGame(game, whitePerspective);
     }
 
-    private static void printBoard(boolean whitePerspective) {
+    public static void printGame(ChessGame game, boolean whitePerspective) {
+        System.out.println(EscapeSequences.ERASE_SCREEN);
+        printBoard(game, whitePerspective);
+    }
+
+    private static void printBoard(ChessGame game, boolean whitePerspective) {
+        ChessBoard board = game.getBoard();
         char[] files = whitePerspective ? WHITE_FILES : BLACK_FILES;
         int startRank = whitePerspective ? 8 : 1;
         int endRank = whitePerspective ? 1 : 8;
@@ -31,7 +37,9 @@ public class BoardPrinter {
                         : EscapeSequences.SET_BG_COLOR_DARK_GREY;
 
                 char file = files[f];
-                String piece = initialPiece(rank, file);
+                int col = fileToCol(file);
+                ChessPiece piece = board.getPiece(new ChessPosition(rank, col));
+                String symbol = pieceSymbol(piece);
 
                 System.out.print(bg + piece + EscapeSequences.RESET_BG_COLOR);
             }
@@ -39,6 +47,10 @@ public class BoardPrinter {
         }
 
         printFileLabels(files);
+    }
+
+    private static int fileToCol(char file) {
+        return (file - 'a') + 1;
     }
 
     private static void printFileLabels(char[] files) {
