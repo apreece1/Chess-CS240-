@@ -50,5 +50,21 @@ public class WebSocketFacade {
             sendCommand(cmd);
         }
 
+        public void leave(String authToken, int gameID) throws IOException {
+            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID);
+            sendCommand(cmd);
+        }
+
+        public void resign(String authToken, int gameID) throws IOException {
+            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.RESIGN, authToken, gameID);
+            sendCommand(cmd);
+        }
+
+        public void close() throws IOException {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+
 
 }
