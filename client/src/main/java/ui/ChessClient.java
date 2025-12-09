@@ -215,10 +215,10 @@ public class ChessClient implements GameplayObserver {
         }
         GameData game = lastGames.get(index - 1);
 
-        facade.joinGame(currentUser.authToken(), game.getGameID(), null);
         System.out.println("Observing game '" + game.getGameName() + "'.");
-        BoardPrinter.printInitialBoard(true);
+        startGameplay(game);
     }
+
 
     private void startGameplay(GameData game) throws Exception {
         currentGame = game;
