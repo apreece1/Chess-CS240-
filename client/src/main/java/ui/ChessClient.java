@@ -282,8 +282,9 @@ public class ChessClient implements GameplayObserver {
                 currentUser.username().equals(currentGame.getBlackUsername())) {
             whiteOnBottom = false;
         }
-        BoardPrinter.printInitialBoard(whiteOnBottom);
+        BoardPrinter.printGame(currentGame.getGame(), whiteOnBottom);
     }
+
 
     private void handleMove(int gameID) throws Exception {
         if (currentGame == null) {
@@ -360,6 +361,7 @@ public class ChessClient implements GameplayObserver {
             return -1;
         }
     }
+
 
 }
 
