@@ -87,6 +87,12 @@ public class WebSocketHandler {
                 send(other, note);
             }
 
+        } catch (DataAccessException e) {
+            sendError(ctx, e.getMessage());
+        }
+    }
+
+
 
 
 
