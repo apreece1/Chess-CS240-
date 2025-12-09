@@ -245,6 +245,8 @@ public class ChessClient implements GameplayObserver {
                 """);
     }
 
+
+
     private void redrawBoard() {
         if (currentGame == null) {
             System.out.println("No game loaded.");
@@ -258,6 +260,23 @@ public class ChessClient implements GameplayObserver {
         }
         BoardPrinter.printInitialBoard(whiteOnBottom);
     }
+
+    private void handleMove(int gameID) throws Exception {
+        if (currentGame == null) {
+            System.out.println("No game loaded.");
+            return;
+        }
+        System.out.print("From (e.g., e2): ");
+        String fromStr = scanner.nextLine().trim();
+        System.out.print("To (e.g., e4): ");
+        String toStr = scanner.nextLine().trim();
+
+        ChessPosition from = parsePosition(fromStr);
+        ChessPosition to = parsePosition(toStr);
+        if (from == null || to == null) {
+            System.out.println("Invalid coordinates.");
+            return;
+        }
 
 
 
