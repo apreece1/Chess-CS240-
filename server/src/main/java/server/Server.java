@@ -62,6 +62,16 @@ public class Server {
         ClearHandler clearHandler = new ClearHandler(userService, authService, gameService);
 
 
+        var connectionManager = new websocket.ConnectionManager();
+        var wsHandler = new websocket.WebSocketHandler(authService, gameService, connectionManager);
+
+        javalin.ws("/ws", ws -> {
+            ws.onConnect(wsHandler::onConnect);
+            ws.onMessage(wsHandler::onMessage);
+            ws.onClose(wsHandler::onClose);
+            ws.onError(wsHandler::onError);
+        });
+
         javalin.post("/user", userHandler::register);
         javalin.post("/session", userHandler::login);
         javalin.delete("/session", userHandler::logout);
@@ -71,8 +81,8 @@ public class Server {
         javalin.put("/game", gameHandler::joinGame);
 
         javalin.delete("/db", clearHandler::clear);
-
     }
+
 
     private void registerExceptionHandlers() {
         javalin.exception(DataAccessException.class, (e, ctx) -> {
