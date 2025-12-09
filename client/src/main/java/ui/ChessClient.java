@@ -140,6 +140,22 @@ public class ChessClient implements GameplayObserver {
                 """);
     }
 
+    private void logout() throws Exception {
+        if (currentUser != null) {
+            facade.logout(currentUser.authToken());
+        }
+        if (ws != null) {
+            ws.close();
+            ws = null;
+        }
+        currentUser = null;
+        currentGame = null;
+        lastGames.clear();
+        state = State.PRELOGIN;
+        System.out.println("Logged out.");
+    }
+
+
 
 
 
