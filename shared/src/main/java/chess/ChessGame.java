@@ -182,51 +182,32 @@ public class ChessGame {
     }
 
     public boolean isInCheck(TeamColor teamColor) {
-        //iterate through until find king
-
-        ChessPosition kingPosition = null;
-        for (int row = 1; row <= 8; row++){
-            for (int col = 1; col <= 8; col++){
-                ChessPosition newPosition = new ChessPosition(row, col);
-                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
-                if (pieceAtNewPosition != null && pieceAtNewPosition.getPieceType() ==
-                        ChessPiece.PieceType.KING && pieceAtNewPosition.getTeamColor() == teamColor){
-                    kingPosition = newPosition;
-                    break;
-                }
-            }
-            if (kingPosition != null){
-                break;
-            }
-        }
-
-        if(kingPosition == null){
+        ChessPosition kingPosition = findKingPosition(teamColor);
+        if (kingPosition == null) {
             return false;
         }
 
-        //find opposite color
         TeamColor opposing = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
 
-        //go through each piece on other team
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
                 ChessPosition oppPosition = new ChessPosition(row, col);
                 ChessPiece oppPiece = board.getPiece(oppPosition);
 
-                if (oppPiece != null && oppPiece.getTeamColor() == opposing) {
-                    Collection<ChessMove> oppMoves = oppPiece.pieceMoves(board, oppPosition);
+                if (oppPiece == null || oppPiece.getTeamColor() != opposing) {
+                    continue;
+                }
 
-                    for (ChessMove move : oppMoves) {
-                        if (move.getEndPosition().equals(kingPosition)) {
-                            return true;
-                        }
-                    }
+                if (pieceAttacksSquare(oppPosition, oppPiece, kingPosition)) {
+                    return true;
                 }
             }
         }
 
         return false;
     }
+
+
 
     /**
      * Determines if the given team is in checkmate
