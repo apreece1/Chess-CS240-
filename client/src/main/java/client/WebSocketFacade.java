@@ -38,7 +38,6 @@ public class WebSocketFacade {
         session = client.connectToServer(new Endpoint() {
             @Override
             public void onOpen(Session session, EndpointConfig config) {
-                System.out.println("[CLIENT WS OPEN]");
                 WebSocketFacade.this.session = session;
 
                 // Make sure this handler is explicitly for String messages
@@ -48,15 +47,12 @@ public class WebSocketFacade {
 
             @Override
             public void onClose(Session session, CloseReason closeReason) {
-                System.out.println("[CLIENT WS CLOSE] code=" +
-                        closeReason.getCloseCode().getCode() +
-                        " reason=" + closeReason.getReasonPhrase());
+                observer.onNotification("Disconnected from game.");
             }
 
             @Override
             public void onError(Session session, Throwable thr) {
-                System.out.println("[CLIENT WS ERROR]");
-                thr.printStackTrace();
+                observer.onError("A connection error occurred.");
             }
         }, ClientEndpointConfig.Builder.create().build(), URI.create(wsUrl));
 
@@ -96,10 +92,8 @@ public class WebSocketFacade {
 
     private void handleMessage(String rawJson) {
         try {
-            System.out.println("[WS RAW] " + rawJson);
 
             ServerMessage msg = gson.fromJson(rawJson, ServerMessage.class);
-            System.out.println("[WS TYPE] " + msg.getServerMessageType());
             switch (msg.getServerMessageType()) {
                 case LOAD_GAME -> {
                     GameData gameData = gson.fromJson(gson.toJson(msg.getGame()), GameData.class);
