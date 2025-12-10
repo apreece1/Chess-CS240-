@@ -39,3 +39,21 @@ public class ChessPiece {
         ROOK,
         PAWN
     }
+    public ChessGame.TeamColor getTeamColor() {
+        return pieceColor;
+    }
+
+    public PieceType getPieceType() {
+        return type;
+    }
+
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> validMoves = new ArrayList<>();
+
+        switch (this.getPieceType()) {
+            case BISHOP -> {
+                int[][] bishopDirections = {
+                        {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
+                };
+                addSlidingMoves(board, myPosition, bishopDirections, validMoves);
+            }
