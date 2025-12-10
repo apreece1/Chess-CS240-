@@ -19,7 +19,7 @@ public class SQLGameDAOTest {
     }
 
     @Test
-    void clear_positive_clearsAllGames() throws DataAccessException {
+    void ClearPositiveClearsAllGames() throws DataAccessException {
         GameData game1 = new GameData(0, "Game 1", "white1", "black1", null);
         GameData game2 = new GameData(0, "Game 2", "white2", "black2", null);
 
@@ -37,12 +37,12 @@ public class SQLGameDAOTest {
     }
 
     @Test
-    void clear_negative_onEmptyTable_noException() {
+    void ClearNegativeOnEmptyTableNoException() {
         assertDoesNotThrow(() -> gameDAO.clear());
     }
 
     @Test
-    void createGame_positive_persistsGame() throws DataAccessException {
+    void createGamePositivePersistsGame() throws DataAccessException {
         GameData game = new GameData(0, "My Game", "whiteUser", "blackUser", null);
 
         gameDAO.createGame(game);
@@ -57,7 +57,7 @@ public class SQLGameDAOTest {
     }
 
     @Test
-    void createGame_negative_nullGame_throws() {
+    void CreateGameNegativeNullGameThrows() {
         assertThrows(NullPointerException.class, () -> gameDAO.createGame(null));
     }
 
@@ -78,12 +78,12 @@ public class SQLGameDAOTest {
     }
 
     @Test
-    void getGame_negative_nonExistingGame_returnsNull() throws DataAccessException {
+    void GetGameNegativeNonExistingGameReturnsNull() throws DataAccessException {
         assertNull(gameDAO.getGame(999999));
     }
 
     @Test
-    void listGames_positive_multipleGamesReturned() throws DataAccessException {
+    void ListGamesPositiveMultipleGamesReturned() throws DataAccessException {
         gameDAO.createGame(new GameData(0, "Game 1", "w1", "b1", null));
         gameDAO.createGame(new GameData(0, "Game 2", "w2", "b2", null));
         gameDAO.createGame(new GameData(0, "Game 3", "w3", "b3", null));
