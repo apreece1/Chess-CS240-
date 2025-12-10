@@ -62,7 +62,7 @@ public class SQLGameDAOTest {
     }
 
     @Test
-    void getGame_positive_existingGame() throws DataAccessException {
+    void GetGamePositiveExistingGame() throws DataAccessException {
         GameData game = new GameData(0, "Game X", "whiteUser", "blackUser", null);
         gameDAO.createGame(game);
 
@@ -93,14 +93,14 @@ public class SQLGameDAOTest {
     }
 
     @Test
-    void listGames_negative_emptyTable_returnsEmpty() throws DataAccessException {
+    void ListGamesNegativeEmptyTableReturnsEmpty() throws DataAccessException {
         Collection<GameData> games = gameDAO.listGames();
         assertNotNull(games);
         assertTrue(games.isEmpty());
     }
 
     @Test
-    void updateGame_positive_updatesExistingGame() throws DataAccessException {
+    void UpdateGamePositiveUpdatesExistingGame() throws DataAccessException {
         GameData original = new GameData(0, "Old Name", "whiteUser", "blackUser", null);
         gameDAO.createGame(original);
 
@@ -119,7 +119,7 @@ public class SQLGameDAOTest {
     }
 
     @Test
-    void updateGame_negative_nonExistingGame_throws() {
+    void UpdateGameNegativeNonExistingGameThrows() {
         GameData fake = new GameData(999999, "Does not exist", "w", "b", null);
         assertThrows(DataAccessException.class, () -> gameDAO.updateGame(fake));
     }
