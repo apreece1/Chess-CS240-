@@ -39,6 +39,7 @@ public class ChessPiece {
         ROOK,
         PAWN
     }
+
     public ChessGame.TeamColor getTeamColor() {
         return pieceColor;
     }
@@ -56,8 +57,8 @@ public class ChessPiece {
                         {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
                 };
                 addSlidingMoves(board, myPosition, bishopDirections, validMoves);
-
-            } case ROOK -> {
+            }
+            case ROOK -> {
                 int[][] rookDirections = {
                         {1, 0}, {-1, 0}, {0, 1}, {0, -1}
                 };
@@ -70,10 +71,27 @@ public class ChessPiece {
                 };
                 addSlidingMoves(board, myPosition, queenDirections, validMoves);
             }
-            case KNIGHT -> addKnightMoves(board, myPosition, validMoves);
-            case KING -> addKingMoves(board, myPosition, validMoves);
+            case KNIGHT -> {
+                int[][] knightDirections = {
+                        {2, 1}, {2, -1}, {1, 2}, {1, -2},
+                        {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}
+                };
+                addLeaperMoves(board, myPosition, knightDirections, validMoves);
+            }
+            case KING -> {
+                int[][] kingDirections = {
+                        {0, 1}, {0, -1}, {1, 0}, {-1, 0},
+                        {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
+                };
+                addLeaperMoves(board, myPosition, kingDirections, validMoves);
+            }
             case PAWN -> addPawnMoves(board, myPosition, validMoves);
-        } return validMoves;
+            default -> {
+                // no-op
+            }
+        }
+
+        return validMoves;
     }
 
     private void addSlidingMoves(ChessBoard board,
@@ -90,6 +108,7 @@ public class ChessPiece {
             while (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
                 ChessPosition newPosition = new ChessPosition(newRow, newCol);
                 ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+
                 if (pieceAtNewPosition == null) {
                     moves.add(new ChessMove(from, newPosition, null));
                 } else {
@@ -104,56 +123,28 @@ public class ChessPiece {
             }
         }
     }
-    private void addKnightMoves(ChessBoard board,
+
+    private void addLeaperMoves(ChessBoard board,
                                 ChessPosition from,
+                                int[][] directions,
                                 Collection<ChessMove> moves) {
         int row = from.getRow();
         int col = from.getColumn();
 
-        int[][] knightDirections = {
-                {2, 1}, {2, -1}, {1, 2}, {1, -2},
-                {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}
-        };
-
-        for (int[] direction : knightDirections) {
+        for (int[] direction : directions) {
             int newRow = row + direction[0];
             int newCol = col + direction[1];
 
-            if (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
-                ChessPosition newPosition = new ChessPosition(newRow, newCol);
-                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
-
-                if (pieceAtNewPosition == null
-                        || pieceAtNewPosition.getTeamColor() != this.getTeamColor()) {
-                    moves.add(new ChessMove(from, newPosition, null));
-                }
+            if (newRow < 1 || newRow > 8 || newCol < 1 || newCol > 8) {
+                continue;
             }
-        }
-    }
 
-    private void addKingMoves(ChessBoard board,
-                              ChessPosition from,
-                              Collection<ChessMove> moves) {
-        int row = from.getRow();
-        int col = from.getColumn();
+            ChessPosition newPosition = new ChessPosition(newRow, newCol);
+            ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
 
-        int[][] kingDirections = {
-                {0, 1}, {0, -1}, {1, 0}, {-1, 0},
-                {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
-        };
-
-        for (int[] direction : kingDirections) {
-            int newRow = row + direction[0];
-            int newCol = col + direction[1];
-
-            if (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
-                ChessPosition newPosition = new ChessPosition(newRow, newCol);
-                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
-
-                if (pieceAtNewPosition == null
-                        || pieceAtNewPosition.getTeamColor() != this.getTeamColor()) {
-                    moves.add(new ChessMove(from, newPosition, null));
-                }
+            if (pieceAtNewPosition == null
+                    || pieceAtNewPosition.getTeamColor() != this.getTeamColor()) {
+                moves.add(new ChessMove(from, newPosition, null));
             }
         }
     }
@@ -228,5 +219,3 @@ public class ChessPiece {
         moves.add(new ChessMove(from, to, PieceType.KNIGHT));
     }
 }
-
-
