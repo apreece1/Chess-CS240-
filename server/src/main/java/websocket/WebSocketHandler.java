@@ -111,6 +111,23 @@ public class WebSocketHandler {
             ChessMove move = cmd.getMove();
             String username = auth.username();
 
+            ChessGame preMoveGame = gameData.getGame();
+
+            var startPos = move.getStartPosition();
+            var endPos = move.getEndPosition();
+
+            var movedPiece = preMoveGame.getBoard().getPiece(startPos);
+            var capturedPiece = preMoveGame.getBoard().getPiece(endPos);
+
+            String fromSquare = formatSquare(startPos);
+            String toSquare = formatSquare(endPos);
+
+            String pieceName = formatPieceName(movedPiece);
+            String capturedName = capturedPiece == null ? null : formatPieceName(capturedPiece);
+            boolean isCastle = pieceName.equals("king") && Math.abs(startPos.getColumn() - endPos.getColumn()) == 2;
+            boolean isPromotion = move.getPromotionPiece() != null;
+
+
             try {
                 gameService.makeMove(cmd.getGameID(), username, move);
             } catch (DataAccessException e) {
@@ -127,13 +144,41 @@ public class WebSocketHandler {
                 send(ctx2, load);
             }
 
-            var startPos = move.getStartPosition();
-            var endPos = move.getEndPosition();
-            String fromSquare = formatSquare(startPos);
-            String toSquare = formatSquare(endPos);
+            String moveText;
+
+            if (isCastle) {
+                moveText = username + " castled.";
+            }
+
+            else if (isPromotion) {
+                moveText = username + " promoted a pawn to " +
+                        move.getPromotionPiece().toString().toLowerCase() +
+                        " at " + toSquare + ".";
+            }
+
+            else if (capturedPiece != null) {
+                moveText = username + " moved a " + pieceName +
+                        " from " + fromSquare +
+                        " to " + toSquare +
+                        " capturing a " + capturedName + ".";
+            }
+
+            else {
+                moveText = username + " moved a " + pieceName +
+                        " from " + fromSquare +
+                        " to " + toSquare + ".";
+            }
+
 
             ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
-            note.setMessage(username + " moved from " + fromSquare + " to " + toSquare + ".");
+            note.setMessage(moveText);
+
+            for (var ctx2 : connections.getOthersInGame(cmd.getGameID(), ctx)) {
+                send(ctx2, note);
+            }
+
+
+
             for (var ctx2 : connections.getOthersInGame(cmd.getGameID(), ctx)) {
                 send(ctx2, note);
             }
@@ -257,5 +302,19 @@ public class WebSocketHandler {
         int rank = pos.getRow();                        // 1..8
         return "" + file + rank;
     }
+
+    private String formatPieceName(chess.ChessPiece piece) {
+        if (piece == null) return "piece";
+
+        return switch (piece.getPieceType()) {
+            case PAWN -> "pawn";
+            case ROOK -> "rook";
+            case KNIGHT -> "knight";
+            case BISHOP -> "bishop";
+            case QUEEN -> "queen";
+            case KING -> "king";
+        };
+    }
+
 
 }
