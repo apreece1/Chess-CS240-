@@ -56,4 +56,21 @@ public class ChessPiece {
                         {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
                 };
                 addSlidingMoves(board, myPosition, bishopDirections, validMoves);
+
+            } case ROOK -> {
+                int[][] rookDirections = {
+                        {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+                };
+                addSlidingMoves(board, myPosition, rookDirections, validMoves);
             }
+            case QUEEN -> {
+                int[][] queenDirections = {
+                        {1, 0}, {-1, 0}, {0, 1}, {0, -1},
+                        {1, 1}, {-1, -1}, {1, -1}, {-1, 1}
+                };
+                addSlidingMoves(board, myPosition, queenDirections, validMoves);
+            }
+            case KNIGHT -> addKnightMoves(board, myPosition, validMoves);
+            case KING -> addKingMoves(board, myPosition, validMoves);
+            case PAWN -> addPawnMoves(board, myPosition, validMoves);
+        }
