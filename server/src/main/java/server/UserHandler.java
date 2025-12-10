@@ -89,15 +89,7 @@ public class UserHandler {
         } catch (com.google.gson.JsonSyntaxException e) {
             ctx.status(400).json(new ErrorMessage("Error: Bad request"));
         } catch (DataAccessException e) {
-            String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
-
-            if (msg.contains("unauthorized")) {
-                ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
-            } else if (isDatabaseFailure(e)) {
-                ctx.status(500).json(new ErrorMessage("Internal Server Error"));
-            } else {
-                ctx.status(500).json(new ErrorMessage("Internal Server Error"));
-            }
+            handleAuthDataException(ctx, e);
         } catch (Exception e) {
             ctx.status(500).json(new ErrorMessage("Error: " + e.getMessage()));
         }
