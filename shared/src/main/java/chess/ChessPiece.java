@@ -158,4 +158,75 @@ public class ChessPiece {
         }
     }
 
-    
+    private void addPawnMoves(ChessBoard board,
+                              ChessPosition from,
+                              Collection<ChessMove> moves) {
+        int direction = (this.getTeamColor() == ChessGame.TeamColor.WHITE) ? 1 : -1;
+        int startRow = (this.getTeamColor() == ChessGame.TeamColor.WHITE) ? 2 : 7;
+        int promotionRow = (this.getTeamColor() == ChessGame.TeamColor.WHITE) ? 8 : 1;
+
+        int row = from.getRow();
+        int col = from.getColumn();
+
+        int oneStepRow = row + direction;
+        if (oneStepRow >= 1 && oneStepRow <= 8) {
+            ChessPosition oneStepPos = new ChessPosition(oneStepRow, col);
+            ChessPiece pieceAtOneStep = board.getPiece(oneStepPos);
+
+            if (pieceAtOneStep == null) {
+                if (oneStepRow == promotionRow) {
+                    addPromotionMoves(from, oneStepPos, moves);
+                } else {
+                    moves.add(new ChessMove(from, oneStepPos, null));
+                }
+            }
+        }
+
+        if (row == startRow) {
+            int twoStepRow = row + (2 * direction);
+            ChessPosition between = new ChessPosition(oneStepRow, col);
+            ChessPosition twoStepPos = new ChessPosition(twoStepRow, col);
+
+            if (board.getPiece(between) == null && board.getPiece(twoStepPos) == null) {
+                moves.add(new ChessMove(from, twoStepPos, null));
+            }
+        }
+
+        int[][] captureDirections = {
+                {direction, 1}, {direction, -1}
+        };
+
+        for (int[] diag : captureDirections) {
+            int captureRow = row + diag[0];
+            int captureCol = col + diag[1];
+
+            if (captureRow < 1 || captureRow > 8 || captureCol < 1 || captureCol > 8) {
+                continue;
+            }
+
+            ChessPosition capturePos = new ChessPosition(captureRow, captureCol);
+            ChessPiece target = board.getPiece(capturePos);
+
+            if (target == null || target.getTeamColor() == this.getTeamColor()) {
+                continue;
+            }
+
+            if (captureRow == promotionRow) {
+                addPromotionMoves(from, capturePos, moves);
+            } else {
+                moves.add(new ChessMove(from, capturePos, null));
+            }
+        }
+    }
+
+    private void addPromotionMoves(ChessPosition from,
+                                   ChessPosition to,
+                                   Collection<ChessMove> moves) {
+        moves.add(new ChessMove(from, to, PieceType.QUEEN));
+        moves.add(new ChessMove(from, to, PieceType.ROOK));
+        moves.add(new ChessMove(from, to, PieceType.BISHOP));
+        moves.add(new ChessMove(from, to, PieceType.KNIGHT));
+    }
+}
+
+
