@@ -42,8 +42,12 @@ public class GameData  {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GameData)) return false;
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof GameData)){
+            return false;
+        }
         GameData gameData = (GameData) o;
         return gameID == gameData.gameID;
     }
