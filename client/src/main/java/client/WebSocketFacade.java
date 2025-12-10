@@ -7,6 +7,7 @@ import jakarta.websocket.Endpoint;
 import jakarta.websocket.EndpointConfig;
 import jakarta.websocket.MessageHandler;
 import jakarta.websocket.Session;
+import jakarta.websocket.CloseReason;
 import model.GameData;
 import org.glassfish.tyrus.client.ClientManager;
 import websocket.commands.UserGameCommand;
@@ -37,7 +38,25 @@ public class WebSocketFacade {
         session = client.connectToServer(new Endpoint() {
             @Override
             public void onOpen(Session session, EndpointConfig config) {
-                session.addMessageHandler((MessageHandler.Whole<String>) WebSocketFacade.this::handleMessage);
+                System.out.println("[CLIENT WS OPEN]");
+                WebSocketFacade.this.session = session;
+
+                // Make sure this handler is explicitly for String messages
+                session.addMessageHandler(String.class,
+                        (MessageHandler.Whole<String>) WebSocketFacade.this::handleMessage);
+            }
+
+            @Override
+            public void onClose(Session session, CloseReason closeReason) {
+                System.out.println("[CLIENT WS CLOSE] code=" +
+                        closeReason.getCloseCode().getCode() +
+                        " reason=" + closeReason.getReasonPhrase());
+            }
+
+            @Override
+            public void onError(Session session, Throwable thr) {
+                System.out.println("[CLIENT WS ERROR]");
+                thr.printStackTrace();
             }
         }, ClientEndpointConfig.Builder.create().build(), URI.create(wsUrl));
 
