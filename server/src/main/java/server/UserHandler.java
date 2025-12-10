@@ -35,6 +35,16 @@ public class UserHandler {
                 && e.getMessage().toLowerCase().contains("failed to get connection"));
     }
 
+    private void handleAuthDataException(Context ctx, DataAccessException e) {
+        String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
+        if (msg.contains("unauthorized")) {
+            ctx.status(401).json(new ErrorMessage("Error: unauthorized"));
+        } else if (isDatabaseFailure(e)) {
+            ctx.status(500).json(new ErrorMessage("Internal Server Error"));
+        } else {
+            ctx.status(500).json(new ErrorMessage("Internal Server Error"));
+        }
+    }
 
     public void register(Context ctx) {
         try {
