@@ -207,6 +207,36 @@ public class ChessGame {
         return false;
     }
 
+    private ChessPosition findKingPosition(TeamColor teamColor) {
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition pos = new ChessPosition(row, col);
+                ChessPiece piece = board.getPiece(pos);
+                if (piece != null
+                        && piece.getPieceType() == ChessPiece.PieceType.KING
+                        && piece.getTeamColor() == teamColor) {
+                    return pos;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean pieceAttacksSquare(ChessPosition from,
+                                       ChessPiece piece,
+                                       ChessPosition target) {
+        Collection<ChessMove> oppMoves = piece.pieceMoves(board, from);
+        if (oppMoves == null) {
+            return false;
+        }
+        for (ChessMove move : oppMoves) {
+            if (move.getEndPosition().equals(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
     /**
