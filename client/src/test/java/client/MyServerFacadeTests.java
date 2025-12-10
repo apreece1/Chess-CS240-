@@ -85,5 +85,12 @@ public class MyServerFacadeTests {
         assertDoesNotThrow(() -> facade.logout(auth.authToken()));
     }
 
+    @Test
+    public void logoutNegativeInvalidToken() {
+        Exception ex = assertThrows(Exception.class, () ->
+                facade.logout("bad-token"));
+        assertTrue(ex.getMessage().contains("HTTP"));
+    }
+
 
 }
