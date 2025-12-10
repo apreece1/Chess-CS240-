@@ -133,6 +133,9 @@ public class WebSocketHandler {
                 send(ctx2, note);
             }
 
+            String whitePlayer = gameData.getWhiteUsername();
+            String blackPlayer = gameData.getBlackUsername();
+
             boolean whiteInCheck = game.isInCheck(ChessGame.TeamColor.WHITE);
             boolean blackInCheck = game.isInCheck(ChessGame.TeamColor.BLACK);
             boolean whiteCheckmated = game.isInCheckmate(ChessGame.TeamColor.WHITE);
@@ -144,19 +147,21 @@ public class WebSocketHandler {
 
 
             if (whiteCheckmated) {
-                statusText = "Checkmate! Black wins.";
+                statusText = blackPlayer + " put " + whitePlayer + " in checkmate and won the game.";
             } else if (blackCheckmated) {
-                statusText = "Checkmate! White wins.";
+                statusText = whitePlayer + " put " + blackPlayer + " in checkmate and won the game.";
             }
+
 
             else if (whiteStalemate || blackStalemate) {
-                statusText = "Stalemate! The game is a draw.";
+                statusText = "Stalemate between " + whitePlayer + " and " + blackPlayer + ". The game is a draw.";
             }
 
+
             else if (whiteInCheck) {
-                statusText = "White is in check.";
+                statusText = blackPlayer + " put " + whitePlayer + " in check.";
             } else if (blackInCheck) {
-                statusText = "Black is in check.";
+                statusText = whitePlayer + " put " + blackPlayer + " in check.";
             }
 
             if (statusText != null) {
