@@ -19,7 +19,7 @@ public class SQLAuthDAOTest {
     }
 
     @Test
-    void ClearPositiveClearsAllAuths() throws DataAccessException {
+    void clearPositiveClearsAllAuths() throws DataAccessException {
         String token = UUID.randomUUID().toString();
         AuthData auth = new AuthData(token, "josh");
 
@@ -31,12 +31,12 @@ public class SQLAuthDAOTest {
     }
 
     @Test
-    void ClearNegativeOnEmptyTableNoException() {
+    void clearNegativeOnEmptyTableNoException() {
         assertDoesNotThrow(() -> authDAO.clear());
     }
 
     @Test
-    void CreateAuthPositiveCreatesUniqueToken() throws DataAccessException {
+    void createAuthPositiveCreatesUniqueToken() throws DataAccessException {
         String token1 = UUID.randomUUID().toString();
         String token2 = UUID.randomUUID().toString();
 
@@ -52,7 +52,7 @@ public class SQLAuthDAOTest {
     }
 
     @Test
-    void CreateAuthNegativeNullUsernameThrows() {
+    void createAuthNegativeNullUsernameThrows() {
         String token = UUID.randomUUID().toString();
         AuthData bad = new AuthData(token, null);
 
@@ -60,7 +60,7 @@ public class SQLAuthDAOTest {
     }
 
     @Test
-    void GetAuthPositiveExistingToken() throws DataAccessException {
+    void getAuthPositiveExistingToken() throws DataAccessException {
         String token = UUID.randomUUID().toString();
         AuthData auth = new AuthData(token, "josh");
 
@@ -72,12 +72,12 @@ public class SQLAuthDAOTest {
     }
 
     @Test
-    void GetAuthNegativeUnknownTokenReturnsNull() throws DataAccessException {
+    void getAuthNegativeUnknownTokenReturnsNull() throws DataAccessException {
         assertNull(authDAO.getAuth("fake-token"));
     }
 
     @Test
-    void DeleteAuthPositiveExistingToken() throws DataAccessException {
+    void deleteAuthPositiveExistingToken() throws DataAccessException {
         String token = UUID.randomUUID().toString();
         AuthData auth = new AuthData(token, "josh");
 
@@ -88,7 +88,7 @@ public class SQLAuthDAOTest {
     }
 
     @Test
-    void DeleteAuthNegativeNonExistingTokenThrows() {
+    void deleteAuthNegativeNonExistingTokenThrows() {
         assertThrows(DataAccessException.class, () -> authDAO.deleteAuth("fake-token"));
     }
 }
