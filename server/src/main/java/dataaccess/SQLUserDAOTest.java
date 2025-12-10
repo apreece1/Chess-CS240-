@@ -19,7 +19,7 @@ public class SQLUserDAOTest {
     }
 
     @Test
-    void clear_positive_clearsAllUsers() throws DataAccessException {
+    void ClearPositiveClearsAllUsers() throws DataAccessException {
         var user = new UserData("josh", "password", "josh@example.com");
         userDAO.createUser(user);
 
@@ -32,12 +32,12 @@ public class SQLUserDAOTest {
     }
 
     @Test
-    void clear_negative_onEmptyTable_noException() {
+    void ClearNegativeOnEmptyTableNoException() {
         assertDoesNotThrow(() -> userDAO.clear());
     }
 
     @Test
-    void createUser_positive_insertsUser() throws DataAccessException {
+    void CreateUserPositiveInsertsUser() throws DataAccessException {
         var user = new UserData("josh", "password", "josh@example.com");
 
         userDAO.createUser(user);
@@ -50,7 +50,7 @@ public class SQLUserDAOTest {
     }
 
     @Test
-    void createUser_negative_duplicateUsername_throws() throws DataAccessException {
+    void CreateUserNegativeDuplicateUsernameThrows() throws DataAccessException {
         var user1 = new UserData("josh", "pw1", "one@example.com");
         var user2 = new UserData("josh", "pw2", "two@example.com");
 
@@ -61,7 +61,7 @@ public class SQLUserDAOTest {
     }
 
     @Test
-    void getUser_positive_existingUser() throws DataAccessException {
+    void GetUserPositiveExistingUser() throws DataAccessException {
         var user = new UserData("josh", "password", "josh@example.com");
         userDAO.createUser(user);
 
@@ -72,7 +72,7 @@ public class SQLUserDAOTest {
     }
 
     @Test
-    void getUser_negative_nonExistingUser_returnsNull() throws DataAccessException {
+    void GetUserNegativeNonExistingUserReturnsNull() throws DataAccessException {
         var fromDb = userDAO.getUser("noSuchUser");
         assertNull(fromDb, "Expected null for non-existing user");
     }
