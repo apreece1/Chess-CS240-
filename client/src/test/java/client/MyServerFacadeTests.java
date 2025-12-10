@@ -132,6 +132,30 @@ public class MyServerFacadeTests {
                 facade.listGames(auth.authToken()));
         assertTrue(ex.getMessage().contains("HTTP"));
     }
+    @Test
+    public void clearNegativeOldTokenStillInvalid() throws Exception {
+        AuthData auth = facade.register("user9", "password", "user9@example.com");
+        facade.clear();
 
+        Exception ex = assertThrows(Exception.class, () ->
+                facade.logout(auth.authToken()));
+        assertTrue(ex.getMessage().contains("HTTP"));
+    }
 
+    @Test
+    public void listGamesPositive() throws Exception {
+        AuthData auth = facade.register("user10", "password", "user10@example.com");
+        int gameID = facade.createGame(auth.authToken(), "List Game");
+
+        List<GameData> games = facade.listGames(auth.authToken());
+        assertFalse(games.isEmpty());
+        assertTrue(games.stream().anyMatch(g -> g.getGameID() == gameID));
+    }
+
+    @Test
+    public void listGamesNegativeInvalidToken() {
+        Exception ex = assertThrows(Exception.class, () ->
+                facade.listGames("invalid-token"));
+        assertTrue(ex.getMessage().contains("HTTP"));
+    }
 }

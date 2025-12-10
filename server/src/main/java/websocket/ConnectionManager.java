@@ -29,21 +29,28 @@ public class ConnectionManager {
 
     public void removeConnection(WsContext ctx) {
         Integer gameId = ctx.attribute("gameId");
-        if (gameId == null) return;
+        if (gameId == null){
+            return;
+        }
         var list = connections.get(gameId);
-        if (list == null) return;
+        if (list == null){ return;
+            }
         list.removeIf(c -> c.ctx.sessionId().equals(ctx.sessionId()));
     }
 
     public List<WsContext> getAllInGame(int gameId) {
         var list = connections.get(gameId);
-        if (list == null) return List.of();
+        if (list == null){
+            return List.of();
+        }
         return list.stream().map(c -> c.ctx).toList();
     }
 
     public List<WsContext> getOthersInGame(int gameId, WsContext exclude) {
         var list = connections.get(gameId);
-        if (list == null) return List.of();
+        if (list == null) {
+            return List.of();
+        }
         return list.stream()
                 .map(c -> c.ctx)
                 .filter(ctx -> !ctx.sessionId().equals(exclude.sessionId()))
