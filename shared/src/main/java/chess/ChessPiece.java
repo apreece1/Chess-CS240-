@@ -90,3 +90,17 @@ public class ChessPiece {
             while (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
                 ChessPosition newPosition = new ChessPosition(newRow, newCol);
                 ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+                if (pieceAtNewPosition == null) {
+                    moves.add(new ChessMove(from, newPosition, null));
+                } else {
+                    if (pieceAtNewPosition.getTeamColor() != this.getTeamColor()) {
+                        moves.add(new ChessMove(from, newPosition, null));
+                    }
+                    break;
+                }
+
+                newRow += direction[0];
+                newCol += direction[1];
+            }
+        }
+    }
