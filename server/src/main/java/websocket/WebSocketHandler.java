@@ -127,11 +127,17 @@ public class WebSocketHandler {
                 send(ctx2, load);
             }
 
+            var startPos = move.getStartPosition();
+            var endPos = move.getEndPosition();
+            String fromSquare = formatSquare(startPos);
+            String toSquare = formatSquare(endPos);
+
             ServerMessage note = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
-            note.setMessage(username + " made a move");
+            note.setMessage(username + " moved from " + fromSquare + " to " + toSquare + ".");
             for (var ctx2 : connections.getOthersInGame(cmd.getGameID(), ctx)) {
                 send(ctx2, note);
             }
+
 
             String whitePlayer = gameData.getWhiteUsername();
             String blackPlayer = gameData.getBlackUsername();
@@ -245,4 +251,11 @@ public class WebSocketHandler {
         err.setErrorMessage(text);
         send(ctx, err);
     }
+
+    private String formatSquare(chess.ChessPosition pos) {
+        char file = (char) ('a' + pos.getColumn() - 1); // 1 -> 'a', 2 -> 'b', ...
+        int rank = pos.getRow();                        // 1..8
+        return "" + file + rank;
+    }
+
 }
