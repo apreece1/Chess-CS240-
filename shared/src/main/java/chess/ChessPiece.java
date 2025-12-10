@@ -73,4 +73,20 @@ public class ChessPiece {
             case KNIGHT -> addKnightMoves(board, myPosition, validMoves);
             case KING -> addKingMoves(board, myPosition, validMoves);
             case PAWN -> addPawnMoves(board, myPosition, validMoves);
-        }
+        } return validMoves;
+    }
+
+    private void addSlidingMoves(ChessBoard board,
+                                 ChessPosition from,
+                                 int[][] directions,
+                                 Collection<ChessMove> moves) {
+        int startRow = from.getRow();
+        int startCol = from.getColumn();
+
+        for (int[] direction : directions) {
+            int newRow = startRow + direction[0];
+            int newCol = startCol + direction[1];
+
+            while (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
+                ChessPosition newPosition = new ChessPosition(newRow, newCol);
+                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
