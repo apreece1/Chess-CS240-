@@ -104,3 +104,29 @@ public class ChessPiece {
             }
         }
     }
+    private void addKnightMoves(ChessBoard board,
+                                ChessPosition from,
+                                Collection<ChessMove> moves) {
+        int row = from.getRow();
+        int col = from.getColumn();
+
+        int[][] knightDirections = {
+                {2, 1}, {2, -1}, {1, 2}, {1, -2},
+                {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}
+        };
+
+        for (int[] direction : knightDirections) {
+            int newRow = row + direction[0];
+            int newCol = col + direction[1];
+
+            if (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
+                ChessPosition newPosition = new ChessPosition(newRow, newCol);
+                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+
+                if (pieceAtNewPosition == null
+                        || pieceAtNewPosition.getTeamColor() != this.getTeamColor()) {
+                    moves.add(new ChessMove(from, newPosition, null));
+                }
+            }
+        }
+    }
