@@ -41,4 +41,17 @@ public class AuthService {
         return authDAO.getAuth(authToken);
     }
 
+    public void logout(String authToken) throws DataAccessException {
+        if (authToken == null || authToken.isBlank()) {
+            throw new DataAccessException("Error: unauthorized");
+        }
+
+        var auth = authDAO.getAuth(authToken);
+        if (auth == null) {
+            throw new DataAccessException("Error: unauthorized");
+        }
+
+        authDAO.deleteAuth(authToken);
+    }
+
 }

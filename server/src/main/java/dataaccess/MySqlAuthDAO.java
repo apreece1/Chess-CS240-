@@ -51,17 +51,13 @@ public class MySqlAuthDAO implements AuthDAO {
              var stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, authToken);
-            int rows = stmt.executeUpdate();
-
-            if (rows == 0) {
-                throw new DataAccessException("unauthorized");
-            }
-
+            stmt.executeUpdate(); // No rows check; service has already validated.
 
         } catch (SQLException ex) {
             throw new DataAccessException("Failed to delete auth token", ex);
         }
     }
+
 
 
     @Override
