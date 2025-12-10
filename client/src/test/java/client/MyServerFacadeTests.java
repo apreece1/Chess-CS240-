@@ -92,5 +92,27 @@ public class MyServerFacadeTests {
         assertTrue(ex.getMessage().contains("HTTP"));
     }
 
+    @Test
+    public void createGamePositive() throws Exception {
+        AuthData auth = facade.register("user5", "password", "user5@example.com");
+        int gameID = facade.createGame(auth.authToken(), "My Game");
+        assertTrue(gameID > 0);
+    }
+
+    @Test
+    public void createGameNegativeInvalidToken() {
+        Exception ex = assertThrows(Exception.class, () ->
+                facade.createGame("bad-token", "Game"));
+        assertTrue(ex.getMessage().contains("HTTP"));
+    }
+
+    @Test
+    public void joinGamePositive() throws Exception {
+        AuthData auth = facade.register("user6", "password", "user6@example.com");
+        int gameID = facade.createGame(auth.authToken(), "Joinable");
+        assertDoesNotThrow(() ->
+                facade.joinGame(auth.authToken(), gameID, "WHITE"));
+    }
+
 
 }
