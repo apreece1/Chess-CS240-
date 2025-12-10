@@ -54,7 +54,7 @@ public class ChessClient implements GameplayObserver {
             try {
                 running = (state == State.PRELOGIN) ? preloginLoop() : postloginLoop();
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                System.out.println("Error:" + e.getMessage());
             }
         }
 

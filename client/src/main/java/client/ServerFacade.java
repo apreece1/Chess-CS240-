@@ -112,7 +112,7 @@ public class ServerFacade {
             }
             return gson.fromJson(responseJson, responseType);
         } else {
-            throw new Exception("HTTP " + status + ": " + responseJson);
+            throw new Exception("unauthorized");
         }
     }
 

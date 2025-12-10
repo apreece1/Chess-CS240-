@@ -31,6 +31,7 @@ public class WebSocketHandler {
 
     public void onConnect(WsConnectContext ctx) {
         System.out.println("[WS CONNECT] " + ctx.sessionId());
+        ctx.enableAutomaticPings();
     }
 
     public void onMessage(WsMessageContext ctx) {
@@ -132,19 +133,40 @@ public class WebSocketHandler {
                 send(ctx2, note);
             }
 
-            if (game.isInCheck(ChessGame.TeamColor.WHITE) ||
-                    game.isInCheck(ChessGame.TeamColor.BLACK) ||
-                    game.isInCheckmate(ChessGame.TeamColor.WHITE) ||
-                    game.isInCheckmate(ChessGame.TeamColor.BLACK) ||
-                    game.isInStalemate(ChessGame.TeamColor.WHITE) ||
-                    game.isInStalemate(ChessGame.TeamColor.BLACK)) {
+            boolean whiteInCheck = game.isInCheck(ChessGame.TeamColor.WHITE);
+            boolean blackInCheck = game.isInCheck(ChessGame.TeamColor.BLACK);
+            boolean whiteCheckmated = game.isInCheckmate(ChessGame.TeamColor.WHITE);
+            boolean blackCheckmated = game.isInCheckmate(ChessGame.TeamColor.BLACK);
+            boolean whiteStalemate = game.isInStalemate(ChessGame.TeamColor.WHITE);
+            boolean blackStalemate = game.isInStalemate(ChessGame.TeamColor.BLACK);
 
+            String statusText = null;
+
+
+            if (whiteCheckmated) {
+                statusText = "Checkmate! Black wins.";
+            } else if (blackCheckmated) {
+                statusText = "Checkmate! White wins.";
+            }
+
+            else if (whiteStalemate || blackStalemate) {
+                statusText = "Stalemate! The game is a draw.";
+            }
+
+            else if (whiteInCheck) {
+                statusText = "White is in check.";
+            } else if (blackInCheck) {
+                statusText = "Black is in check.";
+            }
+
+            if (statusText != null) {
                 ServerMessage status = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
-                status.setMessage("Game status changed");
+                status.setMessage(statusText);
                 for (var c : connections.getAllInGame(cmd.getGameID())) {
                     send(c, status);
                 }
             }
+
 
         } catch (DataAccessException e) {
             sendError(ctx, e.getMessage());
