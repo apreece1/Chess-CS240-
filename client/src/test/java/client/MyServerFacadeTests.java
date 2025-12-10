@@ -27,4 +27,23 @@ public class MyServerFacadeTests {
             server.stop();
         }
     }
+
+    @BeforeEach
+    public void clearDatabase() throws Exception {
+        facade.clear();
+    }
+
+    @Test
+    public void getPortPositive() {
+        int port = 1234;
+        ServerFacade f = new ServerFacade(port);
+        assertEquals(port, f.getPort());
+    }
+
+    @Test
+    public void getPortNegative() {
+        int port = 1234;
+        ServerFacade f = new ServerFacade(port);
+        assertNotEquals(9999, f.getPort());
+    }
 }
