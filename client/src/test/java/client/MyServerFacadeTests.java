@@ -47,5 +47,20 @@ public class MyServerFacadeTests {
         assertNotEquals(9999, f.getPort());
     }
 
-    
+    @Test
+    public void registerPositive() throws Exception {
+        AuthData auth = facade.register("user1", "password", "user1@example.com");
+        assertNotNull(auth);
+        assertEquals("user1", auth.username());
+        assertNotNull(auth.authToken());
+    }
+
+    @Test
+    public void registerNegativeDuplicateUsername() throws Exception {
+        facade.register("user1", "password", "user1@example.com");
+        Exception ex = assertThrows(Exception.class, () ->
+                facade.register("user1", "password2", "other@example.com"));
+        assertTrue(ex.getMessage().contains("HTTP"));
+    }
+
 }
